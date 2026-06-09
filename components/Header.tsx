@@ -30,7 +30,7 @@ export default function Header() {
         <button key={l} onClick={() => setLang(l)} style={{
           background: lang === l ? "var(--coral)" : "transparent",
           color: lang === l ? "#fff" : "var(--muted)",
-          border: "none", padding: "6px 12px", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit", textTransform: "uppercase",
+          border: "none", padding: "6px 12px", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "Inter", textTransform: "uppercase",
         }}>{l}</button>
       ))}
     </div>
@@ -46,7 +46,7 @@ export default function Header() {
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ textDecoration: "none", color: "var(--text)" }}>
           <span style={{ fontFamily: "Fraunces, serif", fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>PRO MIAMI</span>
-          <span style={{ fontFamily: "Outfit", fontSize: 11, letterSpacing: "0.3em", display: "block", color: "var(--coral)", marginTop: -4 }}>REALTY</span>
+          <span style={{ fontFamily: "Inter", fontSize: 11, letterSpacing: "0.3em", display: "block", color: "var(--coral)", marginTop: -4 }}>REALTY</span>
         </Link>
         <nav className="desktop-nav" style={{ display: "flex", gap: 26, alignItems: "center" }}>
           {nav.map(n => (

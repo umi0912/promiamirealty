@@ -4,6 +4,7 @@ import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import AIChat from "@/components/AIChat";
+import ChatPanel from "@/components/ChatPanel";
 
 export default function Home() {
   const { t } = useLang();
@@ -50,7 +51,6 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <p style={{ fontSize: 11, color: "var(--muted)", textAlign: "center", marginTop: 16 }}>* placeholder figures — confirm with client</p>
       </section>
 
       {/* AGENT VIDEO */}
@@ -65,7 +65,6 @@ export default function Home() {
             <video controls poster="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1000&q=80" style={{ width: "100%", height: "100%", objectFit: "cover" }}>
               <source src="https://cdn.coverr.co/videos/coverr-a-woman-in-a-business-meeting-5244/1080p.mp4" type="video/mp4" />
             </video>
-            <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(22,18,28,.8)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 999 }}>~30 sec · placeholder</div>
           </div>
         </div>
       </section>
@@ -132,13 +131,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section style={{ maxWidth: 980, margin: "0 auto", padding: "80px 24px 0" }}>
-        <div  style={{ textAlign: "center", marginBottom: 28 }}>
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
           <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: 0 }}>{t("home.consult.title")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 10 }}>{t("home.consult.text")}</p>
         </div>
-        <div  style={{ position: "relative" }}>
-          <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="700" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
+        <div className="consult-split" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "stretch" }}>
+          {/* слева: чат с AI-помощником */}
+          <ChatPanel height={600} />
+          {/* справа: запись через Calendly */}
+          <div style={{ height: 600, borderRadius: 16, border: "1px solid var(--line)", overflow: "hidden" }}>
+            <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="100%" frameBorder="0" title="Book" style={{ display: "block", border: "none" }} />
+          </div>
         </div>
       </section>
 
@@ -155,7 +159,7 @@ export default function Home() {
         .tile-price{ color:#fff; font-size:17px; font-weight:500; font-family:'Fraunces',serif; }
         .tile-addr{ color:rgba(255,255,255,.82); font-size:12px; margin-top:2px; }
         .tile-specs{ color:rgba(255,255,255,.7); font-size:12px; margin-top:4px; }
-        @media (max-width:760px){ .mosaic{ grid-template-columns:repeat(2,1fr); } .m-big{ grid-column:span 2; grid-row:span 1; } .agentvid{ grid-template-columns:1fr !important; } }
+        @media (max-width:760px){ .mosaic{ grid-template-columns:repeat(2,1fr); } .m-big{ grid-column:span 2; grid-row:span 1; } .agentvid{ grid-template-columns:1fr !important; } .consult-split{ grid-template-columns:1fr !important; } }
       `}</style>
     </>
   );

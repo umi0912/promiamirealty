@@ -33,7 +33,7 @@ export default function HomeValuation() {
     setStep("done");
   };
 
-  const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", fontFamily: "Outfit" };
+  const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", fontFamily: "Inter" };
   const sel: React.CSSProperties = { ...inp, appearance: "auto" as const };
   const lab: React.CSSProperties = { fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
@@ -59,7 +59,7 @@ export default function HomeValuation() {
             <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>Estimated value range</div>
             <div style={{ fontSize: 28, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--amber)" }}>{fmt(low)} – {fmt(high)}</div>
           </div>
-          <button onClick={() => setStep("lead")} style={{ width: "100%", marginTop: 16, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>Get an accurate valuation →</button>
+          <button onClick={() => setStep("lead")} style={{ width: "100%", marginTop: 16, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>Get an accurate valuation →</button>
           <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, marginBottom: 0 }}>Rough estimate based on area price per square foot. A precise valuation uses recent comparable sales — request one above.</p>
         </>
       )}
@@ -73,8 +73,8 @@ export default function HomeValuation() {
             <input style={inp} placeholder="Phone (optional)" value={contact.phone} onChange={e => setContact({ ...contact, phone: e.target.value })} />
             <input style={inp} placeholder="Property address" value={contact.address} onChange={e => setContact({ ...contact, address: e.target.value })} />
           </div>
-          <button onClick={submitLead} disabled={busy} style={{ width: "100%", marginTop: 16, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: busy ? 0.6 : 1, fontFamily: "Outfit" }}>{busy ? "Sending…" : "Request valuation"}</button>
-          <button onClick={() => setStep("calc")} style={{ width: "100%", marginTop: 10, background: "none", color: "var(--muted)", border: "none", fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>← Back to estimate</button>
+          <button onClick={submitLead} disabled={busy} style={{ width: "100%", marginTop: 16, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: busy ? 0.6 : 1, fontFamily: "Inter" }}>{busy ? "Sending…" : "Request valuation"}</button>
+          <button onClick={() => setStep("calc")} style={{ width: "100%", marginTop: 10, background: "none", color: "var(--muted)", border: "none", fontSize: 13, cursor: "pointer", fontFamily: "Inter" }}>← Back to estimate</button>
         </>
       )}
     </div>

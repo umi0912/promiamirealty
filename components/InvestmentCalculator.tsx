@@ -38,7 +38,7 @@ export default function InvestmentCalculator() {
       <label style={{ fontSize: 12, color: "var(--muted)", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</label>
       <div style={{ display: "flex", alignItems: "center", background: "var(--bg)", borderRadius: 10, border: "1px solid var(--line)", padding: "0 12px" }}>
         <span style={{ color: "var(--muted)", fontSize: 14 }}>{prefix}</span>
-        <input type="number" value={val} step={step} onChange={e=>set(+e.target.value||0)} style={{ background: "none", border: "none", color: "var(--text)", fontSize: 15, padding: "10px 8px", width: "100%", outline: "none", fontFamily: "Outfit" }} />
+        <input type="number" value={val} step={step} onChange={e=>set(+e.target.value||0)} style={{ background: "none", border: "none", color: "var(--text)", fontSize: 15, padding: "10px 8px", width: "100%", outline: "none", fontFamily: "Inter" }} />
       </div>
     </div>
   );

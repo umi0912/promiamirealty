@@ -89,7 +89,7 @@ export default function Services() {
 
   const reset = () => { setStep("plans"); setPlan(null); setResult(null); setFilename(""); setFileObj(null); };
 
-  const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", fontFamily: "Outfit" };
+  const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", fontFamily: "Inter" };
   const lab: React.CSSProperties = { fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
 
   const StepDots = () => {
@@ -131,7 +131,7 @@ export default function Services() {
                   <span style={{ fontSize: 44, fontWeight: 500, fontFamily: "Fraunces, serif", color: p.accent }}>${p.price}</span>
                 </div>
                 <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, margin: "0 0 24px", flex: 1 }}>{p.desc}</p>
-                <button onClick={() => startPlan(id)} style={{ background: p.accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+                <button onClick={() => startPlan(id)} style={{ background: p.accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>
                   {ru ? "Выбрать" : "Choose"}
                 </button>
               </div>
@@ -147,11 +147,11 @@ export default function Services() {
           <div style={{ fontSize: 32, fontWeight: 500, fontFamily: "Fraunces, serif", color: PLANS[plan].accent, marginBottom: 18 }}>${PLANS[plan].price}</div>
           <input style={{ ...inp, marginBottom: 12 }} placeholder={ru ? "Ваше имя" : "Your name"} value={contact.name} onChange={e => setContact({ ...contact, name: e.target.value })} />
           <input style={{ ...inp, marginBottom: 18 }} placeholder="Email" value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} />
-          <button onClick={pay} disabled={paying || !contact.name || !contact.email} style={{ width: "100%", background: PLANS[plan].accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: paying || !contact.name || !contact.email ? 0.5 : 1, fontFamily: "Outfit" }}>
+          <button onClick={pay} disabled={paying || !contact.name || !contact.email} style={{ width: "100%", background: PLANS[plan].accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: paying || !contact.name || !contact.email ? 0.5 : 1, fontFamily: "Inter" }}>
             {paying ? (ru ? "Перенаправление…" : "Redirecting…") : (ru ? `Оплатить $${PLANS[plan].price} картой` : `Pay $${PLANS[plan].price} by card`)}
           </button>
           <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, textAlign: "center" }}>{ru ? "Безопасная оплата картой через Stripe" : "Secure card payment via Stripe"}</p>
-          <button onClick={reset} style={{ width: "100%", marginTop: 8, background: "none", border: "none", color: "var(--muted)", fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>← {ru ? "Назад" : "Back"}</button>
+          <button onClick={reset} style={{ width: "100%", marginTop: 8, background: "none", border: "none", color: "var(--muted)", fontSize: 13, cursor: "pointer", fontFamily: "Inter" }}>← {ru ? "Назад" : "Back"}</button>
         </div>
       )}
 
@@ -164,7 +164,7 @@ export default function Services() {
             <input type="file" accept="application/pdf" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0]; setFileObj(f || null); setFilename(f?.name || ""); }} />
             <div style={{ fontSize: 14, color: filename ? "var(--text)" : "var(--muted)" }}>{filename || (ru ? "Нажмите, чтобы выбрать PDF" : "Click to choose a PDF")}</div>
           </label>
-          <button onClick={runAI} disabled={!filename} style={{ width: "100%", marginTop: 18, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: filename ? 1 : 0.5, fontFamily: "Outfit" }}>
+          <button onClick={runAI} disabled={!filename} style={{ width: "100%", marginTop: 18, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: filename ? 1 : 0.5, fontFamily: "Inter" }}>
             {ru ? "Проверить контракт" : "Review contract"}
           </button>
         </div>
@@ -182,7 +182,7 @@ export default function Services() {
             <div><label style={lab}>{ru ? "Дата закрытия" : "Closing date"}</label><input style={inp} value={deal.closing} onChange={e => setDeal({ ...deal, closing: e.target.value })} /></div>
             <div><label style={lab}>{ru ? "Задаток $" : "Earnest money $"}</label><input style={inp} value={deal.earnest} onChange={e => setDeal({ ...deal, earnest: e.target.value })} /></div>
           </div>
-          <button onClick={runAI} style={{ width: "100%", marginTop: 18, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+          <button onClick={runAI} style={{ width: "100%", marginTop: 18, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>
             {ru ? "Подготовить черновик" : "Prepare draft"}
           </button>
         </div>
@@ -228,7 +228,7 @@ export default function Services() {
             👤 {ru ? "Это AI-черновик. Ays Iziken проверит его и пришлёт вам финальный результат на email." : "This is an AI draft. Ays Iziken will review it and send you the final result by email."}
             {requestId && <div style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>{ru ? "Номер заявки" : "Request"}: #{requestId}</div>}
           </div>
-          <button onClick={reset} style={{ width: "100%", marginTop: 18, background: "var(--surface-2)", color: "var(--text)", border: "none", padding: "13px", borderRadius: 999, fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+          <button onClick={reset} style={{ width: "100%", marginTop: 18, background: "var(--surface-2)", color: "var(--text)", border: "none", padding: "13px", borderRadius: 999, fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>
             {ru ? "Готово" : "Done"}
           </button>
         </div>

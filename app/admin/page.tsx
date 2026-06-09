@@ -104,8 +104,8 @@ export default function Admin() {
       <h1 style={{ fontSize: 24, marginBottom: 8 }}>Agent inbox</h1>
       <p style={{ color: "var(--muted)", fontSize: 14, marginBottom: 20 }}>Enter password to view contract requests.</p>
       <input type="password" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => e.key === "Enter" && login()} placeholder="Password"
-        style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", marginBottom: 12, fontFamily: "Outfit" }} />
-      <button onClick={login} style={{ width: "100%", background: "var(--coral)", color: "#fff", border: "none", padding: "13px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>Enter</button>
+        style={{ width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", marginBottom: 12, fontFamily: "Inter" }} />
+      <button onClick={login} style={{ width: "100%", background: "var(--coral)", color: "#fff", border: "none", padding: "13px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>Enter</button>
       {err && <p style={{ color: "#E2625C", fontSize: 13, marginTop: 12 }}>{err}</p>}
     </div>
   );
@@ -114,7 +114,7 @@ export default function Admin() {
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "110px 24px 60px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <h1 style={{ fontSize: 26, margin: 0 }}>Contract requests</h1>
-        <button onClick={() => load(pass)} style={{ background: "var(--surface-2)", color: "var(--text)", border: "none", padding: "8px 16px", borderRadius: 999, fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>↻ Refresh</button>
+        <button onClick={() => load(pass)} style={{ background: "var(--surface-2)", color: "var(--text)", border: "none", padding: "8px 16px", borderRadius: 999, fontSize: 13, cursor: "pointer", fontFamily: "Inter" }}>↻ Refresh</button>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: active ? "1fr 1.3fr" : "1fr", gap: 20 }}>
@@ -145,7 +145,7 @@ export default function Admin() {
               {active.client_email} · ${active.amount}
               {active.file_url && (
                 <div style={{ marginTop: 8 }}>
-                  <button onClick={() => downloadClientFile(active.file_url!)} style={{ background: "var(--surface-2)", color: "var(--text)", border: "1px solid var(--line)", padding: "8px 14px", borderRadius: 8, fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>📄 Download client's PDF</button>
+                  <button onClick={() => downloadClientFile(active.file_url!)} style={{ background: "var(--surface-2)", color: "var(--text)", border: "1px solid var(--line)", padding: "8px 14px", borderRadius: 8, fontSize: 13, cursor: "pointer", fontFamily: "Inter" }}>📄 Download client's PDF</button>
                 </div>
               )}
             </div>
@@ -168,7 +168,7 @@ export default function Admin() {
             ) : (
               <>
                 <div style={{ fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Final message to client (edit before sending)</div>
-                <textarea value={draft} onChange={e => setDraft(e.target.value)} style={{ width: "100%", minHeight: 180, background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: 14, fontSize: 14, outline: "none", boxSizing: "border-box", resize: "vertical", fontFamily: "Outfit", lineHeight: 1.6 }} />
+                <textarea value={draft} onChange={e => setDraft(e.target.value)} style={{ width: "100%", minHeight: 180, background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: 14, fontSize: 14, outline: "none", boxSizing: "border-box", resize: "vertical", fontFamily: "Inter", lineHeight: 1.6 }} />
 
                 <div style={{ marginTop: 12, marginBottom: 4, fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Attach completed PDF (optional)</div>
                 <label style={{ display: "block", border: "1.5px dashed var(--line)", borderRadius: 10, padding: 16, textAlign: "center", cursor: "pointer", background: "var(--bg)" }}>
@@ -178,7 +178,7 @@ export default function Admin() {
                   </span>
                 </label>
 
-                <button onClick={deliver} disabled={sending || !draft.trim()} style={{ width: "100%", marginTop: 12, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: sending || !draft.trim() ? 0.5 : 1, fontFamily: "Outfit" }}>
+                <button onClick={deliver} disabled={sending || !draft.trim()} style={{ width: "100%", marginTop: 12, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: sending || !draft.trim() ? 0.5 : 1, fontFamily: "Inter" }}>
                   {sending ? "Sending…" : "Review done → send to client"}
                 </button>
                 {err && <p style={{ color: "#E2625C", fontSize: 13, marginTop: 10 }}>{err}</p>}
