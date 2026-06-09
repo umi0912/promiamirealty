@@ -50,7 +50,7 @@ export default function Header() {
         </Link>
         <nav className="desktop-nav" style={{ display: "flex", gap: 26, alignItems: "center" }}>
           {nav.map(n => (
-            <Link key={n.href} href={n.href} className="ulink" style={{ color: "var(--text)", textDecoration: "none", fontSize: 14, opacity: 0.85 }}>{t(n.key)}</Link>
+            <Link key={n.href} href={n.href} style={{ color: "var(--text)", textDecoration: "none", fontSize: 14, opacity: 0.85 }}>{t(n.key)}</Link>
           ))}
           <LangToggle />
           <a href={`tel:${AGENT.phoneRaw}`} className="btn" style={{ color: "#fff", background: "var(--coral)", padding: "9px 18px", borderRadius: 999, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>{AGENT.phone}</a>

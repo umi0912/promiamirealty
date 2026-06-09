@@ -1,21 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useEffect } from "react";
 import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import AIChat from "@/components/AIChat";
-import AnimatedGradient from "@/components/AnimatedGradient";
 
 export default function Home() {
   const { t } = useLang();
   const featured = LISTINGS.filter(l => l.featured);
   const rest = LISTINGS.filter(l => !l.featured).slice(0, 4);
-  useEffect(() => {
-    const obs = new IntersectionObserver((es) => es.forEach(e => e.isIntersecting && e.target.classList.add("in")), { threshold: 0.15 });
-    document.querySelectorAll(".fade-up").forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
   return (
     <>
       {/* HERO */}
@@ -25,15 +18,13 @@ export default function Home() {
           <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
         </video>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.55) 0%,rgba(22,18,28,.3) 40%,rgba(22,18,28,.95) 100%)" }} />
-        {/* живой sunset-градиент в нижней зоне hero (поверх видео, под текстом) */}
-        <AnimatedGradient style={{ top: "auto", height: "55%", bottom: 0, mixBlendMode: "screen", opacity: 0.6 }} />
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
-          <div className="fade-up" style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
-          <h1 className="fade-up d1" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
-          <p className="fade-up d2" style={{ fontSize: 18, color: "var(--muted)", maxWidth: 520, marginTop: 24, lineHeight: 1.7 }}>
+          <div  style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
+          <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
+          <p className="" style={{ fontSize: 18, color: "var(--muted)", maxWidth: 520, marginTop: 24, lineHeight: 1.7 }}>
             {t("home.subtitle")}
           </p>
-          <div className="fade-up d3" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
+          <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
             <Link href="/search" className="btn" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("home.cta.search")}</Link>
             <a href={AGENT.calendly} className="btn" style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("home.cta.book")}</a>
           </div>
@@ -42,7 +33,7 @@ export default function Home() {
 
       {/* STATS — о компании */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "72px 24px 0" }}>
-        <div className="fade-up" style={{ textAlign: "center", marginBottom: 36 }}>
+        <div  style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>{t("home.stats.eyebrow")}</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,40px)", margin: 0 }}>{t("home.stats.title")}</h2>
         </div>
@@ -53,7 +44,7 @@ export default function Home() {
             { v: "6", k: "home.stats.cities" as const, c: "var(--green)" },
             { v: "3", k: "home.stats.langs" as const, c: "var(--violet)" },
           ].map((s, i) => (
-            <div key={i} className={`lift fade-up d${i + 1}`} style={{ background: "var(--surface)", borderRadius: 16, padding: "28px 20px", textAlign: "center", border: "1px solid var(--line)" }}>
+            <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: "28px 20px", textAlign: "center", border: "1px solid var(--line)" }}>
               <div style={{ fontSize: 38, fontWeight: 500, fontFamily: "Fraunces, serif", color: s.c, lineHeight: 1 }}>{s.v}</div>
               <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 10 }}>{t(s.k)}</div>
             </div>
@@ -64,7 +55,7 @@ export default function Home() {
 
       {/* AGENT VIDEO */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "72px 24px 0" }}>
-        <div className="fade-up agentvid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
+        <div className="agentvid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
           <div>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 12 }}>{t("home.agent.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)", margin: "0 0 16px", lineHeight: 1.1 }}>{t("home.agent.title")}</h2>
@@ -81,16 +72,16 @@ export default function Home() {
 
       {/* FEATURED — журнальная мозаика */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
-        <div className="fade-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
+        <div  style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
           <div>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.featured.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(28px,4vw,40px)", margin: 0 }}>{t("home.featured.title")}</h2>
           </div>
           <Link href="/search" style={{ color: "var(--text)", fontSize: 14, textDecoration: "none", opacity: 0.8 }}>{t("home.viewall")}</Link>
         </div>
-        <div className="mosaic fade-up">
+        <div className="mosaic">
           {featured[0] && (
-            <Link href={`/listings/${featured[0].id}`} className="m-big tile lift">
+            <Link href={`/listings/${featured[0].id}`} className="m-big tile">
               <div className="tile-img" style={{ backgroundImage: `url(${featured[0].photos[0]})` }} />
               <div className="tile-ov" /><span className="tile-badge">Featured</span>
               <div className="tile-info"><div className="tile-price" style={{ fontSize: 24 }}>{fmtPrice(featured[0].price)}</div><div className="tile-addr">{featured[0].address}</div><div className="tile-specs">{featured[0].beds} bd · {featured[0].baths} ba · {featured[0].sqft.toLocaleString()} sqft</div></div>
@@ -115,7 +106,7 @@ export default function Home() {
 
       {/* INVESTORS — ключевой блок */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
-        <Link href="/investors" className="fade-up" style={{ display: "block", textDecoration: "none", position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 340 }}>
+        <Link href="/investors"  style={{ display: "block", textDecoration: "none", position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 340 }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(22,18,28,.92) 0%,rgba(22,18,28,.7) 50%,rgba(22,18,28,.35) 100%)" }} />
           <div style={{ position: "relative", padding: "48px 40px", maxWidth: 600 }}>
@@ -131,7 +122,7 @@ export default function Home() {
 
       {/* CALC + CONSULT */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
-        <div className="fade-up" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 24, alignItems: "start" }}>
+        <div  style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 24, alignItems: "start" }}>
           <div>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.calc.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
@@ -142,11 +133,11 @@ export default function Home() {
       </section>
 
       <section style={{ maxWidth: 980, margin: "0 auto", padding: "80px 24px 0" }}>
-        <div className="fade-up" style={{ textAlign: "center", marginBottom: 28 }}>
+        <div  style={{ textAlign: "center", marginBottom: 28 }}>
           <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: 0 }}>{t("home.consult.title")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 10 }}>{t("home.consult.text")}</p>
         </div>
-        <div className="fade-up" style={{ position: "relative" }}>
+        <div  style={{ position: "relative" }}>
           <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="700" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
         </div>
       </section>
