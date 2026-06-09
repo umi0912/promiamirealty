@@ -19,7 +19,8 @@ export async function POST(req: Request) {
     const path = `client/${Date.now()}_${safe}`;
     await uploadContractFile(path, bytes, "application/pdf");
     return NextResponse.json({ ok: true, path, name: file.name });
-  } catch (e) {
-    return NextResponse.json({ ok: false, error: "upload_failed" }, { status: 500 });
+  } catch (e: any) {
+    console.error("[upload] failed:", e?.message || e);
+    return NextResponse.json({ ok: false, error: "upload_failed", detail: e?.message || String(e) }, { status: 500 });
   }
 }

@@ -90,7 +90,7 @@ const BUCKET = "contracts";
 export async function uploadContractFile(path: string, bytes: ArrayBuffer, contentType: string): Promise<string | null> {
   if (!SUPABASE_READY) return path; // демо: просто возвращаем путь-заглушку
   const { error } = await sb().storage.from(BUCKET).upload(path, bytes, { contentType, upsert: true });
-  if (error) throw error;
+  if (error) { console.error("[storage] upload failed:", error.message); throw error; }
   return path;
 }
 
@@ -98,6 +98,6 @@ export async function uploadContractFile(path: string, bytes: ArrayBuffer, conte
 export async function signedFileUrl(path: string): Promise<string | null> {
   if (!SUPABASE_READY) return null;
   const { data, error } = await sb().storage.from(BUCKET).createSignedUrl(path, 3600);
-  if (error) return null;
+  if (error) { console.error("[storage] signed url failed for", path, ":", error.message); return null; }
   return data?.signedUrl || null;
 }
