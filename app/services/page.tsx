@@ -2,81 +2,190 @@
 import { useState } from "react";
 import { useLang } from "@/lib/i18n";
 
-type Plan = { id: string; price: number; titleEn: string; titleRu: string; descEn: string; descRu: string; featuresEn: string[]; featuresRu: string[]; accent: string };
-
-const PLANS: Plan[] = [
-  {
-    id: "contract-review", price: 50, accent: "var(--green)",
-    titleEn: "Contract review", titleRu: "Проверка контракта",
-    descEn: "Upload your listing or contract — get it checked for issues before you sign.",
-    descRu: "Загрузите листинг или контракт — проверим на ошибки до подписания.",
-    featuresEn: ["Review of your document", "Flags missing or risky terms", "Written notes back within 48h"],
-    featuresRu: ["Проверка вашего документа", "Отметим спорные и упущенные пункты", "Письменные замечания в течение 48ч"],
-  },
-  {
-    id: "contract-prep", price: 100, accent: "var(--coral)",
-    titleEn: "Contract preparation", titleRu: "Подготовка контракта",
-    descEn: "We prepare the full contract for you — filled in, ready to sign.",
-    descRu: "Готовим полный контракт за вас — заполнен и готов к подписанию.",
-    featuresEn: ["Full contract drafted for you", "All client & property data filled in", "Ready-to-sign document", "One round of edits included"],
-    featuresRu: ["Полный контракт под ключ", "Все данные клиента и объекта внесены", "Документ готов к подписанию", "Один раунд правок включён"],
-  },
-];
+type Step = "plans" | "pay" | "input" | "processing" | "result";
+type PlanId = "review" | "prepare";
 
 export default function Services() {
   const { lang } = useLang();
-  const [busy, setBusy] = useState<string | null>(null);
+  const ru = lang === "ru";
+  const [step, setStep] = useState<Step>("plans");
+  const [plan, setPlan] = useState<PlanId | null>(null);
+  const [filename, setFilename] = useState("");
+  const [deal, setDeal] = useState({ buyer: "", seller: "", property: "", price: "", closing: "", earnest: "" });
+  const [result, setResult] = useState<any>(null);
+  const [contact, setContact] = useState({ name: "", email: "" });
 
-  const checkout = async (plan: Plan) => {
-    setBusy(plan.id);
+  const PLANS = {
+    review: { price: 50, accent: "var(--green)", title: ru ? "Проверка контракта" : "Contract review", desc: ru ? "Загрузите контракт — AI найдёт пробелы и риски, агент проверит." : "Upload your contract — AI flags gaps and risks, agent reviews." },
+    prepare: { price: 100, accent: "var(--coral)", title: ru ? "Подготовка контракта" : "Contract preparation", desc: ru ? "Введите данные сделки — AI готовит черновик, агент финализирует." : "Enter the deal details — AI drafts it, agent finalizes." },
+  };
+
+  const startPlan = (id: PlanId) => { setPlan(id); setStep("pay"); };
+
+  const pay = async () => {
+    // ДЕМО: Stripe ещё не подключён — пропускаем к вводу.
+    // При реальном Stripe здесь будет редирект на checkout, возврат → input.
+    setStep("input");
+  };
+
+  const runAI = async () => {
+    setStep("processing");
     try {
-      const res = await fetch("/api/checkout", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId: plan.id, price: plan.price, title: lang === "ru" ? plan.titleRu : plan.titleEn }),
-      });
+      const payload = plan === "prepare" ? { mode: "prepare", deal } : { mode: "review", filename };
+      const res = await fetch("/api/contract-ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
-      if (data.url) { window.location.href = data.url; return; }
-      alert(lang === "ru" ? "Оплата скоро будет подключена. Свяжитесь с нами напрямую." : "Payments are being set up. Please reach out directly for now.");
+      setResult(data.result);
     } catch {
-      alert(lang === "ru" ? "Оплата скоро будет подключена." : "Payments are being set up.");
+      setResult(null);
     }
-    setBusy(null);
+    setStep("result");
+  };
+
+  const reset = () => { setStep("plans"); setPlan(null); setResult(null); setFilename(""); };
+
+  const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", fontFamily: "Outfit" };
+  const lab: React.CSSProperties = { fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
+
+  const StepDots = () => {
+    const steps = ["plans", "pay", "input", "result"];
+    const cur = step === "processing" ? 2 : steps.indexOf(step);
+    return (
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 32 }}>
+        {steps.map((_, i) => (
+          <div key={i} style={{ width: i === cur ? 28 : 8, height: 8, borderRadius: 999, background: i <= cur ? "var(--coral)" : "var(--surface-2)", transition: "all .3s" }} />
+        ))}
+      </div>
+    );
   };
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto", padding: "120px 24px 0" }}>
-      <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>{lang === "ru" ? "Услуги" : "Services"}</div>
-      <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05 }}>{lang === "ru" ? "Помощь с контрактами" : "Contract help, on demand"}</h1>
-      <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--muted)", maxWidth: 560 }}>
-        {lang === "ru" ? "Для агентов и клиентов: проверим ваш контракт или подготовим новый. Оплата прямо на сайте, результат — быстро." : "For agents and clients: have your contract reviewed, or have a new one prepared. Pay online, get it done fast."}
+    <div style={{ maxWidth: 820, margin: "0 auto", padding: "120px 24px 0" }}>
+      <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14, textAlign: "center" }}>{ru ? "Услуги" : "Services"}</div>
+      <h1 style={{ fontSize: "clamp(30px,5vw,48px)", margin: "0 0 12px", lineHeight: 1.05, textAlign: "center" }}>{ru ? "Помощь с контрактами" : "Contract help, on demand"}</h1>
+      <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--muted)", maxWidth: 540, margin: "0 auto 16px", textAlign: "center" }}>
+        {ru ? "Быстрая AI-проверка или подготовка контракта — с финальной проверкой лицензированного агента." : "Fast AI-assisted review or preparation — with a final check by a licensed agent."}
       </p>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20, marginTop: 44 }}>
-        {PLANS.map(p => (
-          <div key={p.id} style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 19, fontFamily: "Fraunces, serif", fontWeight: 500 }}>{lang === "ru" ? p.titleRu : p.titleEn}</div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "14px 0" }}>
-              <span style={{ fontSize: 44, fontWeight: 500, fontFamily: "Fraunces, serif", color: p.accent }}>${p.price}</span>
-              <span style={{ fontSize: 14, color: "var(--muted)" }}>{lang === "ru" ? "/ услуга" : "/ service"}</span>
-            </div>
-            <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, margin: "0 0 18px" }}>{lang === "ru" ? p.descRu : p.descEn}</p>
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-              {(lang === "ru" ? p.featuresRu : p.featuresEn).map((f, i) => (
-                <li key={i} style={{ fontSize: 14, color: "var(--text)", display: "flex", gap: 10, alignItems: "flex-start" }}>
-                  <span style={{ color: p.accent, flexShrink: 0 }}>✓</span>{f}
-                </li>
-              ))}
-            </ul>
-            <button onClick={() => checkout(p)} disabled={busy === p.id} style={{ background: p.accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: busy === p.id ? 0.6 : 1, fontFamily: "Outfit" }}>
-              {busy === p.id ? "…" : (lang === "ru" ? `Оплатить $${p.price}` : `Pay $${p.price}`)}
-            </button>
-          </div>
-        ))}
+      <div style={{ textAlign: "center", marginBottom: 40 }}>
+        <span style={{ fontSize: 12, color: "var(--green)", background: "rgba(63,185,132,.12)", padding: "6px 14px", borderRadius: 999 }}>
+          {ru ? "✓ Каждый результат проверяет Ays Iziken перед отправкой" : "✓ Every result reviewed by Ays Iziken before delivery"}
+        </span>
       </div>
 
-      <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 24, textAlign: "center" }}>
-        {lang === "ru" ? "Безопасная оплата картой через Stripe. После оплаты — инструкция по загрузке документа." : "Secure card payment via Stripe. After payment, you'll get instructions to upload your document."}
-      </p>
+      <StepDots />
+
+      {/* STEP: PLANS */}
+      {step === "plans" && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+          {(["review", "prepare"] as PlanId[]).map(id => {
+            const p = PLANS[id];
+            return (
+              <div key={id} style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", display: "flex", flexDirection: "column" }}>
+                <div style={{ fontSize: 19, fontFamily: "Fraunces, serif", fontWeight: 500 }}>{p.title}</div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "14px 0" }}>
+                  <span style={{ fontSize: 44, fontWeight: 500, fontFamily: "Fraunces, serif", color: p.accent }}>${p.price}</span>
+                </div>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, margin: "0 0 24px", flex: 1 }}>{p.desc}</p>
+                <button onClick={() => startPlan(id)} style={{ background: p.accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+                  {ru ? "Выбрать" : "Choose"}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* STEP: PAY */}
+      {step === "pay" && plan && (
+        <div style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", maxWidth: 480, margin: "0 auto" }}>
+          <div style={{ fontSize: 19, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 4 }}>{PLANS[plan].title}</div>
+          <div style={{ fontSize: 32, fontWeight: 500, fontFamily: "Fraunces, serif", color: PLANS[plan].accent, marginBottom: 18 }}>${PLANS[plan].price}</div>
+          <input style={{ ...inp, marginBottom: 12 }} placeholder={ru ? "Ваше имя" : "Your name"} value={contact.name} onChange={e => setContact({ ...contact, name: e.target.value })} />
+          <input style={{ ...inp, marginBottom: 18 }} placeholder="Email" value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} />
+          <button onClick={pay} style={{ width: "100%", background: PLANS[plan].accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+            {ru ? `Оплатить $${PLANS[plan].price} картой` : `Pay $${PLANS[plan].price} by card`}
+          </button>
+          <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, textAlign: "center" }}>{ru ? "Безопасная оплата через Stripe · демо-режим" : "Secure payment via Stripe · demo mode"}</p>
+          <button onClick={reset} style={{ width: "100%", marginTop: 8, background: "none", border: "none", color: "var(--muted)", fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>← {ru ? "Назад" : "Back"}</button>
+        </div>
+      )}
+
+      {/* STEP: INPUT */}
+      {step === "input" && plan === "review" && (
+        <div style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", maxWidth: 520, margin: "0 auto" }}>
+          <h3 style={{ fontSize: 18, margin: "0 0 6px" }}>{ru ? "Загрузите контракт" : "Upload your contract"}</h3>
+          <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 18px" }}>{ru ? "PDF вашего контракта или листинга." : "PDF of your contract or listing."}</p>
+          <label style={{ display: "block", border: "1.5px dashed var(--line)", borderRadius: 12, padding: 32, textAlign: "center", cursor: "pointer", background: "var(--bg)" }}>
+            <input type="file" accept="application/pdf" style={{ display: "none" }} onChange={e => setFilename(e.target.files?.[0]?.name || "")} />
+            <div style={{ fontSize: 14, color: filename ? "var(--text)" : "var(--muted)" }}>{filename || (ru ? "Нажмите, чтобы выбрать PDF" : "Click to choose a PDF")}</div>
+          </label>
+          <button onClick={runAI} disabled={!filename} style={{ width: "100%", marginTop: 18, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: filename ? 1 : 0.5, fontFamily: "Outfit" }}>
+            {ru ? "Проверить контракт" : "Review contract"}
+          </button>
+        </div>
+      )}
+
+      {step === "input" && plan === "prepare" && (
+        <div style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", maxWidth: 560, margin: "0 auto" }}>
+          <h3 style={{ fontSize: 18, margin: "0 0 6px" }}>{ru ? "Данные сделки" : "Deal details"}</h3>
+          <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 18px" }}>{ru ? "Заполните — AI подготовит черновик." : "Fill in — AI prepares a draft."}</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div><label style={lab}>{ru ? "Покупатель" : "Buyer"}</label><input style={inp} value={deal.buyer} onChange={e => setDeal({ ...deal, buyer: e.target.value })} /></div>
+            <div><label style={lab}>{ru ? "Продавец" : "Seller"}</label><input style={inp} value={deal.seller} onChange={e => setDeal({ ...deal, seller: e.target.value })} /></div>
+            <div style={{ gridColumn: "1 / -1" }}><label style={lab}>{ru ? "Адрес объекта" : "Property address"}</label><input style={inp} value={deal.property} onChange={e => setDeal({ ...deal, property: e.target.value })} /></div>
+            <div><label style={lab}>{ru ? "Цена $" : "Price $"}</label><input style={inp} value={deal.price} onChange={e => setDeal({ ...deal, price: e.target.value })} /></div>
+            <div><label style={lab}>{ru ? "Дата закрытия" : "Closing date"}</label><input style={inp} value={deal.closing} onChange={e => setDeal({ ...deal, closing: e.target.value })} /></div>
+            <div><label style={lab}>{ru ? "Задаток $" : "Earnest money $"}</label><input style={inp} value={deal.earnest} onChange={e => setDeal({ ...deal, earnest: e.target.value })} /></div>
+          </div>
+          <button onClick={runAI} style={{ width: "100%", marginTop: 18, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+            {ru ? "Подготовить черновик" : "Prepare draft"}
+          </button>
+        </div>
+      )}
+
+      {/* STEP: PROCESSING */}
+      {step === "processing" && (
+        <div style={{ textAlign: "center", padding: "60px 20px" }}>
+          <div className="spin" style={{ width: 44, height: 44, border: "3px solid var(--surface-2)", borderTopColor: "var(--coral)", borderRadius: "50%", margin: "0 auto 20px" }} />
+          <div style={{ fontSize: 16, color: "var(--text)" }}>{ru ? "AI обрабатывает…" : "AI is working…"}</div>
+          <style>{`.spin{ animation: spin 0.8s linear infinite; } @keyframes spin{ to{ transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+
+      {/* STEP: RESULT */}
+      {step === "result" && result && (
+        <div style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)" }}>
+          <div style={{ fontSize: 18, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 4 }}>{result.summary}</div>
+          {result.findings && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18 }}>
+              {result.findings.map((f: any, i: number) => {
+                const c = f.level === "warning" ? "var(--amber)" : f.level === "ok" ? "var(--green)" : "var(--violet)";
+                return (
+                  <div key={i} style={{ background: "var(--bg)", borderRadius: 12, padding: 14, borderLeft: `3px solid ${c}` }}>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: "var(--text)" }}>{f.label}</div>
+                    <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 4, lineHeight: 1.5 }}>{f.detail}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {result.preview && (
+            <div style={{ marginTop: 18, background: "var(--bg)", borderRadius: 12, padding: 18 }}>
+              {result.preview.map(([k, v]: [string, string], i: number) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: i < result.preview.length - 1 ? "1px solid var(--line)" : "none" }}>
+                  <span style={{ fontSize: 13, color: "var(--muted)" }}>{k}</span>
+                  <span style={{ fontSize: 14, color: "var(--text)", fontWeight: 500 }}>{v}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          <div style={{ background: "rgba(63,185,132,.1)", borderRadius: 12, padding: 14, marginTop: 18, fontSize: 13, color: "var(--text)", lineHeight: 1.6 }}>
+            👤 {result.note}
+          </div>
+          <button onClick={reset} style={{ width: "100%", marginTop: 18, background: "var(--surface-2)", color: "var(--text)", border: "none", padding: "13px", borderRadius: 999, fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
+            {ru ? "Готово" : "Done"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
