@@ -1,4 +1,5 @@
 import { AGENT } from "@/lib/data";
+import HomeValuation from "@/components/HomeValuation";
 
 export default function Sellers() {
   const steps = [
@@ -23,10 +24,17 @@ export default function Sellers() {
         ))}
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 20, padding: "40px 32px", marginTop: 64, textAlign: "center", border: "1px solid var(--line)" }}>
-        <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px" }}>What's your home worth?</h2>
-        <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>Get a free, no-obligation market valuation based on current Miami comps.</p>
-        <a href={AGENT.calendly} style={{ background: "var(--coral)", color: "#fff", padding: "14px 30px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>Request a valuation</a>
+      <div style={{ marginTop: 64 }}>
+        <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>Free tool</div>
+        <h2 style={{ fontSize: "clamp(26px,3.5vw,34px)", marginBottom: 8 }}>What's your home worth?</h2>
+        <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 0, marginBottom: 24, maxWidth: 520 }}>Get a quick estimate now, then request a precise valuation built on recent comparable sales in your neighborhood.</p>
+        <HomeValuation />
+      </div>
+
+      <div style={{ background: "var(--surface)", borderRadius: 20, padding: "40px 32px", marginTop: 48, textAlign: "center", border: "1px solid var(--line)" }}>
+        <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px" }}>Thinking about selling?</h2>
+        <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>Let's talk strategy, timing, and price — no pressure.</p>
+        <a href={AGENT.calendly} style={{ background: "var(--coral)", color: "#fff", padding: "14px 30px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>Book a consultation</a>
       </div>
     </div>
   );
