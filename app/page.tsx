@@ -141,7 +141,7 @@ export default function Home() {
           <ChatPanel height={600} />
           {/* справа: запись через Calendly */}
           <div style={{ height: 600, borderRadius: 16, border: "1px solid var(--line)", overflow: "hidden" }}>
-            <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="100%" frameBorder="0" title="Book" style={{ display: "block", border: "none" }} />
+            <iframe src={`${AGENT.calendly}?embed_domain=promiamirealty.com&embed_type=Inline&hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="100%" frameBorder="0" title="Book" style={{ display: "block", border: "none" }} />
           </div>
         </div>
       </section>
