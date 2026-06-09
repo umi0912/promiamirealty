@@ -13,6 +13,7 @@ export default function Services() {
   const [filename, setFilename] = useState("");
   const [deal, setDeal] = useState({ buyer: "", seller: "", property: "", price: "", closing: "", earnest: "" });
   const [result, setResult] = useState<any>(null);
+  const [requestId, setRequestId] = useState<string>("");
   const [contact, setContact] = useState({ name: "", email: "" });
 
   const PLANS = {
@@ -31,10 +32,13 @@ export default function Services() {
   const runAI = async () => {
     setStep("processing");
     try {
-      const payload = plan === "prepare" ? { mode: "prepare", deal } : { mode: "review", filename };
+      const payload = plan === "prepare"
+        ? { mode: "prepare", deal, client_name: contact.name, client_email: contact.email }
+        : { mode: "review", filename, client_name: contact.name, client_email: contact.email };
       const res = await fetch("/api/contract-ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
       setResult(data.result);
+      setRequestId(data.requestId || "");
     } catch {
       setResult(null);
     }
@@ -179,7 +183,8 @@ export default function Services() {
             </div>
           )}
           <div style={{ background: "rgba(63,185,132,.1)", borderRadius: 12, padding: 14, marginTop: 18, fontSize: 13, color: "var(--text)", lineHeight: 1.6 }}>
-            👤 {result.note}
+            👤 {ru ? "Это AI-черновик. Ays Iziken проверит его и пришлёт вам финальный результат на email." : "This is an AI draft. Ays Iziken will review it and send you the final result by email."}
+            {requestId && <div style={{ marginTop: 8, fontSize: 12, color: "var(--muted)" }}>{ru ? "Номер заявки" : "Request"}: #{requestId}</div>}
           </div>
           <button onClick={reset} style={{ width: "100%", marginTop: 18, background: "var(--surface-2)", color: "var(--text)", border: "none", padding: "13px", borderRadius: 999, fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
             {ru ? "Готово" : "Done"}
