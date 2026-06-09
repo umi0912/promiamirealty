@@ -17,6 +17,8 @@ export type Listing = {
   lat: number;
   lng: number;
   featured?: boolean;
+  investor?: boolean;        // помечен как инвест-объект (доходный)
+  estRent?: number;          // оценочная месячная аренда (для подборки инвесторов)
   description: string;
   photos: string[];
 };
@@ -46,7 +48,7 @@ export const LISTINGS: Listing[] = [
   {
     id: "4", price: 1120000, address: "1000 West Ave #714", city: "Miami Beach", state: "FL", zip: "33139",
     type: "Condo", typeKey: "condo", status: "For Sale", beds: 2, baths: 2, sqft: 1290, yearBuilt: 2009,
-    lat: 25.7831, lng: -80.1431,
+    lat: 25.7831, lng: -80.1431, investor: true, estRent: 5200,
     description: "Renovated bayfront residence with an open layout, spa-style baths, and a resort-style pool deck steps from Lincoln Road.",
     photos: ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1400&q=80","https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=900&q=80"],
   },
@@ -60,21 +62,21 @@ export const LISTINGS: Listing[] = [
   {
     id: "6", price: 760000, address: "6420 SW 8th St", city: "Miami", state: "FL", zip: "33144",
     type: "Single Family", typeKey: "house", status: "For Sale", beds: 4, baths: 3, sqft: 2010, yearBuilt: 2004,
-    lat: 25.7637, lng: -80.3045,
+    lat: 25.7637, lng: -80.3045, investor: true, estRent: 4100,
     description: "Move-in ready home with a split floor plan, updated kitchen, two-car garage, and a covered patio.",
     photos: ["https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1400&q=80","https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=900&q=80"],
   },
   {
     id: "7", price: 640000, address: "3325 SW 22nd St", city: "Miami", state: "FL", zip: "33145",
     type: "Single Family", typeKey: "house", status: "For Sale", beds: 3, baths: 2, sqft: 1640, yearBuilt: 1991,
-    lat: 25.7501, lng: -80.2531,
+    lat: 25.7501, lng: -80.2531, investor: true, estRent: 3600,
     description: "Charming home in Coral Gate with hardwood floors, a renovated kitchen, and a fenced yard with mature landscaping.",
     photos: ["https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1400&q=80","https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=900&q=80"],
   },
   {
     id: "8", price: 540000, address: "15420 SW 104th Ter", city: "Miami", state: "FL", zip: "33176",
     type: "Single Family", typeKey: "house", status: "For Sale", beds: 3, baths: 2, sqft: 1480, yearBuilt: 1985,
-    lat: 25.6711, lng: -80.4123,
+    lat: 25.6711, lng: -80.4123, investor: true, estRent: 3100,
     description: "Well-maintained home in a quiet neighborhood with a screened patio, updated roof, and a spacious lot.",
     photos: ["https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1400&q=80","https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=900&q=80"],
   },

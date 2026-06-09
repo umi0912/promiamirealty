@@ -66,6 +66,22 @@ export default function Home() {
         </div>
       </section>
 
+      {/* INVESTORS — ключевой блок */}
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
+        <Link href="/investors" className="fade-up" style={{ display: "block", textDecoration: "none", position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 340 }}>
+          <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(20,16,12,.92) 0%,rgba(20,16,12,.7) 50%,rgba(20,16,12,.35) 100%)" }} />
+          <div style={{ position: "relative", padding: "48px 40px", maxWidth: 600 }}>
+            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>Investors — our focus</div>
+            <h2 style={{ fontSize: "clamp(28px,4.5vw,46px)", margin: "0 0 16px", lineHeight: 1.06, color: "var(--text)" }}>Miami real estate that pays you back.</h2>
+            <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 460, margin: "0 0 24px" }}>
+              Cash-flowing rentals, full deal analysis, and rental-market insight. Cap rate, cash-on-cash, and monthly cash flow on every property — before you buy.
+            </p>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--coral)", color: "#fff", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500 }}>Explore investing →</span>
+          </div>
+        </Link>
+      </section>
+
       {/* CALC + CONSULT */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
         <div className="fade-up" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 24, alignItems: "start" }}>
