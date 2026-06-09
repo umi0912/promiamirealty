@@ -10,13 +10,13 @@ export default function ChatPanel({ height = 480, showHeader = true }: { height?
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const endRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const greeting = ru
     ? "Здравствуйте! Я помощник PRO MIAMI REALTY. Спросите о покупке, продаже или инвестициях в недвижимость Майами."
     : "Hi! I'm the PRO MIAMI REALTY assistant. Ask me about buying, selling, or investing in Miami real estate.";
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, busy]);
+  useEffect(() => { const el = scrollRef.current; if (el) el.scrollTop = el.scrollHeight; }, [msgs, busy]);
 
   const send = async () => {
     const text = input.trim();
@@ -47,13 +47,12 @@ export default function ChatPanel({ height = 480, showHeader = true }: { height?
           </div>
         </div>
       )}
-      <div style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
         <div style={{ background: "var(--surface-2)", borderRadius: 12, padding: "10px 13px", fontSize: 13.5, lineHeight: 1.5, color: "var(--text)", alignSelf: "flex-start", maxWidth: "85%" }}>{greeting}</div>
         {msgs.map((m, i) => (
           <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: "85%", background: m.role === "user" ? "var(--coral)" : "var(--surface-2)", color: m.role === "user" ? "#fff" : "var(--text)", borderRadius: 12, padding: "10px 13px", fontSize: 13.5, lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{m.content}</div>
         ))}
         {busy && <div style={{ alignSelf: "flex-start", color: "var(--muted)", fontSize: 13, padding: "4px 6px" }}>{ru ? "Печатает…" : "Typing…"}</div>}
-        <div ref={endRef} />
       </div>
       <div style={{ borderTop: "1px solid var(--line)", padding: 12, display: "flex", gap: 8, flexShrink: 0 }}>
         <input
