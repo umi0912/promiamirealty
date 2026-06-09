@@ -15,7 +15,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { price, title, planId } = await req.json();
+    const { price, title, planId, origin } = await req.json();
+    const base = origin || site;
     const stripe = new Stripe(key);
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -28,8 +29,8 @@ export async function POST(req: Request) {
         quantity: 1,
       }],
       metadata: { planId: planId || "" },
-      success_url: `${site}/services?paid=1`,
-      cancel_url: `${site}/services?canceled=1`,
+      success_url: `${base}/services?paid=1`,
+      cancel_url: `${base}/services?canceled=1`,
     });
     return NextResponse.json({ url: session.url });
   } catch (e) {

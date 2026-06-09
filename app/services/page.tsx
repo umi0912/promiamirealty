@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLang } from "@/lib/i18n";
 
 type Step = "plans" | "pay" | "input" | "processing" | "result";
@@ -15,6 +15,23 @@ export default function Services() {
   const [result, setResult] = useState<any>(null);
   const [requestId, setRequestId] = useState<string>("");
   const [contact, setContact] = useState({ name: "", email: "" });
+  const [paying, setPaying] = useState(false);
+
+  // Возврат от Stripe: ?paid=1 → восстановить план/контакты и перейти к вводу данных.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "1") {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem("pmr_order") || "{}");
+        if (saved.plan) {
+          setPlan(saved.plan);
+          setContact({ name: saved.name || "", email: saved.email || "" });
+          setStep("input");
+        }
+      } catch {}
+      window.history.replaceState({}, "", "/services");
+    }
+  }, []);
 
   const PLANS = {
     review: { price: 50, accent: "var(--green)", title: ru ? "Проверка контракта" : "Contract review", desc: ru ? "Загрузите контракт — AI найдёт пробелы и риски, агент проверит." : "Upload your contract — AI flags gaps and risks, agent reviews." },
@@ -24,9 +41,24 @@ export default function Services() {
   const startPlan = (id: PlanId) => { setPlan(id); setStep("pay"); };
 
   const pay = async () => {
-    // ДЕМО: Stripe ещё не подключён — пропускаем к вводу.
-    // При реальном Stripe здесь будет редирект на checkout, возврат → input.
-    setStep("input");
+    if (!plan) return;
+    if (!contact.name || !contact.email) return;
+    setPaying(true);
+    // сохраняем заказ, чтобы пережить редирект на Stripe и обратно
+    sessionStorage.setItem("pmr_order", JSON.stringify({ plan, name: contact.name, email: contact.email }));
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ price: PLANS[plan].price, title: PLANS[plan].title, planId: plan, origin: window.location.origin }),
+      });
+      const data = await res.json();
+      if (data.url) { window.location.href = data.url; return; }  // → Stripe Checkout
+      // Stripe не настроен (configured:false) — фолбэк: продолжаем без оплаты (тест)
+      setStep("input");
+    } catch {
+      setStep("input");
+    }
+    setPaying(false);
   };
 
   const runAI = async () => {
@@ -105,10 +137,10 @@ export default function Services() {
           <div style={{ fontSize: 32, fontWeight: 500, fontFamily: "Fraunces, serif", color: PLANS[plan].accent, marginBottom: 18 }}>${PLANS[plan].price}</div>
           <input style={{ ...inp, marginBottom: 12 }} placeholder={ru ? "Ваше имя" : "Your name"} value={contact.name} onChange={e => setContact({ ...contact, name: e.target.value })} />
           <input style={{ ...inp, marginBottom: 18 }} placeholder="Email" value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} />
-          <button onClick={pay} style={{ width: "100%", background: PLANS[plan].accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Outfit" }}>
-            {ru ? `Оплатить $${PLANS[plan].price} картой` : `Pay $${PLANS[plan].price} by card`}
+          <button onClick={pay} disabled={paying || !contact.name || !contact.email} style={{ width: "100%", background: PLANS[plan].accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: paying || !contact.name || !contact.email ? 0.5 : 1, fontFamily: "Outfit" }}>
+            {paying ? (ru ? "Перенаправление…" : "Redirecting…") : (ru ? `Оплатить $${PLANS[plan].price} картой` : `Pay $${PLANS[plan].price} by card`)}
           </button>
-          <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, textAlign: "center" }}>{ru ? "Безопасная оплата через Stripe · демо-режим" : "Secure payment via Stripe · demo mode"}</p>
+          <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, textAlign: "center" }}>{ru ? "Безопасная оплата картой через Stripe" : "Secure card payment via Stripe"}</p>
           <button onClick={reset} style={{ width: "100%", marginTop: 8, background: "none", border: "none", color: "var(--muted)", fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>← {ru ? "Назад" : "Back"}</button>
         </div>
       )}
