@@ -9,13 +9,13 @@ const AGENT_EMAIL = process.env.AGENT_EMAIL || "info@promiamirealty.com";
 
 export const EMAIL_READY = Boolean(KEY);
 
-async function send(to: string, subject: string, html: string) {
+async function send(to: string, subject: string, html: string, replyTo?: string) {
   if (!KEY) {
     console.log(`[EMAIL demo] to=${to} subject="${subject}"`);
     return { demo: true };
   }
   const resend = new Resend(KEY);
-  await resend.emails.send({ from: FROM, to, subject, html });
+  await resend.emails.send({ from: FROM, to, subject, html, ...(replyTo ? { replyTo } : {}) });
   return { demo: false };
 }
 
@@ -54,4 +54,20 @@ export async function deliverToClient(req: { id: string; kind: string; client_na
       <p style="font-size:11px;color:#999;margin-top:8px">Request #${req.id}</p>
     </div>`;
   return send(req.client_email, isReview ? "Your contract review — PRO MIAMI REALTY" : "Your contract draft — PRO MIAMI REALTY", html);
+}
+
+// Новый лид с контактной формы → письмо агенту (reply-to = email клиента)
+export async function notifyAgentNewLead(lead: { name: string; email: string; phone?: string; message?: string; source?: string }) {
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:560px">
+      <h2 style="margin:0 0 12px">New website lead${lead.source ? ` · ${lead.source}` : ""}</h2>
+      <table style="font-size:14px;border-collapse:collapse">
+        <tr><td style="padding:4px 12px 4px 0;color:#666">Name</td><td>${lead.name}</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:#666">Email</td><td>${lead.email}</td></tr>
+        ${lead.phone ? `<tr><td style="padding:4px 12px 4px 0;color:#666">Phone</td><td>${lead.phone}</td></tr>` : ""}
+      </table>
+      ${lead.message ? `<p style="margin:14px 0 0;color:#666;font-size:13px">Message:</p><div style="background:#f6f6f4;border-radius:10px;padding:14px;font-size:14px;line-height:1.6;white-space:pre-wrap">${lead.message.replace(/</g, "&lt;")}</div>` : ""}
+      <p style="font-size:12px;color:#999;margin-top:16px">Reply directly to this email to respond to the client.</p>
+    </div>`;
+  return send(AGENT_EMAIL, `New lead — ${lead.name}`, html, lead.email);
 }
