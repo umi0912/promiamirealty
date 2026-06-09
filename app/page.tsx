@@ -5,6 +5,7 @@ import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import AIChat from "@/components/AIChat";
+import AnimatedGradient from "@/components/AnimatedGradient";
 
 export default function Home() {
   const { t } = useLang();
@@ -24,15 +25,17 @@ export default function Home() {
           <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
         </video>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.55) 0%,rgba(22,18,28,.3) 40%,rgba(22,18,28,.95) 100%)" }} />
+        {/* живой sunset-градиент в нижней зоне hero (поверх видео, под текстом) */}
+        <AnimatedGradient style={{ top: "auto", height: "55%", bottom: 0, mixBlendMode: "screen", opacity: 0.6 }} />
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
-          <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
-          <h1 style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
-          <p style={{ fontSize: 18, color: "var(--muted)", maxWidth: 520, marginTop: 24, lineHeight: 1.7 }}>
+          <div className="fade-up" style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
+          <h1 className="fade-up d1" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
+          <p className="fade-up d2" style={{ fontSize: 18, color: "var(--muted)", maxWidth: 520, marginTop: 24, lineHeight: 1.7 }}>
             {t("home.subtitle")}
           </p>
-          <div style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
-            <Link href="/search" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("home.cta.search")}</Link>
-            <a href={AGENT.calendly} style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("home.cta.book")}</a>
+          <div className="fade-up d3" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
+            <Link href="/search" className="btn" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("home.cta.search")}</Link>
+            <a href={AGENT.calendly} className="btn" style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("home.cta.book")}</a>
           </div>
         </div>
       </section>
@@ -43,14 +46,14 @@ export default function Home() {
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>{t("home.stats.eyebrow")}</div>
           <h2 style={{ fontSize: "clamp(26px,4vw,40px)", margin: 0 }}>{t("home.stats.title")}</h2>
         </div>
-        <div className="fade-up" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16 }}>
           {[
             { v: "120+", k: "home.stats.deals" as const, c: "var(--coral)" },
             { v: "$85M+", k: "home.stats.volume" as const, c: "var(--amber)" },
             { v: "6", k: "home.stats.cities" as const, c: "var(--green)" },
             { v: "3", k: "home.stats.langs" as const, c: "var(--violet)" },
           ].map((s, i) => (
-            <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: "28px 20px", textAlign: "center", border: "1px solid var(--line)" }}>
+            <div key={i} className={`lift fade-up d${i + 1}`} style={{ background: "var(--surface)", borderRadius: 16, padding: "28px 20px", textAlign: "center", border: "1px solid var(--line)" }}>
               <div style={{ fontSize: 38, fontWeight: 500, fontFamily: "Fraunces, serif", color: s.c, lineHeight: 1 }}>{s.v}</div>
               <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 10 }}>{t(s.k)}</div>
             </div>
@@ -87,7 +90,7 @@ export default function Home() {
         </div>
         <div className="mosaic fade-up">
           {featured[0] && (
-            <Link href={`/listings/${featured[0].id}`} className="m-big tile">
+            <Link href={`/listings/${featured[0].id}`} className="m-big tile lift">
               <div className="tile-img" style={{ backgroundImage: `url(${featured[0].photos[0]})` }} />
               <div className="tile-ov" /><span className="tile-badge">Featured</span>
               <div className="tile-info"><div className="tile-price" style={{ fontSize: 24 }}>{fmtPrice(featured[0].price)}</div><div className="tile-addr">{featured[0].address}</div><div className="tile-specs">{featured[0].beds} bd · {featured[0].baths} ba · {featured[0].sqft.toLocaleString()} sqft</div></div>
@@ -121,7 +124,7 @@ export default function Home() {
             <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 460, margin: "0 0 24px" }}>
               {t("home.inv.text")}
             </p>
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--coral)", color: "#fff", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500 }}>{t("home.inv.cta")}</span>
+            <span className="btn" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "var(--coral)", color: "#fff", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500 }}>{t("home.inv.cta")}</span>
           </div>
         </Link>
       </section>

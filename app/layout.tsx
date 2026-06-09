@@ -37,6 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        {/* фоновый sunset-акцент: фиксированные размытые пятна за всем контентом */}
+        <div aria-hidden style={{ position: "fixed", inset: 0, zIndex: -1, overflow: "hidden", pointerEvents: "none" }}>
+          <div style={{ position: "absolute", top: "-200px", left: "-100px", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(242,116,44,0.10), transparent 70%)", filter: "blur(40px)" }} />
+          <div style={{ position: "absolute", bottom: "-200px", right: "-100px", width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.10), transparent 70%)", filter: "blur(50px)" }} />
+        </div>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
         <LangProvider>
           <Header />
