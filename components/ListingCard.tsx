@@ -7,8 +7,8 @@ export default function ListingCard({ l, h = 240 }: { l: Listing; h?: number }) 
     <Link href={`/listings/${l.id}`} style={{ textDecoration: "none", display: "block" }}>
       <div className="lcard" style={{ position: "relative", height: h, borderRadius: 14, overflow: "hidden", background: "var(--surface-2)" }}>
         <div className="lcard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .6s cubic-bezier(.2,.7,.2,1)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(20,16,12,0) 45%,rgba(20,16,12,.9) 100%)" }} />
-        <span style={{ position: "absolute", top: 12, left: 12, background: "rgba(216,90,48,.92)", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 10px", borderRadius: 999 }}>{l.status}</span>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,0) 45%,rgba(22,18,28,.9) 100%)" }} />
+        <span style={{ position: "absolute", top: 12, left: 12, background: "rgba(242,116,44,.92)", color: "#fff", fontSize: 11, fontWeight: 500, padding: "4px 10px", borderRadius: 999 }}>{l.status}</span>
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: 14 }}>
           <div style={{ color: "#fff", fontSize: 20, fontWeight: 500, fontFamily: "Fraunces, serif" }}>{fmtPrice(l.price)}</div>
           <div style={{ color: "rgba(255,255,255,.85)", fontSize: 13, marginTop: 2 }}>{l.address}, {l.city}</div>

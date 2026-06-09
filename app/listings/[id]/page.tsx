@@ -38,7 +38,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
       <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40, marginTop: 28 }} className="dgrid">
         <div>
           <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-            <span style={{ background: "rgba(216,90,48,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
+            <span style={{ background: "rgba(242,116,44,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
             <span style={{ background: "var(--surface-2)", color: "var(--muted)", fontSize: 12, padding: "4px 11px", borderRadius: 999 }}>{l.type}</span>
           </div>
           <div style={{ fontSize: "clamp(32px,5vw,44px)", fontFamily: "Fraunces, serif", fontWeight: 500, lineHeight: 1 }}>{fmtPrice(l.price)}</div>
@@ -61,7 +61,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
           <MortgageCalculator price={l.price} />
           <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", padding: 18 }}>
             <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-              <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(216,90,48,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 500 }}>AI</div>
+              <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(242,116,44,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 500 }}>AI</div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 15, fontWeight: 500 }}>{AGENT.name}</div>
                 <div style={{ fontSize: 12, color: "var(--muted)" }}>{AGENT.brokerage} · {AGENT.license}</div>

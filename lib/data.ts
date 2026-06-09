@@ -98,3 +98,58 @@ export const AGENT = {
 export const fmtPrice = (n: number) => "$" + n.toLocaleString("en-US");
 export const fmtPriceShort = (n: number) =>
   n >= 1000000 ? "$" + (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + "M" : "$" + Math.round(n / 1000) + "k";
+
+// Города для отдельных лендингов (SEO + навигация по локациям)
+export type City = {
+  slug: string;
+  name: string;
+  tagline: { en: string; ru: string };
+  blurb: { en: string; ru: string };
+  photo: string;
+  matchCities: string[]; // какие city из листингов сюда попадают
+};
+
+export const CITIES: City[] = [
+  {
+    slug: "miami", name: "Miami",
+    tagline: { en: "The heart of South Florida", ru: "Сердце Южной Флориды" },
+    blurb: { en: "From Brickell high-rises to single-family neighborhoods, Miami offers urban energy, beaches, and strong long-term value.", ru: "От небоскрёбов Brickell до семейных районов — Майами сочетает городскую энергию, пляжи и устойчивый рост стоимости." },
+    photo: "https://images.unsplash.com/photo-1506966953602-c20cc11f75e3?w=1400&q=80",
+    matchCities: ["Miami", "Miami Beach"],
+  },
+  {
+    slug: "miami-beach", name: "Miami Beach",
+    tagline: { en: "Waterfront living, world-famous", ru: "Жизнь у воды, всемирно известная" },
+    blurb: { en: "Oceanfront condos, Art Deco charm, and a lifestyle that draws buyers and investors from around the world.", ru: "Кондо у океана, ар-деко и стиль жизни, который привлекает покупателей и инвесторов со всего мира." },
+    photo: "https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=1400&q=80",
+    matchCities: ["Miami Beach"],
+  },
+  {
+    slug: "miramar", name: "Miramar",
+    tagline: { en: "Family-friendly Broward living", ru: "Семейный район Broward" },
+    blurb: { en: "Newer communities, great schools, and space — a top choice for families looking for value in Broward County.", ru: "Новые районы, хорошие школы и простор — отличный выбор для семей, ищущих ценность в Broward." },
+    photo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1400&q=80",
+    matchCities: ["Miramar"],
+  },
+  {
+    slug: "hollywood", name: "Hollywood",
+    tagline: { en: "Beaches and a classic boardwalk", ru: "Пляжи и классический променад" },
+    blurb: { en: "A walkable beach town between Miami and Fort Lauderdale, mixing affordability with a laid-back coastal lifestyle.", ru: "Пляжный город между Майами и Форт-Лодердейлом — доступность и спокойный прибрежный стиль жизни." },
+    photo: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1400&q=80",
+    matchCities: ["Hollywood"],
+  },
+  {
+    slug: "sunny-isles", name: "Sunny Isles Beach",
+    tagline: { en: "Luxury oceanfront towers", ru: "Люксовые башни у океана" },
+    blurb: { en: "High-end oceanfront condos and a strong investment market — Sunny Isles is one of South Florida's premium addresses.", ru: "Премиальные кондо у океана и сильный инвестиционный рынок — Sunny Isles один из престижных адресов Южной Флориды." },
+    photo: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1400&q=80",
+    matchCities: ["Sunny Isles Beach", "Sunny Isles"],
+  },
+  {
+    slug: "boca-raton", name: "Boca Raton",
+    tagline: { en: "Upscale living in Palm Beach County", ru: "Престижная жизнь в Palm Beach" },
+    blurb: { en: "Golf, gated communities, and refined coastal living — Boca Raton is a magnet for buyers seeking quality and calm.", ru: "Гольф, закрытые сообщества и утончённая прибрежная жизнь — Boca Raton привлекает покупателей, ценящих качество и спокойствие." },
+    photo: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80",
+    matchCities: ["Boca Raton"],
+  },
+];

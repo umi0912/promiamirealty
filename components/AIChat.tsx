@@ -13,7 +13,7 @@ export default function AIChat() {
           <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>AI assistant connecting… (agent widget embeds here)</p>
         </div>
       )}
-      <button onClick={() => setOpen(!open)} aria-label="Chat" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--coral)", border: "none", color: "#fff", fontSize: 24, cursor: "pointer", boxShadow: "0 6px 20px rgba(216,90,48,.4)" }}>{open ? "✕" : "✦"}</button>
+      <button onClick={() => setOpen(!open)} aria-label="Chat" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--coral)", border: "none", color: "#fff", fontSize: 24, cursor: "pointer", boxShadow: "0 6px 20px rgba(242,116,44,.4)" }}>{open ? "✕" : "✦"}</button>
     </div>
   );
 }

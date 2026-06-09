@@ -55,7 +55,7 @@ export default function Search() {
             {results.map(l => (
               <Link key={l.id} href={`/listings/${l.id}`} onMouseEnter={() => setHot(l.id)} onMouseLeave={() => setHot(null)}
                 style={{ position: "absolute", ...px(l), transform: "translate(-50%,-100%)", textDecoration: "none", zIndex: hot === l.id ? 10 : 1 }}>
-                <span style={{ display: "inline-block", background: hot === l.id ? "var(--coral)" : "rgba(20,16,12,.88)", color: "#fff", fontSize: 12, fontWeight: 500, padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap", transition: "all .2s", transform: hot === l.id ? "scale(1.12)" : "scale(1)" }}>{fmtPriceShort(l.price)}</span>
+                <span style={{ display: "inline-block", background: hot === l.id ? "var(--coral)" : "rgba(22,18,28,.88)", color: "#fff", fontSize: 12, fontWeight: 500, padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap", transition: "all .2s", transform: hot === l.id ? "scale(1.12)" : "scale(1)" }}>{fmtPriceShort(l.price)}</span>
               </Link>
             ))}
           </div>

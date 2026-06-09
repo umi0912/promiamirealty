@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { LangProvider } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "PRO MIAMI REALTY — Miami & Broward Real Estate",
@@ -37,9 +38,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-        <Header />
-        <main style={{ minHeight: "60vh" }}>{children}</main>
-        <Footer />
+        <LangProvider>
+          <Header />
+          <main style={{ minHeight: "60vh" }}>{children}</main>
+          <Footer />
+        </LangProvider>
       </body>
     </html>
   );

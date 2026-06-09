@@ -18,7 +18,7 @@ export default function Investors() {
       {/* HERO */}
       <section style={{ position: "relative", minHeight: "72vh", display: "flex", alignItems: "flex-end" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(20,16,12,.6) 0%,rgba(20,16,12,.4) 40%,rgba(20,16,12,.96) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.6) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 64px", width: "100%" }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 16 }}>For investors</div>
           <h1 style={{ fontSize: "clamp(36px,6vw,68px)", lineHeight: 1.04, margin: 0, maxWidth: 760 }}>Miami real estate that pays you back.</h1>
@@ -27,7 +27,7 @@ export default function Investors() {
           </p>
           <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
             <a href="#calculator" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>Analyze a deal</a>
-            <a href="#deals" style={{ background: "rgba(245,239,233,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>See income properties</a>
+            <a href="#deals" style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>See income properties</a>
           </div>
         </div>
       </section>
