@@ -23,6 +23,10 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", margin: "14px 0 10px" }}>{city.tagline[lang]}</div>
           <h1 style={{ fontSize: "clamp(36px,6vw,64px)", lineHeight: 1.04, margin: 0 }}>{city.name}</h1>
           <p style={{ fontSize: 17, color: "var(--muted)", maxWidth: 560, marginTop: 16, lineHeight: 1.7 }}>{city.blurb[lang]}</p>
+          <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+            <Link href={`/search?city=${encodeURIComponent(city.name)}`} style={{ background: "var(--coral)", color: "#fff", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{lang === "ru" ? `Искать в ${city.name}` : `Search in ${city.name}`}</Link>
+            <a href={AGENT.calendly} style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{lang === "ru" ? "Записаться" : "Book a consultation"}</a>
+          </div>
         </div>
       </section>
 

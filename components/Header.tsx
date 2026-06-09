@@ -7,7 +7,6 @@ import { useLang, DictKey } from "@/lib/i18n";
 const nav: { href: string; key: DictKey }[] = [
   { href: "/", key: "nav.home" },
   { href: "/search", key: "nav.search" },
-  { href: "/city", key: "nav.cities" },
   { href: "/buyers", key: "nav.buyers" },
   { href: "/sellers", key: "nav.sellers" },
   { href: "/investors", key: "nav.investors" },
@@ -68,7 +67,7 @@ export default function Header() {
         </div>
       )}
       <style>{`
-        @media (max-width: 1100px){ .desktop-nav{ display:none !important; } .mobile-toggle{ display:block !important; } }
+        @media (max-width: 980px){ .desktop-nav{ display:none !important; } .mobile-toggle{ display:block !important; } }
       `}</style>
     </header>
   );

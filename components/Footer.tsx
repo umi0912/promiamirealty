@@ -5,7 +5,7 @@ import { useLang, DictKey } from "@/lib/i18n";
 
 export default function Footer() {
   const { t } = useLang();
-  const links: [string, DictKey][] = [["/search","nav.search"],["/city","nav.cities"],["/buyers","nav.buyers"],["/sellers","nav.sellers"],["/investors","nav.investors"],["/about","nav.about"],["/contact","nav.contact"]];
+  const links: [string, DictKey][] = [["/search","nav.search"],["/city","nav.cities"],["/buyers","nav.buyers"],["/sellers","nav.sellers"],["/investors","nav.investors"],["/services","nav.services"],["/about","nav.about"],["/contact","nav.contact"]];
   return (
     <footer style={{ background: "var(--surface)", borderTop: "1px solid var(--line)", marginTop: 80 }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "56px 24px 32px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 40 }}>

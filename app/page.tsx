@@ -18,8 +18,11 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "flex-end" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
+      <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "flex-end", overflow: "hidden" }}>
+        <video autoPlay muted loop playsInline poster="https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=2000&q=80"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
+          <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
+        </video>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.55) 0%,rgba(22,18,28,.3) 40%,rgba(22,18,28,.95) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
@@ -30,6 +33,45 @@ export default function Home() {
           <div style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
             <Link href="/search" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("home.cta.search")}</Link>
             <a href={AGENT.calendly} style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("home.cta.book")}</a>
+          </div>
+        </div>
+      </section>
+
+      {/* STATS — о компании */}
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "72px 24px 0" }}>
+        <div className="fade-up" style={{ textAlign: "center", marginBottom: 36 }}>
+          <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>{t("home.stats.eyebrow")}</div>
+          <h2 style={{ fontSize: "clamp(26px,4vw,40px)", margin: 0 }}>{t("home.stats.title")}</h2>
+        </div>
+        <div className="fade-up" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 16 }}>
+          {[
+            { v: "120+", k: "home.stats.deals" as const, c: "var(--coral)" },
+            { v: "$85M+", k: "home.stats.volume" as const, c: "var(--amber)" },
+            { v: "6", k: "home.stats.cities" as const, c: "var(--green)" },
+            { v: "3", k: "home.stats.langs" as const, c: "var(--violet)" },
+          ].map((s, i) => (
+            <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: "28px 20px", textAlign: "center", border: "1px solid var(--line)" }}>
+              <div style={{ fontSize: 38, fontWeight: 500, fontFamily: "Fraunces, serif", color: s.c, lineHeight: 1 }}>{s.v}</div>
+              <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 10 }}>{t(s.k)}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 11, color: "var(--muted)", textAlign: "center", marginTop: 16 }}>* placeholder figures — confirm with client</p>
+      </section>
+
+      {/* AGENT VIDEO */}
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "72px 24px 0" }}>
+        <div className="fade-up agentvid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
+          <div>
+            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 12 }}>{t("home.agent.eyebrow")}</div>
+            <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)", margin: "0 0 16px", lineHeight: 1.1 }}>{t("home.agent.title")}</h2>
+            <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 440 }}>{t("home.agent.text")}</p>
+          </div>
+          <div style={{ position: "relative", borderRadius: 18, overflow: "hidden", aspectRatio: "16/10", background: "var(--surface-2)" }}>
+            <video controls poster="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1000&q=80" style={{ width: "100%", height: "100%", objectFit: "cover" }}>
+              <source src="https://cdn.coverr.co/videos/coverr-a-woman-in-a-business-meeting-5244/1080p.mp4" type="video/mp4" />
+            </video>
+            <div style={{ position: "absolute", top: 12, left: 12, background: "rgba(22,18,28,.8)", color: "#fff", fontSize: 11, padding: "4px 10px", borderRadius: 999 }}>~30 sec · placeholder</div>
           </div>
         </div>
       </section>
@@ -119,7 +161,7 @@ export default function Home() {
         .tile-price{ color:#fff; font-size:17px; font-weight:500; font-family:'Fraunces',serif; }
         .tile-addr{ color:rgba(255,255,255,.82); font-size:12px; margin-top:2px; }
         .tile-specs{ color:rgba(255,255,255,.7); font-size:12px; margin-top:4px; }
-        @media (max-width:760px){ .mosaic{ grid-template-columns:repeat(2,1fr); } .m-big{ grid-column:span 2; grid-row:span 1; } }
+        @media (max-width:760px){ .mosaic{ grid-template-columns:repeat(2,1fr); } .m-big{ grid-column:span 2; grid-row:span 1; } .agentvid{ grid-template-columns:1fr !important; } }
       `}</style>
     </>
   );

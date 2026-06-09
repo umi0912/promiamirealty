@@ -1,14 +1,29 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LISTINGS, fmtPrice, fmtPriceShort } from "@/lib/data";
 
-export default function Search() {
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div style={{ paddingTop: 120, textAlign: "center", color: "var(--muted)" }}>Loading…</div>}>
+      <Search />
+    </Suspense>
+  );
+}
+
+function Search() {
+  const sp = useSearchParams();
   const [q, setQ] = useState("");
   const [type, setType] = useState("all");
   const [beds, setBeds] = useState(0);
   const [maxPrice, setMaxPrice] = useState(99999999);
   const [hot, setHot] = useState<string | null>(null);
+
+  useEffect(() => {
+    const city = sp.get("city");
+    if (city) setQ(city);
+  }, [sp]);
 
   const results = useMemo(() => {
     const term = q.trim().toLowerCase();
