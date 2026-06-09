@@ -40,9 +40,12 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div style={{ borderTop: "1px solid var(--line)", padding: "20px 24px", maxWidth: 1280, margin: "0 auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+      <div style={{ borderTop: "1px solid var(--line)", padding: "20px 24px", maxWidth: 1280, margin: "0 auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
         <span style={{ color: "var(--muted)", fontSize: 13 }}>© {new Date().getFullYear()} {AGENT.brokerage}. {t("footer.rights")}</span>
-        <span style={{ color: "var(--muted)", fontSize: 13 }}>{t("footer.equal")}</span>
+        <span style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <Link href="/privacy" className="ulink" style={{ color: "var(--muted)", fontSize: 13, textDecoration: "none" }}>{t("footer.privacy")}</Link>
+          <span style={{ color: "var(--muted)", fontSize: 13 }}>{t("footer.equal")}</span>
+        </span>
       </div>
     </footer>
   );

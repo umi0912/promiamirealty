@@ -57,6 +57,7 @@ export const DICT = {
   "footer.contact": { en: "Contact", ru: "Контакты" },
   "footer.connect": { en: "Connect", ru: "Связь" },
   "footer.rights": { en: "All rights reserved.", ru: "Все права защищены." },
+  "footer.privacy": { en: "Privacy Policy", ru: "Политика конфиденциальности" },
   "footer.equal": { en: "Equal Housing Opportunity · Listings via BeachesMLS IDX", ru: "Equal Housing Opportunity · Объекты через BeachesMLS IDX" },
 
   // buyers
