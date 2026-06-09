@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         {/* фоновый sunset-акцент: фиксированные размытые пятна за всем контентом */}
-        <div aria-hidden style={{ position: "fixed", inset: 0, zIndex: -1, overflow: "hidden", pointerEvents: "none" }}>
+        <div aria-hidden style={{ position: "fixed", inset: 0, zIndex: -1, overflow: "hidden", pointerEvents: "none", transform: "translateZ(0)", willChange: "transform" }}>
           <div style={{ position: "absolute", top: "-200px", left: "-100px", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(242,116,44,0.08), transparent 70%)" }} />
           <div style={{ position: "absolute", bottom: "-200px", right: "-100px", width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.08), transparent 70%)" }} />
         </div>
