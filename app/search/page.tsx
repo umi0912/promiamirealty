@@ -18,7 +18,6 @@ function Search() {
   const [type, setType] = useState("all");
   const [beds, setBeds] = useState(0);
   const [maxPrice, setMaxPrice] = useState(99999999);
-  const [hot, setHot] = useState<string | null>(null);
 
   useEffect(() => {
     const city = sp.get("city");
@@ -68,16 +67,16 @@ function Search() {
               <path d="M110,30 L120,440 M220,25 L230,445 M320,35 L310,440" stroke="#1f3252" strokeWidth="1" />
             </svg>
             {results.map(l => (
-              <Link key={l.id} href={`/listings/${l.id}`} onMouseEnter={() => setHot(l.id)} onMouseLeave={() => setHot(null)}
-                style={{ position: "absolute", ...px(l), transform: "translate(-50%,-100%)", textDecoration: "none", zIndex: hot === l.id ? 10 : 1 }}>
-                <span style={{ display: "inline-block", background: hot === l.id ? "var(--coral)" : "rgba(22,18,28,.88)", color: "#fff", fontSize: 12, fontWeight: 500, padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap", transition: "all .2s", transform: hot === l.id ? "scale(1.12)" : "scale(1)" }}>{fmtPriceShort(l.price)}</span>
+              <Link key={l.id} href={`/listings/${l.id}`} className="mappin"
+                style={{ position: "absolute", ...px(l), transform: "translate(-50%,-100%)", textDecoration: "none", zIndex: 2 }}>
+                <span style={{ display: "inline-block", background: "rgba(22,18,28,.88)", color: "#fff", fontSize: 12, fontWeight: 500, padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap", transition: "all .2s" }}>{fmtPriceShort(l.price)}</span>
               </Link>
             ))}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {results.map(l => (
-              <Link key={l.id} href={`/listings/${l.id}`} onMouseEnter={() => setHot(l.id)} onMouseLeave={() => setHot(null)}
-                style={{ display: "flex", gap: 12, background: hot === l.id ? "var(--surface-2)" : "var(--surface)", border: `1px solid ${hot === l.id ? "var(--coral)" : "var(--line)"}`, borderRadius: 14, padding: 10, textDecoration: "none", transition: "all .2s" }}>
+              <Link key={l.id} href={`/listings/${l.id}`} className="scard"
+                style={{ display: "flex", gap: 12, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 14, padding: 10, textDecoration: "none", transition: "all .2s" }}>
                 <div style={{ width: 110, height: 84, borderRadius: 10, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center", flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 18, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
@@ -90,7 +89,12 @@ function Search() {
           </div>
         </div>
       </div>
-      <style>{`@media(max-width:820px){ .sgrid{ grid-template-columns:1fr !important; } .smap{ position:relative !important; top:0 !important; height:300px !important; min-height:300px !important; } }`}</style>
+      <style>{`
+        .scard:hover{ border-color: var(--coral) !important; background: var(--surface-2) !important; }
+        .mappin:hover span{ background: var(--coral) !important; transform: scale(1.12); }
+        .mappin:hover{ z-index: 10 !important; }
+        @media(max-width:820px){ .sgrid{ grid-template-columns:1fr !important; } .smap{ position:relative !important; top:0 !important; height:300px !important; min-height:300px !important; } }
+      `}</style>
     </div>
   );
 }

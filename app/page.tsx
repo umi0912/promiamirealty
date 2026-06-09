@@ -143,8 +143,8 @@ export default function Home() {
           <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: 0 }}>{t("home.consult.title")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 10 }}>{t("home.consult.text")}</p>
         </div>
-        <div className="fade-up">
-          <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1`} width="100%" height="640" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
+        <div className="fade-up" style={{ position: "relative" }}>
+          <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="700" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
         </div>
       </section>
 

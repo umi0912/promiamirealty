@@ -22,7 +22,7 @@ export default function Contact() {
         </div>
         <div>
           <div style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>{t("contact.pickTime")}</div>
-          <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1`} width="100%" height="600" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
+          <iframe src={`${AGENT.calendly}?hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="640" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
         </div>
       </div>
       <style>{`@media(max-width:820px){ .cgrid{ grid-template-columns:1fr !important; } }`}</style>
