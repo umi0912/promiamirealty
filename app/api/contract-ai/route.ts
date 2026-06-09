@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       kind, amount,
       client_name: body.client_name || "Client",
       client_email: body.client_email || "",
-      file_url: body.filename || null,
+      file_url: body.file_path || body.filename || null,
       deal_data: kind === "prepare" ? (body.deal || {}) : null,
       ai_draft,
       final_text: null,

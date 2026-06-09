@@ -39,13 +39,17 @@ export async function notifyAgentNewRequest(req: { id: string; kind: string; cli
 }
 
 // Клиент: финальный результат от Ays
-export async function deliverToClient(req: { id: string; kind: string; client_name: string; client_email: string }, finalText: string) {
+export async function deliverToClient(req: { id: string; kind: string; client_name: string; client_email: string }, finalText: string, fileLink?: string | null) {
   const isReview = req.kind === "review";
+  const fileBlock = fileLink ? `
+      <p style="margin:16px 0"><a href="${fileLink}" style="background:#F2742C;color:#fff;padding:11px 20px;border-radius:8px;text-decoration:none;font-size:14px">Download your document (PDF) →</a></p>
+      <p style="font-size:11px;color:#999">Download link is valid for 7 days.</p>` : "";
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:560px">
       <h2 style="margin:0 0 12px">${isReview ? "Your contract review is ready" : "Your contract draft is ready"}</h2>
       <p style="margin:0 0 12px">Hi ${req.client_name}, here is the result, reviewed by Ays Iziken (PRO MIAMI REALTY, FL #3517956):</p>
       <div style="background:#f6f6f4;border-radius:10px;padding:18px;font-size:14px;line-height:1.7;white-space:pre-wrap">${finalText.replace(/</g, "&lt;")}</div>
+      ${fileBlock}
       <p style="font-size:13px;color:#666;margin-top:16px">Questions? Reply to this email or call (305) 766-5513.</p>
       <p style="font-size:11px;color:#999;margin-top:8px">Request #${req.id}</p>
     </div>`;

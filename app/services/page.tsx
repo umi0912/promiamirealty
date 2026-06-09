@@ -11,6 +11,7 @@ export default function Services() {
   const [step, setStep] = useState<Step>("plans");
   const [plan, setPlan] = useState<PlanId | null>(null);
   const [filename, setFilename] = useState("");
+  const [fileObj, setFileObj] = useState<File | null>(null);
   const [deal, setDeal] = useState({ buyer: "", seller: "", property: "", price: "", closing: "", earnest: "" });
   const [result, setResult] = useState<any>(null);
   const [requestId, setRequestId] = useState<string>("");
@@ -64,9 +65,18 @@ export default function Services() {
   const runAI = async () => {
     setStep("processing");
     try {
+      let filePath = "";
+      // для review — сначала загружаем реальный PDF
+      if (plan === "review" && fileObj) {
+        const fd = new FormData();
+        fd.append("file", fileObj);
+        const up = await fetch("/api/upload", { method: "POST", body: fd });
+        const upData = await up.json();
+        if (upData.ok) filePath = upData.path;
+      }
       const payload = plan === "prepare"
         ? { mode: "prepare", deal, client_name: contact.name, client_email: contact.email }
-        : { mode: "review", filename, client_name: contact.name, client_email: contact.email };
+        : { mode: "review", filename, file_path: filePath, client_name: contact.name, client_email: contact.email };
       const res = await fetch("/api/contract-ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
       setResult(data.result);
@@ -77,7 +87,7 @@ export default function Services() {
     setStep("result");
   };
 
-  const reset = () => { setStep("plans"); setPlan(null); setResult(null); setFilename(""); };
+  const reset = () => { setStep("plans"); setPlan(null); setResult(null); setFilename(""); setFileObj(null); };
 
   const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", boxSizing: "border-box", fontFamily: "Outfit" };
   const lab: React.CSSProperties = { fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 6 };
@@ -151,7 +161,7 @@ export default function Services() {
           <h3 style={{ fontSize: 18, margin: "0 0 6px" }}>{ru ? "Загрузите контракт" : "Upload your contract"}</h3>
           <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 18px" }}>{ru ? "PDF вашего контракта или листинга." : "PDF of your contract or listing."}</p>
           <label style={{ display: "block", border: "1.5px dashed var(--line)", borderRadius: 12, padding: 32, textAlign: "center", cursor: "pointer", background: "var(--bg)" }}>
-            <input type="file" accept="application/pdf" style={{ display: "none" }} onChange={e => setFilename(e.target.files?.[0]?.name || "")} />
+            <input type="file" accept="application/pdf" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0]; setFileObj(f || null); setFilename(f?.name || ""); }} />
             <div style={{ fontSize: 14, color: filename ? "var(--text)" : "var(--muted)" }}>{filename || (ru ? "Нажмите, чтобы выбрать PDF" : "Click to choose a PDF")}</div>
           </label>
           <button onClick={runAI} disabled={!filename} style={{ width: "100%", marginTop: 18, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: filename ? 1 : 0.5, fontFamily: "Outfit" }}>

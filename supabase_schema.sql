@@ -28,3 +28,6 @@ alter table contract_requests enable row level security;
 -- (Опционально) хранилище загруженных PDF:
 -- Supabase → Storage → New bucket → name: "contracts", Public: OFF (приватный).
 -- Серверный роут будет грузить файлы через service_role ключ.
+
+-- ОБНОВЛЕНИЕ (если таблица уже создана ранее): добавить колонку для ответного PDF агента
+alter table contract_requests add column if not exists final_file_url text;

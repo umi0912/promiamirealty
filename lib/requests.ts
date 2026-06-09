@@ -24,6 +24,7 @@ export interface ContractRequest {
   ai_draft?: any | null;
   // финал от Ays:
   final_text?: string | null;   // что Ays отправляет клиенту
+  final_file_url?: string | null; // ответный PDF от Ays (опционально)
   delivered_at?: string | null;
 }
 
@@ -80,4 +81,23 @@ export async function updateRequest(id: string, patch: Partial<ContractRequest>)
   if (i === -1) return null;
   mem[i] = { ...mem[i], ...patch };
   return mem[i];
+}
+
+// ---- Файлы (Supabase Storage, bucket "contracts") ----
+const BUCKET = "contracts";
+
+// Загрузка файла. Возвращает путь внутри bucket (не публичный URL — bucket приватный).
+export async function uploadContractFile(path: string, bytes: ArrayBuffer, contentType: string): Promise<string | null> {
+  if (!SUPABASE_READY) return path; // демо: просто возвращаем путь-заглушку
+  const { error } = await sb().storage.from(BUCKET).upload(path, bytes, { contentType, upsert: true });
+  if (error) throw error;
+  return path;
+}
+
+// Временная ссылка на скачивание приватного файла (signed URL, действует 1 час).
+export async function signedFileUrl(path: string): Promise<string | null> {
+  if (!SUPABASE_READY) return null;
+  const { data, error } = await sb().storage.from(BUCKET).createSignedUrl(path, 3600);
+  if (error) return null;
+  return data?.signedUrl || null;
 }

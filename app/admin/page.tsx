@@ -5,7 +5,7 @@ type Req = {
   id: string; created_at: string; kind: "review" | "prepare"; status: string;
   client_name: string; client_email: string; amount: number;
   file_url?: string; deal_data?: Record<string, string>; ai_draft?: any;
-  final_text?: string; delivered_at?: string;
+  final_text?: string; final_file_url?: string; delivered_at?: string;
 };
 
 export default function Admin() {
@@ -16,6 +16,30 @@ export default function Admin() {
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const [err, setErr] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [replyFile, setReplyFile] = useState("");
+
+  // скачать PDF клиента (через signed URL)
+  const downloadClientFile = async (path: string) => {
+    const res = await fetch(`/api/admin/file?path=${encodeURIComponent(path)}`, { headers: { "x-admin-pass": pass } });
+    const data = await res.json();
+    if (data.ok && data.url) window.open(data.url, "_blank");
+    else setErr("Could not open file");
+  };
+
+  // загрузить ответный PDF агента
+  const uploadReply = async (file: File) => {
+    if (!active) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("id", active.id);
+    const res = await fetch("/api/admin/file", { method: "POST", headers: { "x-admin-pass": pass }, body: fd });
+    const data = await res.json();
+    setUploading(false);
+    if (data.ok) { setReplyFile(file.name); await load(pass); }
+    else setErr("Upload failed");
+  };
 
   const load = async (p: string) => {
     const res = await fetch("/api/admin/requests", { headers: { "x-admin-pass": p } });
@@ -39,6 +63,8 @@ export default function Admin() {
 
   const openReq = (r: Req) => {
     setActive(r);
+    setReplyFile("");
+    setErr("");
     // префилл черновика для правки: из AI-результата делаем читаемый текст
     if (r.final_text) { setDraft(r.final_text); return; }
     if (r.kind === "review" && r.ai_draft?.findings) {
@@ -117,7 +143,11 @@ export default function Admin() {
 
             <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 14 }}>
               {active.client_email} · ${active.amount}
-              {active.file_url && <div style={{ marginTop: 4 }}>File: {active.file_url}</div>}
+              {active.file_url && (
+                <div style={{ marginTop: 8 }}>
+                  <button onClick={() => downloadClientFile(active.file_url!)} style={{ background: "var(--surface-2)", color: "var(--text)", border: "1px solid var(--line)", padding: "8px 14px", borderRadius: 8, fontSize: 13, cursor: "pointer", fontFamily: "Outfit" }}>📄 Download client's PDF</button>
+                </div>
+              )}
             </div>
 
             {/* AI DRAFT (read-only reference) */}
@@ -139,6 +169,15 @@ export default function Admin() {
               <>
                 <div style={{ fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Final message to client (edit before sending)</div>
                 <textarea value={draft} onChange={e => setDraft(e.target.value)} style={{ width: "100%", minHeight: 180, background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: 14, fontSize: 14, outline: "none", boxSizing: "border-box", resize: "vertical", fontFamily: "Outfit", lineHeight: 1.6 }} />
+
+                <div style={{ marginTop: 12, marginBottom: 4, fontSize: 12, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Attach completed PDF (optional)</div>
+                <label style={{ display: "block", border: "1.5px dashed var(--line)", borderRadius: 10, padding: 16, textAlign: "center", cursor: "pointer", background: "var(--bg)" }}>
+                  <input type="file" accept="application/pdf" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0]; if (f) uploadReply(f); }} />
+                  <span style={{ fontSize: 13, color: replyFile || active.final_file_url ? "var(--green)" : "var(--muted)" }}>
+                    {uploading ? "Uploading…" : (replyFile || active.final_file_url ? "✓ PDF attached — click to replace" : "Click to attach a PDF for the client")}
+                  </span>
+                </label>
+
                 <button onClick={deliver} disabled={sending || !draft.trim()} style={{ width: "100%", marginTop: 12, background: "var(--green)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: sending || !draft.trim() ? 0.5 : 1, fontFamily: "Outfit" }}>
                   {sending ? "Sending…" : "Review done → send to client"}
                 </button>
