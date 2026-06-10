@@ -15,7 +15,7 @@ export default function Investors() {
   return (
     <div>
       <section style={{ position: "relative", minHeight: "72vh", display: "flex", alignItems: "flex-end" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1736829391323-a302d2737210?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.6) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 64px", width: "100%" }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 16 }}>{t("inv.eyebrow")}</div>
