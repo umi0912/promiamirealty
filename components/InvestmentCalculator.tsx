@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useLang } from "@/lib/i18n";
+import CalcContactCTA from "@/components/CalcContactCTA";
 
 export default function InvestmentCalculator() {
   const { lang } = useLang();
@@ -36,8 +37,11 @@ export default function InvestmentCalculator() {
     term: { en: "Loan term", ru: "Срок кредита" },
     rent: { en: "Monthly rent income", ru: "Доход от аренды в месяц" },
     tax: { en: "Taxes (yearly)", ru: "Налоги (в год)" },
+    taxH: { en: "Usually ~1.5–2% of price/yr", ru: "Обычно ~1.5–2% от цены/год" },
     ins: { en: "Insurance (yearly)", ru: "Страховка (в год)" },
+    insH: { en: "South FL ~$2.5–5k/yr", ru: "Южная FL ~$2.5–5 тыс/год" },
     hoa: { en: "HOA (monthly)", ru: "Ассоциация (в месяц)" },
+    hoaH: { en: "From the listing; 0 if none", ru: "Из листинга; 0 если нет" },
     cap: { en: "Cap rate", ru: "Cap rate (доходность)" },
     capSub: { en: "Net income vs. price — ignores financing", ru: "Чистый доход к цене — без учёта ипотеки" },
     cf: { en: "Annual cash flow", ru: "Денежный поток / год" },
@@ -46,13 +50,14 @@ export default function InvestmentCalculator() {
   };
   const tt = (o: { en: string; ru: string }) => o[lang];
 
-  const field = (label: string, val: number, set: (n: number) => void, prefix = "$", step = 1000) => (
+  const field = (label: string, val: number, set: (n: number) => void, prefix = "$", step = 1000, hint?: string) => (
     <div>
       <label style={{ fontSize: 12, color: "var(--muted)", display: "block", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</label>
       <div style={{ display: "flex", alignItems: "center", background: "var(--bg)", borderRadius: 10, border: "1px solid var(--line)", padding: "0 12px" }}>
         {prefix && <span style={{ color: "var(--muted)", fontSize: 14 }}>{prefix}</span>}
         <input type="number" value={val} step={step} onChange={e=>set(e.target.value===""?0:+e.target.value)} style={{ background: "none", border: "none", color: "var(--text)", fontSize: 15, padding: "10px 8px", width: "100%", outline: "none", fontFamily: "Inter" }} />
       </div>
+      {hint && <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 5, lineHeight: 1.4 }}>{hint}</div>}
     </div>
   );
 
@@ -78,9 +83,9 @@ export default function InvestmentCalculator() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 14 }}>
-        {field(tt(L.tax), taxYr, setTaxYr, "$", 100)}
-        {field(tt(L.ins), insYr, setInsYr, "$", 100)}
-        {field(tt(L.hoa), hoaMo, setHoaMo, "$", 50)}
+        {field(tt(L.tax), taxYr, setTaxYr, "$", 100, tt(L.taxH))}
+        {field(tt(L.ins), insYr, setInsYr, "$", 100, tt(L.insH))}
+        {field(tt(L.hoa), hoaMo, setHoaMo, "$", 50, tt(L.hoaH))}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 12, marginTop: 20 }}>
@@ -96,6 +101,8 @@ export default function InvestmentCalculator() {
         </div>
       </div>
       <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 14, marginBottom: 0 }}>{tt(L.note)}</p>
+
+      <CalcContactCTA />
     </div>
   );
 }

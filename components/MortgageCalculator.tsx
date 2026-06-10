@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import CalcContactCTA from "@/components/CalcContactCTA";
 
 export default function MortgageCalculator({
   price,
@@ -44,10 +45,11 @@ export default function MortgageCalculator({
     display: "block",
   };
 
-  const field = (label: string, node: React.ReactNode) => (
+  const field = (label: string, node: React.ReactNode, hint?: string) => (
     <div style={{ flex: "1 1 140px", minWidth: 130 }}>
       <label style={labelStyle}>{label}</label>
       {node}
+      {hint && <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 5, lineHeight: 1.4 }}>{hint}</div>}
     </div>
   );
 
@@ -106,9 +108,9 @@ export default function MortgageCalculator({
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginBottom: 20 }}>
-        {field("Taxes (yearly)", numInput(taxYr, setTaxYr, "$"))}
-        {field("Insurance (yearly)", numInput(insYr, setInsYr, "$"))}
-        {field("HOA (monthly)", numInput(hoaMo, setHoaMo, "$"))}
+        {field("Taxes (yearly)", numInput(taxYr, setTaxYr, "$"), "Usually ~1.5–2% of price/yr")}
+        {field("Insurance (yearly)", numInput(insYr, setInsYr, "$"), "South FL ~$2.5–5k/yr")}
+        {field("HOA (monthly)", numInput(hoaMo, setHoaMo, "$"), "From the listing; 0 if none")}
       </div>
 
       <div style={{ borderTop: "1px solid var(--line)", paddingTop: 16 }}>
@@ -124,6 +126,8 @@ export default function MortgageCalculator({
         </div>
         <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, marginBottom: 0 }}>For illustration only. Confirm exact figures with your lender.</p>
       </div>
+
+      <CalcContactCTA />
     </div>
   );
 }
