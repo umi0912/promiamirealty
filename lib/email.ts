@@ -71,3 +71,85 @@ export async function notifyAgentNewLead(lead: { name: string; email: string; ph
     </div>`;
   return send(AGENT_EMAIL, `New lead — ${lead.name}`, html, lead.email);
 }
+
+// Запись на созвон из калькулятора / CTA → подробное письмо Ays ДО звонка.
+// Показывает намерение, данные продавца/покупателя и снимок калькулятора.
+export async function notifyAgentNewBooking(lead: {
+  id?: string;
+  name: string;
+  phone?: string | null;
+  email?: string | null;
+  best_time?: string | null;
+  intent: string; // buy | sell | invest
+  sell_address?: string | null;
+  sell_property_type?: string | null;
+  sell_price_expect?: string | null;
+  sell_has_mortgage?: string | null;
+  sell_timeline?: string | null;
+  buy_budget?: string | null;
+  buy_areas?: string | null;
+  buy_property_type?: string | null;
+  buy_purpose?: string | null;
+  calc_kind?: string | null;
+  calc_snapshot?: Record<string, any> | null;
+  source?: string | null;
+  listing_ref?: string | null;
+}) {
+  const intentLabel =
+    lead.intent === "sell" ? "SELLING" : lead.intent === "invest" ? "INVESTING" : "BUYING";
+  const intentColor =
+    lead.intent === "sell" ? "#C0552F" : lead.intent === "invest" ? "#8A6D2B" : "#2B6CB0";
+
+  const tr = (label: string, val?: string | null) =>
+    val ? `<tr><td style="padding:4px 12px 4px 0;color:#666;white-space:nowrap;vertical-align:top">${label}</td><td>${String(val).replace(/</g, "&lt;")}</td></tr>` : "";
+
+  // Блок намерения
+  let detailRows = "";
+  if (lead.intent === "sell") {
+    detailRows =
+      tr("Property address", lead.sell_address) +
+      tr("Property type", lead.sell_property_type) +
+      tr("Price expectation", lead.sell_price_expect) +
+      tr("Has mortgage/lien", lead.sell_has_mortgage) +
+      tr("Timeline", lead.sell_timeline);
+  } else {
+    detailRows =
+      tr("Budget", lead.buy_budget) +
+      tr("Areas of interest", lead.buy_areas) +
+      tr("Property type", lead.buy_property_type) +
+      tr("Purpose", lead.buy_purpose);
+  }
+
+  // Снимок калькулятора
+  let calcBlock = "";
+  const s = lead.calc_snapshot;
+  if (s && Object.keys(s).length) {
+    const f = (k: string) => (s[k] !== undefined && s[k] !== null && s[k] !== "" ? s[k] : "—");
+    const lines =
+      lead.calc_kind === "investment"
+        ? `Price $${f("price")} · Down ${f("downPct")}% · Rate ${f("rate")}% · Term ${f("term")}y · Rent $${f("rent")}/mo · Taxes $${f("taxYr")}/yr · Ins $${f("insYr")}/yr · HOA $${f("hoaMo")}/mo<br><b>Cap rate ${f("capRate")}% · Annual cash flow $${f("annualCashFlow")}</b>`
+        : `Price $${f("price")} · Down ${f("downPct")}% · Rate ${f("rate")}% · Term ${f("term")}y · Taxes $${f("taxYr")}/yr · Ins $${f("insYr")}/yr · HOA $${f("hoaMo")}/mo<br><b>Est. monthly payment $${f("total")}</b>`;
+    calcBlock = `
+      <p style="margin:16px 0 4px;color:#666;font-size:13px">Calculator they used (${lead.calc_kind === "investment" ? "Investment" : "Mortgage"}):</p>
+      <div style="background:#f6f6f4;border-radius:10px;padding:14px;font-size:13px;line-height:1.7">${lines}</div>`;
+  }
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:560px">
+      <div style="display:inline-block;background:${intentColor};color:#fff;font-size:12px;font-weight:bold;padding:4px 10px;border-radius:6px;letter-spacing:0.04em">${intentLabel}</div>
+      <h2 style="margin:10px 0 12px">Call request from ${lead.name}</h2>
+      <table style="font-size:14px;border-collapse:collapse">
+        ${tr("Name", lead.name)}
+        ${tr("Phone", lead.phone)}
+        ${tr("Email", lead.email)}
+        ${tr("Best time", lead.best_time)}
+      </table>
+      <p style="margin:16px 0 4px;color:#666;font-size:13px">Details:</p>
+      <table style="font-size:14px;border-collapse:collapse">${detailRows || `<tr><td style="color:#999">—</td></tr>`}</table>
+      ${calcBlock}
+      ${lead.listing_ref ? `<p style="font-size:13px;color:#666;margin-top:14px">Listing: ${String(lead.listing_ref).replace(/</g, "&lt;")}</p>` : ""}
+      <p style="font-size:12px;color:#999;margin-top:16px">Source: ${lead.source || "website"}${lead.id ? ` · #${lead.id.slice(0, 8)}` : ""}. Reply to this email to reach the client.</p>
+    </div>`;
+
+  return send(AGENT_EMAIL, `Call request — ${lead.name} (${intentLabel})`, html, lead.email || undefined);
+}

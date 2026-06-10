@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CITIES, LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
+import BookButton from "@/components/BookButton";
 
 export default function CityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -25,7 +26,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
           <p style={{ fontSize: 17, color: "var(--muted)", maxWidth: 560, marginTop: 16, lineHeight: 1.7 }}>{city.blurb[lang]}</p>
           <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
             <Link href={`/search?city=${encodeURIComponent(city.name)}`} style={{ background: "var(--coral)", color: "#fff", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{lang === "ru" ? `Искать в ${city.name}` : `Search in ${city.name}`}</Link>
-            <a href={AGENT.calendly} style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{lang === "ru" ? "Записаться" : "Book a consultation"}</a>
+            <BookButton intent="buy" source="City page hero" label={lang === "ru" ? "Записаться" : "Book a consultation"} variant="outline" style={{ background: "rgba(246,241,236,.1)", padding: "13px 26px" }} />
           </div>
         </div>
       </section>
@@ -61,7 +62,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
         <div style={{ background: "var(--surface)", borderRadius: 20, padding: "40px 32px", textAlign: "center", border: "1px solid var(--line)" }}>
           <h2 style={{ fontSize: "clamp(22px,3vw,30px)", margin: "0 0 12px" }}>{lang === "ru" ? `Интересует ${city.name}?` : `Interested in ${city.name}?`}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px" }}>{lang === "ru" ? `Запишитесь к ${AGENT.name} — обсудим район и варианты.` : `Book time with ${AGENT.name} to talk neighborhoods and options.`}</p>
-          <a href={AGENT.calendly} style={{ background: "var(--coral)", color: "#fff", padding: "14px 30px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{lang === "ru" ? "Записаться" : "Book a consultation"}</a>
+          <BookButton intent="buy" source="City page CTA" label={lang === "ru" ? "Записаться" : "Book a consultation"} />
         </div>
       </section>
     </div>

@@ -102,7 +102,10 @@ export default function InvestmentCalculator() {
       </div>
       <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 14, marginBottom: 0 }}>{tt(L.note)}</p>
 
-      <CalcContactCTA />
+      <CalcContactCTA
+        calcKind="investment"
+        snapshot={{ price, downPct: dp, rate, term, rent, taxYr, insYr, hoaMo, capRate: capRate.toFixed(1), annualCashFlow: Math.round(annualCashFlow) }}
+      />
     </div>
   );
 }

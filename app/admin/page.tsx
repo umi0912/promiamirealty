@@ -8,10 +8,21 @@ type Req = {
   final_text?: string; final_file_url?: string; delivered_at?: string;
 };
 
+type Lead = {
+  id: string; created_at: string; name: string; phone?: string; email?: string;
+  best_time?: string; intent: "buy" | "sell" | "invest";
+  sell_address?: string; sell_property_type?: string; sell_price_expect?: string;
+  sell_has_mortgage?: string; sell_timeline?: string;
+  buy_budget?: string; buy_areas?: string; buy_property_type?: string;
+  calc_kind?: string; calc_snapshot?: Record<string, any>;
+  source?: string; listing_ref?: string; status: string;
+};
+
 export default function Admin() {
   const [pass, setPass] = useState("");
   const [authed, setAuthed] = useState(false);
   const [reqs, setReqs] = useState<Req[]>([]);
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [active, setActive] = useState<Req | null>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
@@ -46,6 +57,10 @@ export default function Admin() {
     if (res.status === 401) { setErr("Wrong password"); return false; }
     const data = await res.json();
     setReqs(data.requests || []);
+    try {
+      const lr = await fetch("/api/admin/leads", { headers: { "x-admin-pass": p } });
+      if (lr.ok) { const ld = await lr.json(); setLeads(ld.leads || []); }
+    } catch { /* лиды не критичны для входа */ }
     return true;
   };
 
@@ -186,6 +201,57 @@ export default function Admin() {
             )}
           </div>
         )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "44px 0 18px" }}>
+        <h1 style={{ fontSize: 26, margin: 0 }}>Call requests</h1>
+        <span style={{ fontSize: 13, color: "var(--muted)" }}>{leads.length} total</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {leads.length === 0 && <div style={{ ...box, textAlign: "center", color: "var(--muted)" }}>No call requests yet.</div>}
+        {leads.map(l => {
+          const intentColor = l.intent === "sell" ? "#C0552F" : l.intent === "invest" ? "#B5852E" : "#3B82C4";
+          const intentLabel = l.intent === "sell" ? "SELLING" : l.intent === "invest" ? "INVESTING" : "BUYING";
+          const s = l.calc_snapshot || {};
+          const calcLine = l.calc_kind === "investment"
+            ? (s.capRate !== undefined ? `Calc: cap ${s.capRate}% · cash flow $${s.annualCashFlow}/yr` : "")
+            : (s.total !== undefined ? `Calc: payment $${s.total}/mo` : "");
+          return (
+            <div key={l.id} style={box}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <span style={{ fontSize: 15, fontWeight: 500 }}>{l.name}</span>
+                <span style={{ background: intentColor, color: "#fff", fontSize: 11, fontWeight: 500, padding: "3px 9px", borderRadius: 6, letterSpacing: "0.04em" }}>{intentLabel}</span>
+              </div>
+              <div style={{ fontSize: 13, color: "var(--muted)", display: "flex", flexWrap: "wrap", gap: "2px 14px" }}>
+                {l.phone && <span>📞 {l.phone}</span>}
+                {l.email && <span>✉ {l.email}</span>}
+                {l.best_time && <span>🕑 {l.best_time}</span>}
+              </div>
+              <div style={{ fontSize: 13, color: "var(--text)", marginTop: 8, lineHeight: 1.6 }}>
+                {l.intent === "sell" ? (
+                  <>
+                    {l.sell_address && <div><b>Address:</b> {l.sell_address}</div>}
+                    <div style={{ color: "var(--muted)" }}>
+                      {[l.sell_property_type, l.sell_price_expect && `hope ${l.sell_price_expect}`,
+                        l.sell_has_mortgage && `mortgage: ${l.sell_has_mortgage}`, l.sell_timeline]
+                        .filter(Boolean).join(" · ")}
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ color: "var(--muted)" }}>
+                    {[l.buy_budget && `budget ${l.buy_budget}`, l.buy_property_type, l.buy_areas]
+                      .filter(Boolean).join(" · ")}
+                  </div>
+                )}
+                {calcLine && <div style={{ color: "var(--muted)", marginTop: 2 }}>{calcLine}</div>}
+              </div>
+              <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 8 }}>
+                {l.source} · {new Date(l.created_at).toLocaleString()}
+                {l.listing_ref ? ` · ${l.listing_ref}` : ""}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

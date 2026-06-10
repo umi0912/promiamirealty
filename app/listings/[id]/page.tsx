@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import MortgageCalculator from "@/components/MortgageCalculator";
+import BookButton from "@/components/BookButton";
 
 export default function ListingDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -58,7 +59,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <MortgageCalculator price={l.price} />
+          <MortgageCalculator price={l.price} listingRef={`${l.address}, ${l.city}`} />
           <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", padding: 18 }}>
             <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
               <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(242,116,44,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 500 }}>AI</div>
@@ -67,7 +68,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
                 <div style={{ fontSize: 12, color: "var(--muted)" }}>{AGENT.brokerage} · {AGENT.license}</div>
               </div>
             </div>
-            <a href={AGENT.calendly} style={{ display: "block", textAlign: "center", marginTop: 16, background: "var(--coral)", color: "#fff", padding: "12px", borderRadius: 999, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Book a tour</a>
+            <BookButton intent="buy" source="Listing page" listingRef={`${l.address}, ${l.city} · ${fmtPrice(l.price)}`} label="Book a tour" style={{ display: "block", marginTop: 16, padding: "12px", fontSize: 14, width: "100%" }} />
             <a href={`tel:${AGENT.phoneRaw}`} style={{ display: "block", textAlign: "center", marginTop: 10, color: "var(--text)", padding: "12px", borderRadius: 999, fontSize: 14, textDecoration: "none", border: "1px solid var(--line)" }}>Call {AGENT.phone}</a>
           </div>
         </div>

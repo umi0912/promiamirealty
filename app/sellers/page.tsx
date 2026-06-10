@@ -2,6 +2,7 @@
 import { AGENT } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import HomeValuation from "@/components/HomeValuation";
+import BookButton from "@/components/BookButton";
 
 export default function Sellers() {
   const { t } = useLang();
@@ -44,7 +45,7 @@ export default function Sellers() {
       <div style={{ background: "var(--surface)", borderRadius: 20, padding: "40px 32px", marginTop: 48, textAlign: "center", border: "1px solid var(--line)" }}>
         <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px" }}>{t("sellers.ctaTitle")}</h2>
         <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("sellers.ctaText")}</p>
-        <a href={AGENT.calendly} style={{ background: "var(--coral)", color: "#fff", padding: "14px 30px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("common.bookConsult")}</a>
+        <BookButton intent="sell" source="Sellers page CTA" label={t("common.bookConsult")} />
       </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import InvestmentCalculator from "@/components/InvestmentCalculator";
+import BookButton from "@/components/BookButton";
 
 export default function Investors() {
   const { t } = useLang();
@@ -74,7 +75,7 @@ export default function Investors() {
         <div style={{ background: "var(--surface)", borderRadius: 20, padding: "44px 32px", textAlign: "center", border: "1px solid var(--line)" }}>
           <h2 style={{ fontSize: "clamp(24px,3.5vw,34px)", margin: "0 0 12px" }}>{t("inv.ctaTitle")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("inv.ctaText")}</p>
-          <a href={AGENT.calendly} style={{ background: "var(--coral)", color: "#fff", padding: "14px 30px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("inv.ctaBtn")}</a>
+          <BookButton intent="invest" source="Investors page CTA" label={t("inv.ctaBtn")} />
         </div>
       </section>
     </div>

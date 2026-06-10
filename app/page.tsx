@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
+import BookButton from "@/components/BookButton";
 import AIChat from "@/components/AIChat";
 import ChatPanel from "@/components/ChatPanel";
 
@@ -27,7 +28,7 @@ export default function Home() {
           </p>
           <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
             <Link href="/search" className="btn" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("home.cta.search")}</Link>
-            <a href={AGENT.calendly} className="btn" style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("home.cta.book")}</a>
+            <BookButton intent="buy" source="Home hero" label={t("home.cta.book")} variant="outline" style={{ background: "rgba(246,241,236,.1)", padding: "14px 28px", fontSize: 15 }} />
           </div>
         </div>
       </section>

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { AGENT } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
+import BookButton from "@/components/BookButton";
 
 export default function About() {
   const { t } = useLang();
@@ -20,7 +21,7 @@ export default function About() {
           <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--muted)" }}>{t("about.p1")}</p>
           <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--muted)" }}>{t("about.p2")}</p>
           <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
-            <a href={AGENT.calendly} style={{ background: "var(--coral)", color: "#fff", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("common.bookConsult")}</a>
+            <BookButton intent="buy" source="About page CTA" label={t("common.bookConsult")} style={{ padding: "13px 26px" }} />
             <Link href="/contact" style={{ background: "rgba(246,241,236,.08)", color: "var(--text)", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("common.getInTouch")}</Link>
           </div>
         </div>

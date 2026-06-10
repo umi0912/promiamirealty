@@ -5,9 +5,11 @@ import CalcContactCTA from "@/components/CalcContactCTA";
 export default function MortgageCalculator({
   price,
   editablePrice = false,
+  listingRef,
 }: {
   price: number;
   editablePrice?: boolean;
+  listingRef?: string;
 }) {
   const [purchase, setPurchase] = useState(price);
   const [dp, setDp] = useState(20);
@@ -127,7 +129,11 @@ export default function MortgageCalculator({
         <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, marginBottom: 0 }}>For illustration only. Confirm exact figures with your lender.</p>
       </div>
 
-      <CalcContactCTA />
+      <CalcContactCTA
+        calcKind="mortgage"
+        listingRef={listingRef}
+        snapshot={{ price: purchase, downPct: dp, rate, term, taxYr, insYr, hoaMo, total: Math.round(total) }}
+      />
     </div>
   );
 }
