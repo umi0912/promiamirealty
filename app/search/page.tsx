@@ -52,7 +52,13 @@ function Search() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
             <select value={type} onChange={e => setType(e.target.value)} style={selStyle}><option value="all">Any type</option><option value="condo">Condo</option><option value="house">House</option></select>
             <select value={beds} onChange={e => setBeds(+e.target.value)} style={selStyle}><option value={0}>Any beds</option><option value={1}>1+</option><option value={2}>2+</option><option value={3}>3+</option><option value={4}>4+</option></select>
-            <select value={maxPrice} onChange={e => setMaxPrice(+e.target.value)} style={selStyle}><option value={99999999}>No max</option><option value={600000}>$600k</option><option value={1000000}>$1M</option><option value={1500000}>$1.5M</option><option value={2500000}>$2.5M</option></select>
+            <input
+              type="number"
+              value={maxPrice >= 99999999 ? "" : maxPrice}
+              onChange={e => setMaxPrice(e.target.value === "" ? 99999999 : +e.target.value)}
+              placeholder="Max price ($)"
+              style={{ ...selStyle, MozAppearance: "textfield" }}
+            />
           </div>
           <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>{results.length} objects found</div>
         </div>

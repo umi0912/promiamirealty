@@ -127,7 +127,7 @@ export default function Home() {
             <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
             <p style={{ color: "var(--muted)", fontSize: 16, lineHeight: 1.7, maxWidth: 420 }}>{t("home.calc.text")}</p>
           </div>
-          <MortgageCalculator price={750000} />
+          <MortgageCalculator price={750000} editablePrice />
         </div>
       </section>
 
