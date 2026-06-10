@@ -122,12 +122,12 @@ export default function Home() {
 
       {/* CALC + CONSULT */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
-        <div  style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 24, alignItems: "start" }}>
-          <div>
-            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.calc.eyebrow")}</div>
-            <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
-            <p style={{ color: "var(--muted)", fontSize: 16, lineHeight: 1.7, maxWidth: 420 }}>{t("home.calc.text")}</p>
-          </div>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.calc.eyebrow")}</div>
+          <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
+          <p style={{ color: "var(--muted)", fontSize: 16, lineHeight: 1.7, maxWidth: 560, margin: "0 auto" }}>{t("home.calc.text")}</p>
+        </div>
+        <div style={{ maxWidth: 760, margin: "0 auto" }}>
           <MortgageCalculator price={750000} editablePrice />
         </div>
       </section>
