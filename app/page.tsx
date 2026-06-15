@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect } from "react";
+import { WORLD_LAND } from "@/lib/worldmap";
 import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
@@ -19,93 +20,47 @@ export default function Home() {
     const ctx = c.getContext("2d");
     if (!ctx) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const size = 640;
+    const size = 680;
     c.width = size * dpr; c.height = size * dpr;
     ctx.scale(dpr, dpr);
-    const R = 290, cx = size / 2, cy = size / 2;
+    const R = 310, cx = size / 2, cy = size / 2;
 
-    // Low-res world landmass map (1 = land). 72 cols x 36 rows, lon -180..180, lat 90..-90
-    const MAP = [
-      "000000000000000000000000000000000000000000000000000000000000000000000000",
-      "000000000000000000000000000000000000000000000000000000000000000000000000",
-      "000001111110000000011111111111111000000000000000000001111111000000000000",
-      "000011111111100001111111111111111111100000000000001111111111110000000000",
-      "000011111111000011111111111111111111111000000000011111111111111100000000",
-      "000001111110000111111111111111111111111110000000111111111111111110000000",
-      "000000111100001111111111111111111111111111000001111111111111111111000000",
-      "000000011000011111111111111111111111111111100011111111111111111110000000",
-      "000000000000011111111111111111111111111111111111111111111111111100000000",
-      "000000000000001111111111111111111111111111111111111111111111110000000000",
-      "000000000000000111111111111111111111111111111111111111111100000000000000",
-      "000000000000000011111111111111111111111111111111111111100000000000000000",
-      "000000000000000001111111111100111111111111111111111100000000000000000000",
-      "000000000000000000111111110000011111111111111111100000000000000000000000",
-      "000000000000000000011111100000001111111111111111000000000000000000000000",
-      "000000000000000000001111000000000111111111111100000000000000000000000000",
-      "000000000000000000000110000000000011111111111000000000000000000000000000",
-      "000000000000000000000100000000000001111111100000000000000000000000000000",
-      "000000000000000000000000000000000001111111000000000000000000000000000000",
-      "000000000000000000000000000000000000111110000000000000000000000000000000",
-      "000000000000000000000000000000000000011100000000000000000000111000000000",
-      "000000000000000000000000000000000000001000000000000000001111111110000000",
-      "000000000000000000000000000000000000000000000000000000011111111111000000",
-      "000000000000000000000000000000000000000000000000000000001111111100000000",
-      "000000000000000000000000000000000000000000000000000000000111110000000000",
-      "000000000000000000000000000000000000000000000000000000000011000000000000",
-      "000000000000000000000000000000000000000000000000000000000000000000000000",
-      "000000000000000000000000000000000000000000000000000000000000000000000000",
-    ];
-    const ROWS = MAP.length, COLS = MAP[0].length;
-    const land: { lat: number; lon: number }[] = [];
-    for (let r = 0; r < ROWS; r++)
-      for (let col = 0; col < COLS; col++)
-        if (MAP[r][col] === "1") {
-          const lat = (90 - (r / ROWS) * 180) * Math.PI / 180;
-          const lon = (-180 + (col / COLS) * 360) * Math.PI / 180;
-          land.push({ lat, lon });
-        }
-    // Miami marker (palm) at 25.76N, -80.19W
+    // real world landmass points [lat, lon]
+    const land = WORLD_LAND.map(([la, lo]) => ({ lat: la * Math.PI / 180, lon: lo * Math.PI / 180 }));
     const miami = { lat: 25.76 * Math.PI / 180, lon: -80.19 * Math.PI / 180 };
 
-    let rot = -1.2, raf = 0;
     const project = (lat: number, lon: number, rotation: number) => {
       const xs = Math.cos(lat) * Math.sin(lon + rotation);
       const ys = Math.sin(lat);
       const zs = Math.cos(lat) * Math.cos(lon + rotation);
       return { px: cx + xs * R, py: cy - ys * R, z: zs };
     };
+
+    // start rotated so the Americas (Miami) face viewer
+    let rot = 1.4, raf = 0;
     const draw = () => {
       ctx.clearRect(0, 0, size, size);
-      rot += 0.0015;
+      rot += 0.0012;
       for (const p of land) {
         const { px, py, z } = project(p.lat, p.lon, rot);
-        if (z < -0.05) continue;
+        if (z < -0.02) continue;
         const depth = (z + 1) / 2;
         ctx.beginPath();
-        ctx.arc(px, py, 1 + depth * 1.8, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(46,26,74,${0.18 + depth * 0.62})`;
+        ctx.arc(px, py, 0.8 + depth * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(46,26,74,${0.12 + depth * 0.62})`;
         ctx.fill();
       }
-      // palm marker on Miami
+      // palm emoji marker on Miami
       const m = project(miami.lat, miami.lon, rot);
-      if (m.z > -0.05) {
-        const s = 0.7 + ((m.z + 1) / 2) * 0.6;
+      if (m.z > 0) {
+        const scale = 0.8 + ((m.z + 1) / 2) * 0.5;
         ctx.save();
-        ctx.translate(m.px, m.py);
-        // trunk
-        ctx.strokeStyle = "#f5a623"; ctx.lineWidth = 2.2 * s; ctx.lineCap = "round";
-        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-2 * s, -11 * s); ctx.stroke();
-        // fronds
-        ctx.lineWidth = 1.6 * s;
-        const top = { x: -2 * s, y: -11 * s };
-        for (const a of [-2.5, -1.7, -0.6, 0.5, 1.4]) {
-          ctx.beginPath(); ctx.moveTo(top.x, top.y);
-          ctx.quadraticCurveTo(top.x + Math.cos(a) * 6 * s, top.y + Math.sin(a) * 5 * s - 3 * s, top.x + Math.cos(a) * 11 * s, top.y + Math.sin(a) * 7 * s - 1 * s);
-          ctx.stroke();
-        }
-        // glow dot at base
-        ctx.beginPath(); ctx.arc(0, 0, 3.2 * s, 0, Math.PI * 2);
-        ctx.fillStyle = "#ff8a3d"; ctx.fill();
+        ctx.font = `${Math.round(30 * scale)}px serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "rgba(255,138,61,.6)";
+        ctx.shadowBlur = 12;
+        ctx.fillText("\uD83C\uDF34", m.px, m.py - 14 * scale);
         ctx.restore();
       }
       raf = requestAnimationFrame(draw);
@@ -189,7 +144,7 @@ export default function Home() {
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", overflow: "visible" }}>
-            <canvas id="globe" width="640" height="640" style={{ width: "120%", maxWidth: "none", height: "auto", marginRight: "-20%" }} />
+            <canvas id="globe" width="680" height="680" style={{ width: "128%", maxWidth: "none", height: "auto", marginRight: "-28%" }} />
           </div>
         </div>
         <style>{`.statsgrid{ overflow:hidden; }`}</style>
