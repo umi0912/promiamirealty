@@ -37,10 +37,10 @@ export default function Home() {
     };
 
     // start rotated so the Americas (Miami) face viewer
-    let rot = 1.4, raf = 0;
+    let rot = 80.19 * Math.PI / 180, raf = 0;
     const draw = () => {
       ctx.clearRect(0, 0, size, size);
-      rot += 0.0012;
+      rot += 0.0017;
       for (const p of land) {
         const { px, py, z } = project(p.lat, p.lon, rot);
         if (z < -0.02) continue;
