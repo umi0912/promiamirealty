@@ -39,13 +39,13 @@ export default function Header() {
   return (
     <header style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, transition: "all .3s",
-      background: scrolled ? "rgba(22,18,28,.92)" : "transparent",
+      background: scrolled ? "rgba(255,255,255,.92)" : "transparent",
       backdropFilter: scrolled ? "blur(10px)" : "none",
       borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
     }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ textDecoration: "none", color: "var(--text)" }}>
-          <span style={{ fontFamily: "Fraunces, serif", fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>PRO MIAMI</span>
+          <span style={{ fontFamily: "Space Grotesk, sans-serif", fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>PRO MIAMI</span>
           <span style={{ fontFamily: "Inter", fontSize: 11, letterSpacing: "0.3em", display: "block", color: "var(--coral)", marginTop: -4 }}>REALTY</span>
         </Link>
         <nav className="desktop-nav" style={{ display: "flex", gap: 26, alignItems: "center" }}>
@@ -58,7 +58,7 @@ export default function Header() {
         <button className="mobile-toggle" aria-label="Menu" onClick={() => setOpen(!open)} style={{ display: "none", background: "none", border: "none", color: "var(--text)", fontSize: 24, cursor: "pointer" }}>{open ? "✕" : "☰"}</button>
       </div>
       {open && (
-        <div className="mobile-menu" style={{ background: "rgba(22,18,28,.98)", borderTop: "1px solid var(--line)", padding: "16px 24px" }}>
+        <div className="mobile-menu" style={{ background: "rgba(255,255,255,.98)", borderTop: "1px solid var(--line)", padding: "16px 24px" }}>
           {nav.map(n => (
             <Link key={n.href} href={n.href} onClick={() => setOpen(false)} style={{ display: "block", color: "var(--text)", textDecoration: "none", fontSize: 16, padding: "12px 0" }}>{t(n.key)}</Link>
           ))}

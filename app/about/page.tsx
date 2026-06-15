@@ -31,7 +31,7 @@ export default function About() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16, marginTop: 72 }}>
         {values.map(([title, d], i) => (
           <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: 24, border: "1px solid var(--line)" }}>
-            <div style={{ fontSize: 18, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 6 }}>{title}</div>
+            <div style={{ fontSize: 18, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 6 }}>{title}</div>
             <div style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6 }}>{d}</div>
           </div>
         ))}

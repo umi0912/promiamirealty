@@ -35,7 +35,7 @@ export default function Investors() {
           {services.map(([title, d], i) => (
             <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: 26, border: "1px solid var(--line)" }}>
               <div style={{ fontSize: 13, color: "var(--coral)", fontWeight: 500, marginBottom: 12 }}>0{i + 1}</div>
-              <div style={{ fontSize: 19, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 10 }}>{title}</div>
+              <div style={{ fontSize: 19, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 10 }}>{title}</div>
               <div style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{d}</div>
             </div>
           ))}
@@ -60,7 +60,7 @@ export default function Investors() {
             <Link key={l.id} href={`/listings/${l.id}`} style={{ textDecoration: "none", background: "var(--surface)", borderRadius: 16, overflow: "hidden", border: "1px solid var(--line)", display: "block" }}>
               <div style={{ height: 170, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center" }} />
               <div style={{ padding: 16 }}>
-                <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
+                <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
                 <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>
                 <div style={{ background: "var(--bg)", borderRadius: 10, padding: "10px 8px", textAlign: "center", marginTop: 14 }}>
                   <div style={{ fontSize: 11, color: "var(--muted)" }}>{t("inv.estRent")}</div>

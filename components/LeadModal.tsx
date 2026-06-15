@@ -141,7 +141,7 @@ function LeadModal({ opts, onClose }: { opts: OpenOptions; onClose: () => void }
           color: "var(--muted)", fontSize: 22, cursor: "pointer", lineHeight: 1,
         }}>×</button>
 
-        <h3 style={{ fontSize: 20, margin: "0 0 6px", fontFamily: "Fraunces, serif" }}>{tt("Talk to Ays", "Связаться с Ays")}</h3>
+        <h3 style={{ fontSize: 20, margin: "0 0 6px", fontFamily: "Space Grotesk, sans-serif" }}>{tt("Talk to Ays", "Связаться с Ays")}</h3>
         <p style={{ fontSize: 14, color: "var(--muted)", margin: "0 0 18px", lineHeight: 1.5 }}>
           {tt("A few details so she can help you before the call.", "Пара деталей, чтобы она подготовилась к звонку.")}
         </p>

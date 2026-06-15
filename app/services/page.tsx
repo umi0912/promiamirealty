@@ -126,9 +126,9 @@ export default function Services() {
             const p = PLANS[id];
             return (
               <div key={id} style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: 19, fontFamily: "Fraunces, serif", fontWeight: 500 }}>{p.title}</div>
+                <div style={{ fontSize: 19, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500 }}>{p.title}</div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "14px 0" }}>
-                  <span style={{ fontSize: 44, fontWeight: 500, fontFamily: "Fraunces, serif", color: p.accent }}>${p.price}</span>
+                  <span style={{ fontSize: 44, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: p.accent }}>${p.price}</span>
                 </div>
                 <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, margin: "0 0 24px", flex: 1 }}>{p.desc}</p>
                 <button onClick={() => startPlan(id)} style={{ background: p.accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>
@@ -143,8 +143,8 @@ export default function Services() {
       {/* STEP: PAY */}
       {step === "pay" && plan && (
         <div style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)", maxWidth: 480, margin: "0 auto" }}>
-          <div style={{ fontSize: 19, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 4 }}>{PLANS[plan].title}</div>
-          <div style={{ fontSize: 32, fontWeight: 500, fontFamily: "Fraunces, serif", color: PLANS[plan].accent, marginBottom: 18 }}>${PLANS[plan].price}</div>
+          <div style={{ fontSize: 19, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 4 }}>{PLANS[plan].title}</div>
+          <div style={{ fontSize: 32, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: PLANS[plan].accent, marginBottom: 18 }}>${PLANS[plan].price}</div>
           <input style={{ ...inp, marginBottom: 12 }} placeholder={ru ? "Ваше имя" : "Your name"} value={contact.name} onChange={e => setContact({ ...contact, name: e.target.value })} />
           <input style={{ ...inp, marginBottom: 18 }} placeholder="Email" value={contact.email} onChange={e => setContact({ ...contact, email: e.target.value })} />
           <button onClick={pay} disabled={paying || !contact.name || !contact.email} style={{ width: "100%", background: PLANS[plan].accent, color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", opacity: paying || !contact.name || !contact.email ? 0.5 : 1, fontFamily: "Inter" }}>
@@ -200,7 +200,7 @@ export default function Services() {
       {/* STEP: RESULT */}
       {step === "result" && result && (
         <div style={{ background: "var(--surface)", borderRadius: 20, padding: 28, border: "1px solid var(--line)" }}>
-          <div style={{ fontSize: 18, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 4 }}>{result.summary}</div>
+          <div style={{ fontSize: 18, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 4 }}>{result.summary}</div>
           {result.findings && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 18 }}>
               {result.findings.map((f: any, i: number) => {

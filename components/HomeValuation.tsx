@@ -39,7 +39,7 @@ export default function HomeValuation() {
 
   if (step === "done") return (
     <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", padding: 40, textAlign: "center" }}>
-      <div style={{ fontSize: 22, fontFamily: "Fraunces, serif", marginBottom: 8 }}>Request received</div>
+      <div style={{ fontSize: 22, fontFamily: "Space Grotesk, sans-serif", marginBottom: 8 }}>Request received</div>
       <p style={{ color: "var(--muted)", fontSize: 15, margin: 0, lineHeight: 1.7 }}>You'll get a detailed, comp-based valuation shortly — based on real recent sales in your area, not just an estimate.</p>
     </div>
   );
@@ -57,7 +57,7 @@ export default function HomeValuation() {
           </div>
           <div style={{ background: "var(--bg)", borderRadius: 12, padding: 20, marginTop: 18, textAlign: "center" }}>
             <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>Estimated value range</div>
-            <div style={{ fontSize: 28, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--amber)" }}>{fmt(low)} – {fmt(high)}</div>
+            <div style={{ fontSize: 28, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--amber)" }}>{fmt(low)} – {fmt(high)}</div>
           </div>
           <button onClick={() => setStep("lead")} style={{ width: "100%", marginTop: 16, background: "var(--coral)", color: "#fff", border: "none", padding: "14px", borderRadius: 999, fontSize: 15, fontWeight: 500, cursor: "pointer", fontFamily: "Inter" }}>Get an accurate valuation →</button>
           <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 12, marginBottom: 0 }}>Rough estimate based on area price per square foot. A precise valuation uses recent comparable sales — request one above.</p>

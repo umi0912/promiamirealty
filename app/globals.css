@@ -1,30 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #16121C;
-  --surface: #211B2B;
-  --surface-2: #2D2540;
-  --coral: #F2742C;
-  --amber: #FFC93C;
-  --violet: #8B5CF6;
+  /* light indigo-plum design system (v3) */
+  --bg: #ffffff;
+  --bg2: #f6f5f9;
+  --surface: #f6f5f9;
+  --surface-2: #ece9f3;
+  --indigo: #2e1a4a;
+  --indigo-d: #1e1133;
+  --violet: #4b2e7a;
+  /* keep legacy var names mapped so existing components recolor automatically */
+  --coral: #2e1a4a;       /* primary actions now indigo */
+  --amber: #f5a623;       /* secondary accent: orange-yellow */
   --green: #3FB984;
-  --text: #F6F1EC;
-  --muted: #A99FB8;
-  --line: rgba(246,241,236,0.10);
+  --text: #160d24;
+  --muted: #6f6580;
+  --line: rgba(22,13,36,0.10);
 }
 
 * { box-sizing: border-box; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Manrope', system-ui, sans-serif;
   margin: 0;
-  -webkit-font-smoothing: auto;
+  -webkit-font-smoothing: antialiased;
 }
-h1,h2,h3,h4 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
+h1,h2,h3,h4 { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.03em; }
 
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
@@ -32,10 +37,9 @@ h1,h2,h3,h4 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-
 
 /* единственная анимация — кнопки при наведении */
 .btn { transition: transform .2s ease, box-shadow .25s ease, opacity .2s ease, background .25s ease; }
-.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(242,116,44,.55); }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(46,26,74,.55); }
 .btn:active { transform: translateY(0); }
 
-/* больше не анимируется — нейтрализуем класс, чтобы контент был сразу виден */
 .fade-up, .fade-up.in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {

@@ -10,7 +10,7 @@ export default function Footer() {
     <footer style={{ background: "var(--surface)", borderTop: "1px solid var(--line)", marginTop: 80 }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "56px 24px 32px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 40 }}>
         <div>
-          <span style={{ fontFamily: "Fraunces, serif", fontSize: 22, fontWeight: 600 }}>PRO MIAMI</span>
+          <span style={{ fontFamily: "Space Grotesk, sans-serif", fontSize: 22, fontWeight: 600 }}>PRO MIAMI</span>
           <span style={{ fontFamily: "Inter", fontSize: 11, letterSpacing: "0.3em", display: "block", color: "var(--coral)", marginTop: -2 }}>REALTY</span>
           <p style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.7, marginTop: 16, maxWidth: 260 }}>{t("footer.tagline")}</p>
         </div>

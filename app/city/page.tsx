@@ -16,9 +16,9 @@ export default function CitiesIndex() {
         {CITIES.map(c => (
           <Link key={c.slug} href={`/city/${c.slug}`} style={{ textDecoration: "none", position: "relative", borderRadius: 18, overflow: "hidden", minHeight: 220, display: "block" }} className="citycard">
             <div className="citycard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url(${c.photo})`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.15) 40%,rgba(22,18,28,.92) 100%)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.15) 40%,rgba(255,255,255,.92) 100%)" }} />
             <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: 20 }}>
-              <div style={{ fontSize: 22, fontFamily: "Fraunces, serif", fontWeight: 500, color: "#fff" }}>{c.name}</div>
+              <div style={{ fontSize: 22, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, color: "#fff" }}>{c.name}</div>
               <div style={{ fontSize: 13, color: "rgba(255,255,255,.8)", marginTop: 4 }}>{c.tagline[lang]}</div>
               <div style={{ fontSize: 12, color: "var(--amber)", marginTop: 8 }}>{count(c.matchCities)} {lang === "ru" ? "объектов" : "listings"}</div>
             </div>

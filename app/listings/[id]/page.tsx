@@ -42,13 +42,13 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
             <span style={{ background: "rgba(242,116,44,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
             <span style={{ background: "var(--surface-2)", color: "var(--muted)", fontSize: 12, padding: "4px 11px", borderRadius: 999 }}>{l.type}</span>
           </div>
-          <div style={{ fontSize: "clamp(32px,5vw,44px)", fontFamily: "Fraunces, serif", fontWeight: 500, lineHeight: 1 }}>{fmtPrice(l.price)}</div>
+          <div style={{ fontSize: "clamp(32px,5vw,44px)", fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, lineHeight: 1 }}>{fmtPrice(l.price)}</div>
           <div style={{ fontSize: 16, color: "var(--muted)", marginTop: 8 }}>{l.address}, {l.city}, {l.state} {l.zip}</div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginTop: 24 }}>
             {stats.map(([v, lab], i) => (
               <div key={i} style={{ background: "var(--surface)", borderRadius: 12, padding: "16px 12px", textAlign: "center", border: "1px solid var(--line)" }}>
-                <div style={{ fontSize: 22, fontWeight: 500, fontFamily: "Fraunces, serif" }}>{v}</div>
+                <div style={{ fontSize: 22, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif" }}>{v}</div>
                 <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>{lab}</div>
               </div>
             ))}

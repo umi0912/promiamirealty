@@ -43,7 +43,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
               <Link key={l.id} href={`/listings/${l.id}`} style={{ textDecoration: "none", background: "var(--surface)", borderRadius: 16, overflow: "hidden", border: "1px solid var(--line)", display: "block" }}>
                 <div style={{ height: 180, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center" }} />
                 <div style={{ padding: 16 }}>
-                  <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
+                  <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
                   <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 6 }}>{l.beds} bd · {l.baths} ba · {l.sqft.toLocaleString()} sqft</div>
                 </div>

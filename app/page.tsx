@@ -19,7 +19,7 @@ export default function Home() {
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
           <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
         </video>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.55) 0%,rgba(22,18,28,.3) 40%,rgba(22,18,28,.95) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(46,26,74,.15) 40%,rgba(255,255,255,.95) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
           <div  style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
           <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
@@ -47,7 +47,7 @@ export default function Home() {
             { v: "3", k: "home.stats.langs" as const, c: "var(--violet)" },
           ].map((s, i) => (
             <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: "28px 20px", textAlign: "center", border: "1px solid var(--line)" }}>
-              <div style={{ fontSize: 38, fontWeight: 500, fontFamily: "Fraunces, serif", color: s.c, lineHeight: 1 }}>{s.v}</div>
+              <div style={{ fontSize: 38, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: s.c, lineHeight: 1 }}>{s.v}</div>
               <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 10 }}>{t(s.k)}</div>
             </div>
           ))}
@@ -108,7 +108,7 @@ export default function Home() {
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
         <Link href="/investors"  style={{ display: "block", textDecoration: "none", position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 340 }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(22,18,28,.92) 0%,rgba(22,18,28,.7) 50%,rgba(22,18,28,.35) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(255,255,255,.92) 0%,rgba(22,18,28,.7) 50%,rgba(22,18,28,.35) 100%)" }} />
           <div style={{ position: "relative", padding: "48px 40px", maxWidth: 600 }}>
             <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("home.inv.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(28px,4.5vw,46px)", margin: "0 0 16px", lineHeight: 1.06, color: "var(--text)" }}>{t("home.inv.title")}</h2>
@@ -157,7 +157,7 @@ export default function Home() {
         .tile-ov{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(22,18,28,0) 45%,rgba(22,18,28,.9) 100%); }
         .tile-badge{ position:absolute; top:12px; left:12px; background:rgba(242,116,44,.92); color:#fff; font-size:11px; font-weight:500; padding:4px 10px; border-radius:999px; }
         .tile-info{ position:absolute; bottom:0; left:0; right:0; padding:14px; }
-        .tile-price{ color:#fff; font-size:17px; font-weight:500; font-family:'Fraunces',serif; }
+        .tile-price{ color:#fff; font-size:17px; font-weight:500; font-family:'Space Grotesk',serif; }
         .tile-addr{ color:rgba(255,255,255,.82); font-size:12px; margin-top:2px; }
         .tile-specs{ color:rgba(255,255,255,.7); font-size:12px; margin-top:4px; }
         @media (max-width:760px){ .mosaic{ grid-template-columns:repeat(2,1fr); } .m-big{ grid-column:span 2; grid-row:span 1; } .agentvid{ grid-template-columns:1fr !important; } .consult-split{ grid-template-columns:1fr !important; } }

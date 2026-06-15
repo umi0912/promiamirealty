@@ -118,7 +118,7 @@ export default function MortgageCalculator({
       <div style={{ borderTop: "1px solid var(--line)", paddingTop: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ fontSize: 14, color: "var(--muted)" }}>Est. monthly payment</span>
-          <span style={{ fontSize: 30, fontWeight: 500, color: "var(--coral)", fontFamily: "Fraunces, serif" }}>{usd(total)}</span>
+          <span style={{ fontSize: 30, fontWeight: 500, color: "var(--coral)", fontFamily: "Space Grotesk, sans-serif" }}>{usd(total)}</span>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 16px", marginTop: 12, fontSize: 12, color: "var(--muted)" }}>
           <span>Principal &amp; interest: {usd(pi)}</span>

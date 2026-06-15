@@ -85,7 +85,7 @@ function Search() {
                 style={{ display: "flex", gap: 12, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 14, padding: 10, textDecoration: "none", transition: "all .2s" }}>
                 <div style={{ width: 110, height: 84, borderRadius: 10, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center", flexShrink: 0 }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 18, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
+                  <div style={{ fontSize: 18, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
                   <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>
                   <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 6 }}>{l.beds} bd · {l.baths} ba · {l.sqft.toLocaleString()} sqft</div>
                 </div>

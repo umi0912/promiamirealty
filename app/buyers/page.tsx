@@ -16,7 +16,7 @@ export default function Buyers() {
     <div>
       <section style={{ position: "relative", minHeight: "62vh", display: "flex", alignItems: "flex-end" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1670811456186-e73d0ace9454?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.55) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 56px", width: "100%" }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("buyers.eyebrow")}</div>
           <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05, maxWidth: 720 }}>{t("buyers.title")}</h1>
@@ -29,7 +29,7 @@ export default function Buyers() {
         {steps.map(([title, d], i) => (
           <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: 24, border: "1px solid var(--line)" }}>
             <div style={{ fontSize: 13, color: "var(--coral)", fontWeight: 500, marginBottom: 10 }}>{t("step")} {i + 1}</div>
-            <div style={{ fontSize: 17, fontFamily: "Fraunces, serif", fontWeight: 500, marginBottom: 8 }}>{title}</div>
+            <div style={{ fontSize: 17, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 8 }}>{title}</div>
             <div style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6 }}>{d}</div>
           </div>
         ))}
