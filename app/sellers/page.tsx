@@ -19,8 +19,8 @@ export default function Sellers() {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 56px", width: "100%" }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("sellers.eyebrow")}</div>
-          <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05, maxWidth: 720 }}>{t("sellers.title")}</h1>
-          <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--muted)", maxWidth: 600 }}>{t("sellers.sub")}</p>
+          <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05, maxWidth: 720, color: "#fff" }}>{t("sellers.title")}</h1>
+          <p style={{ fontSize: 17, lineHeight: 1.8, color: "rgba(255,255,255,.9)", maxWidth: 600 }}>{t("sellers.sub")}</p>
         </div>
       </section>
 

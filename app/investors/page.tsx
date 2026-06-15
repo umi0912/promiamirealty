@@ -20,8 +20,8 @@ export default function Investors() {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.6) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 64px", width: "100%" }}>
           <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 16 }}>{t("inv.eyebrow")}</div>
-          <h1 style={{ fontSize: "clamp(36px,6vw,68px)", lineHeight: 1.04, margin: 0, maxWidth: 760 }}>{t("inv.title")}</h1>
-          <p style={{ fontSize: 18, color: "var(--muted)", maxWidth: 540, marginTop: 20, lineHeight: 1.7 }}>{t("inv.sub")}</p>
+          <h1 style={{ fontSize: "clamp(36px,6vw,68px)", lineHeight: 1.04, margin: 0, maxWidth: 760, color: "#fff" }}>{t("inv.title")}</h1>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,.9)", maxWidth: 540, marginTop: 20, lineHeight: 1.7 }}>{t("inv.sub")}</p>
           <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
             <a href="#calculator" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("inv.analyze")}</a>
             <a href="#deals" style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("inv.seeProps")}</a>
