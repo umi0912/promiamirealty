@@ -21,7 +21,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.5) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 48px", width: "100%" }}>
           <Link href="/city" style={{ color: "var(--muted)", fontSize: 14, textDecoration: "none" }}>← {lang === "ru" ? "Все города" : "All cities"}</Link>
-          <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", margin: "14px 0 10px" }}>{city.tagline[lang]}</div>
+          <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", margin: "14px 0 10px" }}>{city.tagline[lang]}</div>
           <h1 style={{ fontSize: "clamp(36px,6vw,64px)", lineHeight: 1.04, margin: 0 }}>{city.name}</h1>
           <p style={{ fontSize: 17, color: "var(--muted)", maxWidth: 560, marginTop: 16, lineHeight: 1.7 }}>{city.blurb[lang]}</p>
           <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>

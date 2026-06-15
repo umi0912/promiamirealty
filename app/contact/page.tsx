@@ -7,7 +7,7 @@ export default function Contact() {
   const { t } = useLang();
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "120px 24px 0" }}>
-      <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>{t("contact.eyebrow")}</div>
+      <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>{t("contact.eyebrow")}</div>
       <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05 }}>{t("contact.title")}</h1>
       <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--muted)", maxWidth: 560 }}>{t("contact.sub")}</p>
 

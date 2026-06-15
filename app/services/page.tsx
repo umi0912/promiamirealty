@@ -106,7 +106,7 @@ export default function Services() {
 
   return (
     <div style={{ maxWidth: 820, margin: "0 auto", padding: "120px 24px 0" }}>
-      <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14, textAlign: "center" }}>{ru ? "Услуги" : "Services"}</div>
+      <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14, textAlign: "center" }}>{ru ? "Услуги" : "Services"}</div>
       <h1 style={{ fontSize: "clamp(30px,5vw,48px)", margin: "0 0 12px", lineHeight: 1.05, textAlign: "center" }}>{ru ? "Помощь с контрактами" : "Contract help, on demand"}</h1>
       <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--muted)", maxWidth: 540, margin: "0 auto 16px", textAlign: "center" }}>
         {ru ? "Быстрая AI-проверка или подготовка контракта — с финальной проверкой лицензированного агента." : "Fast AI-assisted review or preparation — with a final check by a licensed agent."}

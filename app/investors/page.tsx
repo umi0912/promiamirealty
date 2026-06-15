@@ -19,7 +19,7 @@ export default function Investors() {
         <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1736829391323-a302d2737210?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.6) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 64px", width: "100%" }}>
-          <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 16 }}>{t("inv.eyebrow")}</div>
+          <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 16 }}>{t("inv.eyebrow")}</div>
           <h1 style={{ fontSize: "clamp(36px,6vw,68px)", lineHeight: 1.04, margin: 0, maxWidth: 760, color: "#fff" }}>{t("inv.title")}</h1>
           <p style={{ fontSize: 18, color: "rgba(255,255,255,.9)", maxWidth: 540, marginTop: 20, lineHeight: 1.7 }}>{t("inv.sub")}</p>
           <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
@@ -42,7 +42,7 @@ export default function Investors() {
         </div>
       </section>
       <section id="calculator" style={{ maxWidth: 1100, margin: "0 auto", padding: "72px 24px 0", scrollMarginTop: 90 }}>
-        <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>{t("inv.calcEyebrow")}</div>
+        <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>{t("inv.calcEyebrow")}</div>
         <h2 style={{ fontSize: "clamp(26px,4vw,38px)", margin: "0 0 8px" }}>{t("inv.calcTitle")}</h2>
         <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 0, marginBottom: 28, maxWidth: 540 }}>{t("inv.calcSub")}</p>
         <InvestmentCalculator />
@@ -50,7 +50,7 @@ export default function Investors() {
       <section id="deals" style={{ maxWidth: 1100, margin: "0 auto", padding: "72px 24px 0", scrollMarginTop: 90 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 24 }}>
           <div>
-            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("inv.dealsEyebrow")}</div>
+            <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("inv.dealsEyebrow")}</div>
             <h2 style={{ fontSize: "clamp(26px,4vw,38px)", margin: 0 }}>{t("inv.dealsTitle")}</h2>
           </div>
           <Link href="/search" style={{ color: "var(--text)", fontSize: 14, textDecoration: "none", opacity: 0.8 }}>{t("common.allListings")}</Link>

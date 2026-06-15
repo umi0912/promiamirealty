@@ -19,37 +19,132 @@ export default function Home() {
     const ctx = c.getContext("2d");
     if (!ctx) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const size = 520;
+    const size = 640;
     c.width = size * dpr; c.height = size * dpr;
     ctx.scale(dpr, dpr);
-    const R = 230, cx = size / 2, cy = size / 2, N = 2600;
-    const dots: { x: number; y: number; z: number }[] = [];
-    for (let i = 0; i < N; i++) {
-      const y = 1 - (i / (N - 1)) * 2;
-      const radius = Math.sqrt(1 - y * y);
-      const theta = Math.PI * (3 - Math.sqrt(5)) * i;
-      dots.push({ x: Math.cos(theta) * radius, y, z: Math.sin(theta) * radius });
-    }
-    let rot = 0, raf = 0;
+    const R = 290, cx = size / 2, cy = size / 2;
+
+    // Low-res world landmass map (1 = land). 72 cols x 36 rows, lon -180..180, lat 90..-90
+    const MAP = [
+      "000000000000000000000000000000000000000000000000000000000000000000000000",
+      "000000000000000000000000000000000000000000000000000000000000000000000000",
+      "000001111110000000011111111111111000000000000000000001111111000000000000",
+      "000011111111100001111111111111111111100000000000001111111111110000000000",
+      "000011111111000011111111111111111111111000000000011111111111111100000000",
+      "000001111110000111111111111111111111111110000000111111111111111110000000",
+      "000000111100001111111111111111111111111111000001111111111111111111000000",
+      "000000011000011111111111111111111111111111100011111111111111111110000000",
+      "000000000000011111111111111111111111111111111111111111111111111100000000",
+      "000000000000001111111111111111111111111111111111111111111111110000000000",
+      "000000000000000111111111111111111111111111111111111111111100000000000000",
+      "000000000000000011111111111111111111111111111111111111100000000000000000",
+      "000000000000000001111111111100111111111111111111111100000000000000000000",
+      "000000000000000000111111110000011111111111111111100000000000000000000000",
+      "000000000000000000011111100000001111111111111111000000000000000000000000",
+      "000000000000000000001111000000000111111111111100000000000000000000000000",
+      "000000000000000000000110000000000011111111111000000000000000000000000000",
+      "000000000000000000000100000000000001111111100000000000000000000000000000",
+      "000000000000000000000000000000000001111111000000000000000000000000000000",
+      "000000000000000000000000000000000000111110000000000000000000000000000000",
+      "000000000000000000000000000000000000011100000000000000000000111000000000",
+      "000000000000000000000000000000000000001000000000000000001111111110000000",
+      "000000000000000000000000000000000000000000000000000000011111111111000000",
+      "000000000000000000000000000000000000000000000000000000001111111100000000",
+      "000000000000000000000000000000000000000000000000000000000111110000000000",
+      "000000000000000000000000000000000000000000000000000000000011000000000000",
+      "000000000000000000000000000000000000000000000000000000000000000000000000",
+      "000000000000000000000000000000000000000000000000000000000000000000000000",
+    ];
+    const ROWS = MAP.length, COLS = MAP[0].length;
+    const land: { lat: number; lon: number }[] = [];
+    for (let r = 0; r < ROWS; r++)
+      for (let col = 0; col < COLS; col++)
+        if (MAP[r][col] === "1") {
+          const lat = (90 - (r / ROWS) * 180) * Math.PI / 180;
+          const lon = (-180 + (col / COLS) * 360) * Math.PI / 180;
+          land.push({ lat, lon });
+        }
+    // Miami marker (palm) at 25.76N, -80.19W
+    const miami = { lat: 25.76 * Math.PI / 180, lon: -80.19 * Math.PI / 180 };
+
+    let rot = -1.2, raf = 0;
+    const project = (lat: number, lon: number, rotation: number) => {
+      const xs = Math.cos(lat) * Math.sin(lon + rotation);
+      const ys = Math.sin(lat);
+      const zs = Math.cos(lat) * Math.cos(lon + rotation);
+      return { px: cx + xs * R, py: cy - ys * R, z: zs };
+    };
     const draw = () => {
       ctx.clearRect(0, 0, size, size);
-      rot += 0.0016;
-      for (const d of dots) {
-        const x = d.x * Math.cos(rot) - d.z * Math.sin(rot);
-        const z = d.x * Math.sin(rot) + d.z * Math.cos(rot);
-        if (z < -0.1) continue;
-        const px = cx + x * R, py = cy + d.y * R;
+      rot += 0.0015;
+      for (const p of land) {
+        const { px, py, z } = project(p.lat, p.lon, rot);
+        if (z < -0.05) continue;
         const depth = (z + 1) / 2;
         ctx.beginPath();
-        ctx.arc(px, py, 0.6 + depth * 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(46,26,74,${0.15 + depth * 0.6})`;
+        ctx.arc(px, py, 1 + depth * 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(46,26,74,${0.18 + depth * 0.62})`;
         ctx.fill();
+      }
+      // palm marker on Miami
+      const m = project(miami.lat, miami.lon, rot);
+      if (m.z > -0.05) {
+        const s = 0.7 + ((m.z + 1) / 2) * 0.6;
+        ctx.save();
+        ctx.translate(m.px, m.py);
+        // trunk
+        ctx.strokeStyle = "#f5a623"; ctx.lineWidth = 2.2 * s; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-2 * s, -11 * s); ctx.stroke();
+        // fronds
+        ctx.lineWidth = 1.6 * s;
+        const top = { x: -2 * s, y: -11 * s };
+        for (const a of [-2.5, -1.7, -0.6, 0.5, 1.4]) {
+          ctx.beginPath(); ctx.moveTo(top.x, top.y);
+          ctx.quadraticCurveTo(top.x + Math.cos(a) * 6 * s, top.y + Math.sin(a) * 5 * s - 3 * s, top.x + Math.cos(a) * 11 * s, top.y + Math.sin(a) * 7 * s - 1 * s);
+          ctx.stroke();
+        }
+        // glow dot at base
+        ctx.beginPath(); ctx.arc(0, 0, 3.2 * s, 0, Math.PI * 2);
+        ctx.fillStyle = "#ff8a3d"; ctx.fill();
+        ctx.restore();
       }
       raf = requestAnimationFrame(draw);
     };
     draw();
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  // count-up animation for stats
+  useEffect(() => {
+    const el = document.querySelector(".statsgrid");
+    if (!el) return;
+    const targets = Array.from(document.querySelectorAll<HTMLElement>("[data-count]"));
+    let done = false;
+    const run = () => {
+      if (done) return; done = true;
+      targets.forEach(node => {
+        const raw = node.getAttribute("data-count") || "";
+        const num = parseFloat(raw.replace(/[^0-9.]/g, "")) || 0;
+        const prefix = raw.startsWith("$") ? "$" : "";
+        const suffix = raw.replace(/[$0-9.]/g, "");
+        const dur = 1100, t0 = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - t0) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const val = Math.round(num * eased);
+          node.textContent = prefix + val + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) run(); });
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
 
   return (
     <>
@@ -61,7 +156,7 @@ export default function Home() {
         </video>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(46,26,74,.15) 40%,rgba(255,255,255,.95) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
-          <div  style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
+          <div  style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
           <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
           <p className="" style={{ fontSize: 18, color: "var(--muted)", maxWidth: 520, marginTop: 24, lineHeight: 1.7 }}>
             {t("home.subtitle")}
@@ -77,7 +172,7 @@ export default function Home() {
       <section style={{ background: "var(--bg2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
         <div className="statsgrid" style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 24px", display: "grid", gridTemplateColumns: "1.05fr .95fr", gap: 50, alignItems: "center" }}>
           <div>
-            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 18, fontFamily: "Space Grotesk, sans-serif", fontWeight: 600 }}>{t("home.stats.eyebrow")}</div>
+            <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 18, fontFamily: "Space Grotesk, sans-serif", fontWeight: 600 }}>{t("home.stats.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", margin: "0 0 40px", lineHeight: 1.02 }}>{t("home.stats.title")}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "44px 30px", maxWidth: 460 }}>
               {[
@@ -87,16 +182,17 @@ export default function Home() {
                 { v: "3", k: "home.stats.langs" as const },
               ].map((s, i) => (
                 <div key={i}>
-                  <div style={{ fontSize: "clamp(40px,5vw,64px)", fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", color: "var(--indigo)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>{s.v}</div>
+                  <div data-count={s.v} style={{ fontSize: "clamp(40px,5vw,64px)", fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", color: "var(--indigo)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>{s.v}</div>
                   <div style={{ fontSize: 15, color: "var(--text)", marginTop: 10, fontWeight: 600 }}>{t(s.k)}</div>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <canvas id="globe" width="520" height="520" style={{ width: "100%", maxWidth: 520, height: "auto" }} />
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", overflow: "visible" }}>
+            <canvas id="globe" width="640" height="640" style={{ width: "120%", maxWidth: "none", height: "auto", marginRight: "-20%" }} />
           </div>
         </div>
+        <style>{`.statsgrid{ overflow:hidden; }`}</style>
         <style>{`@media(max-width:880px){ .statsgrid{ grid-template-columns:1fr !important; gap:50px !important; } .statsgrid > div:last-child{ order:-1; } }`}</style>
       </section>
 
@@ -104,7 +200,7 @@ export default function Home() {
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "72px 24px 0" }}>
         <div className="agentvid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
           <div>
-            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 12 }}>{t("home.agent.eyebrow")}</div>
+            <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 12 }}>{t("home.agent.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)", margin: "0 0 16px", lineHeight: 1.1 }}>{t("home.agent.title")}</h2>
             <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 440 }}>{t("home.agent.text")}</p>
           </div>
@@ -120,7 +216,7 @@ export default function Home() {
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
         <div  style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
           <div>
-            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.featured.eyebrow")}</div>
+            <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.featured.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(28px,4vw,40px)", margin: 0 }}>{t("home.featured.title")}</h2>
           </div>
           <Link href="/search" style={{ color: "var(--text)", fontSize: 14, textDecoration: "none", opacity: 0.8 }}>{t("home.viewall")}</Link>
@@ -156,7 +252,7 @@ export default function Home() {
           <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(255,255,255,.92) 0%,rgba(22,18,28,.7) 50%,rgba(22,18,28,.35) 100%)" }} />
           <div style={{ position: "relative", padding: "48px 40px", maxWidth: 600 }}>
-            <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("home.inv.eyebrow")}</div>
+            <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("home.inv.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(28px,4.5vw,46px)", margin: "0 0 16px", lineHeight: 1.06, color: "var(--text)" }}>{t("home.inv.title")}</h2>
             <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 460, margin: "0 0 24px" }}>
               {t("home.inv.text")}
@@ -169,7 +265,7 @@ export default function Home() {
       {/* CALC + CONSULT */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.calc.eyebrow")}</div>
+          <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 8 }}>{t("home.calc.eyebrow")}</div>
           <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, lineHeight: 1.7, maxWidth: 560, margin: "0 auto" }}>{t("home.calc.text")}</p>
         </div>
