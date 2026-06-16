@@ -51,38 +51,25 @@ export default function Home() {
         ctx.fillStyle = `rgba(46,26,74,${0.12 + depth * 0.62})`;
         ctx.fill();
       }
-      // palm marker on Miami — vector drawn (crisp & vivid on every device)
+      // palm emoji marker on Miami — on a glossy white disc (crisp, no transparency)
       const m = project(miami.lat, miami.lon, rot);
       if (m.z > 0.05) {
         const mx = m.px, my = m.py;
         ctx.save();
         // glossy white disc backing
-        ctx.beginPath(); ctx.arc(mx, my, 20, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(mx, my, 19, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "rgba(255,138,61,.75)"; ctx.shadowBlur = 18;
+        ctx.shadowColor = "rgba(255,138,61,.75)"; ctx.shadowBlur = 16;
         ctx.fill();
-        ctx.beginPath(); ctx.arc(mx, my, 20, 0, Math.PI * 2);
+        // thin amber ring
+        ctx.beginPath(); ctx.arc(mx, my, 19, 0, Math.PI * 2);
         ctx.lineWidth = 2; ctx.strokeStyle = "#ff8a3d"; ctx.shadowBlur = 0; ctx.stroke();
-        // ground
-        ctx.beginPath(); ctx.ellipse(mx, my + 9, 7, 2.2, 0, 0, Math.PI * 2);
-        ctx.fillStyle = "#f5a623"; ctx.fill();
-        // trunk (curved, brown)
-        ctx.strokeStyle = "#8a5a2b"; ctx.lineWidth = 3; ctx.lineCap = "round";
-        ctx.beginPath(); ctx.moveTo(mx + 1, my + 8);
-        ctx.quadraticCurveTo(mx - 3, my, mx - 5, my - 8); ctx.stroke();
-        // fronds (vivid green)
-        const top = { x: mx - 5, y: my - 9 };
-        ctx.strokeStyle = "#2faa55"; ctx.lineWidth = 2.6;
-        const fronds = [[-11, -4], [-6, -9], [2, -10], [9, -6], [11, 1]];
-        for (const [dx, dy] of fronds) {
-          ctx.beginPath(); ctx.moveTo(top.x, top.y);
-          ctx.quadraticCurveTo(top.x + dx * 0.5, top.y + dy * 0.5 - 2, top.x + dx, top.y + dy);
-          ctx.stroke();
-        }
-        // coconuts
-        ctx.fillStyle = "#7a4a22";
-        ctx.beginPath(); ctx.arc(top.x - 1, top.y + 2, 1.6, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(top.x + 2, top.y + 2, 1.6, 0, Math.PI * 2); ctx.fill();
+        // palm emoji, full opacity, centered
+        ctx.globalAlpha = 1;
+        ctx.font = "26px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("\uD83C\uDF34", mx, my + 1);
         ctx.restore();
       }
       raf = requestAnimationFrame(draw);
