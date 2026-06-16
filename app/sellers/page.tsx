@@ -38,10 +38,12 @@ export default function Sellers() {
       </div>
       {/* /maxWidth wrapper закрыт — дальше full-width тёмная секция */}
 
-      <section style={{ background: "var(--indigo)", padding: "72px 24px", marginTop: 72 }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <h2 style={{ fontSize: "clamp(26px,3.5vw,34px)", marginBottom: 8, color: "#fff" }}>{t("sellers.valTitle")}</h2>
-          <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, marginTop: 0, marginBottom: 24, maxWidth: 520 }}>{t("sellers.valSub")}</p>
+      <section style={{ background: "var(--indigo)", padding: "80px 24px 88px", marginTop: 80 }}>
+        <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ fontSize: "clamp(26px,3.5vw,34px)", marginBottom: 12, color: "#fff" }}>{t("sellers.valTitle")}</h2>
+          <p style={{ color: "rgba(255,255,255,.72)", fontSize: 16, marginTop: 0, marginBottom: 36, maxWidth: 520, marginLeft: "auto", marginRight: "auto" }}>{t("sellers.valSub")}</p>
+        </div>
+        <div style={{ maxWidth: 820, margin: "0 auto" }}>
           <HomeValuation />
         </div>
       </section>
