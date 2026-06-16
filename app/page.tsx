@@ -7,7 +7,6 @@ import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
 import AIChat from "@/components/AIChat";
-import ChatPanel from "@/components/ChatPanel";
 
 export default function Home() {
   const { t } = useLang();
@@ -243,11 +242,9 @@ export default function Home() {
           <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: 0 }}>{t("home.consult.title")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 10 }}>{t("home.consult.text")}</p>
         </div>
-        <div className="consult-split" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "stretch" }}>
-          {/* слева: чат с AI-помощником */}
-          <ChatPanel height={600} />
-          {/* справа: запись через Calendly */}
-          <div style={{ height: 600, borderRadius: 16, border: "1px solid var(--line)", overflow: "hidden" }}>
+        <div className="consult-split" style={{ maxWidth: 900, margin: "0 auto" }}>
+          {/* запись через Calendly */}
+          <div style={{ height: 640, borderRadius: 16, border: "1px solid var(--line)", overflow: "hidden" }}>
             <iframe src={`${AGENT.calendly}?embed_domain=promiamirealty.com&embed_type=Inline&hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="100%" frameBorder="0" title="Book" style={{ display: "block", border: "none" }} />
           </div>
         </div>

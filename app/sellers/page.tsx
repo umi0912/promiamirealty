@@ -35,16 +35,21 @@ export default function Sellers() {
         ))}
       </div>
 
-      <div style={{ marginTop: 64 }}>
-        <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 10 }}>{t("sellers.freeTool")}</div>
-        <h2 style={{ fontSize: "clamp(26px,3.5vw,34px)", marginBottom: 8 }}>{t("sellers.valTitle")}</h2>
-        <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 0, marginBottom: 24, maxWidth: 520 }}>{t("sellers.valSub")}</p>
-        <HomeValuation />
       </div>
+      {/* /maxWidth wrapper закрыт — дальше full-width тёмная секция */}
 
-      <div style={{ background: "var(--surface)", borderRadius: 20, padding: "40px 32px", marginTop: 48, textAlign: "center", border: "1px solid var(--line)" }}>
-        <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px" }}>{t("sellers.ctaTitle")}</h2>
-        <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("sellers.ctaText")}</p>
+      <section style={{ background: "var(--indigo)", padding: "72px 24px", marginTop: 72 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <h2 style={{ fontSize: "clamp(26px,3.5vw,34px)", marginBottom: 8, color: "#fff" }}>{t("sellers.valTitle")}</h2>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, marginTop: 0, marginBottom: 24, maxWidth: 520 }}>{t("sellers.valSub")}</p>
+          <HomeValuation />
+        </div>
+      </section>
+
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ background: "var(--indigo)", borderRadius: 20, padding: "48px 32px", marginTop: 72, textAlign: "center" }}>
+        <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px", color: "#fff" }}>{t("sellers.ctaTitle")}</h2>
+        <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("sellers.ctaText")}</p>
         <BookButton intent="sell" source="Sellers page CTA" label={t("common.bookConsult")} />
       </div>
       </div>
