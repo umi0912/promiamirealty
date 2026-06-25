@@ -2,7 +2,14 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { type Listing, fmtPrice, fmtPriceShort } from "@/lib/data";
+
+// MapLibre использует window — грузим только на клиенте.
+const MapView = dynamic(() => import("@/components/MapView"), {
+  ssr: false,
+  loading: () => <div style={{ height: "100%", minHeight: 420, borderRadius: 16, background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)" }}>Loading map…</div>,
+});
 
 export default function SearchPage() {
   return (
@@ -92,15 +99,6 @@ function Search() {
     if (navigator.share) navigator.share({ title: l.address, url }).catch(() => {});
     else navigator.clipboard?.writeText(url);
   };
-
-  // нормализация координат для карты
-  const withGeo = listings.filter(l => l.lat && l.lng);
-  const lats = withGeo.map(l => l.lat), lngs = withGeo.map(l => l.lng);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats), minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-  const px = (l: Listing) => ({
-    left: `${8 + ((l.lng - minLng) / (maxLng - minLng || 1)) * 84}%`,
-    top: `${12 + ((maxLat - l.lat) / (maxLat - minLat || 1)) * 76}%`,
-  });
 
   const priceLabel = minPrice || maxPrice < 99999999
     ? `${minPrice ? fmtPriceShort(minPrice) : "$0"}–${maxPrice < 99999999 ? fmtPriceShort(maxPrice) : "∞"}`
@@ -201,7 +199,9 @@ function Search() {
       <div style={{ maxWidth: 1600, margin: "0 auto", padding: "8px 24px 80px" }}>
         {view === "map" ? (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }} className="map-split">
-            <MapPanel listings={withGeo} px={px} />
+            <div style={{ position: "sticky", top: 150, alignSelf: "start", height: "calc(100vh - 180px)", minHeight: 480 }}>
+              <MapView listings={listings} />
+            </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 }} className="map-cards">
               {listings.map(l => <Card key={l.id} l={l} saved={saved.has(l.id)} onSave={toggleSave} onShare={share} />)}
             </div>
@@ -263,25 +263,6 @@ function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSav
       </div>
       <style>{`.scard:hover .scard-img{ transform: scale(1.06); }`}</style>
     </Link>
-  );
-}
-
-// ---------- MAP PANEL ----------
-function MapPanel({ listings, px }: { listings: Listing[]; px: (l: Listing) => { left: string; top: string } }) {
-  return (
-    <div style={{ position: "sticky", top: 150, alignSelf: "start", height: "calc(100vh - 180px)", minHeight: 420, borderRadius: 16, overflow: "hidden", background: "#11203a" }}>
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#16263f,#0e1c30)" }} />
-      <svg viewBox="0 0 400 460" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} aria-hidden>
-        <path d="M0,300 Q100,280 200,295 T400,290 L400,460 L0,460 Z" fill="#0c1830" opacity=".6" />
-        <path d="M40,60 L370,80 M30,160 L380,170 M50,260 L360,270 M40,360 L370,370" stroke="#1f3252" strokeWidth="1" />
-      </svg>
-      {listings.map(l => (
-        <Link key={l.id} href={`/listings/${l.id}`} className="mappin" style={{ position: "absolute", ...px(l), transform: "translate(-50%,-100%)", textDecoration: "none", zIndex: 2 }}>
-          <span style={{ display: "inline-block", background: "rgba(22,18,28,.9)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap" }}>{fmtPriceShort(l.price)}</span>
-        </Link>
-      ))}
-      <style>{`.mappin:hover span{ background: var(--indigo) !important; } .mappin:hover{ z-index:10 !important; }`}</style>
-    </div>
   );
 }
 

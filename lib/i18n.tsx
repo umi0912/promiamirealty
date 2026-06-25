@@ -43,7 +43,7 @@ export const DICT = {
   "home.stats.cities": { en: "Cities served", ru: "Городов" },
   "home.stats.langs": { en: "Languages: EN · RU · ES", ru: "Языки: EN · RU · ES" },
   "home.agent.eyebrow": { en: "Meet your real estate broker", ru: "Ваш брокер по недвижимости" },
-  "home.agent.title": { en: "A quick hello from Ays", ru: "Несколько слов от Ays" },
+  "home.agent.title": { en: "Meet Your Real Estate Broker", ru: "Познакомьтесь с вашим брокером" },
   "home.agent.text": { en: "Real estate is personal. Here's who you'll be working with — and how I think about helping you buy, sell, or invest in South Florida.", ru: "Недвижимость — это личное. Вот с кем вы будете работать и как я подхожу к помощи в покупке, продаже и инвестициях в Южной Флориде." },
 
   // common

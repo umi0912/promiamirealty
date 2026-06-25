@@ -77,9 +77,7 @@ export default function MortgageCalculator({
       <h3 style={{ fontSize: 18, margin: "0 0 18px" }}>Mortgage estimate</h3>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
-        {field("Purchase price", editablePrice
-          ? numInput(purchase, setPurchase, "$")
-          : <div style={{ ...inputStyle, opacity: 0.85 }}>{usd(purchase)}</div>)}
+        {field("Purchase price", numInput(purchase, setPurchase, "$"), "Edit to match your offer")}
         {field("Down payment", numInput(dp, (v) => setDp(Math.min(100, Math.max(0, v))), undefined, "%"))}
         {field("Interest rate", numInput(rate, setRate, undefined, "%"))}
       </div>
