@@ -1,16 +1,33 @@
 "use client";
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
+import { type Listing, LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
 
 export default function ListingDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const l = LISTINGS.find(x => x.id === id);
+  const [l, setL] = useState<Listing | null>(() => LISTINGS.find(x => x.id === id) || null);
+  const [loading, setLoading] = useState(!l);
   const [active, setActive] = useState(0);
-  if (!l) return notFound();
+
+  // если нет в статике — тянем live из Spark
+  useEffect(() => {
+    if (l) return;
+    let cancel = false;
+    (async () => {
+      try {
+        const res = await fetch(`/api/listings/${id}`);
+        const data = await res.json();
+        if (!cancel) setL(data.listing || null);
+      } catch { if (!cancel) setL(null); }
+      if (!cancel) setLoading(false);
+    })();
+    return () => { cancel = true; };
+  }, [id, l]);
+
+  if (loading) return <div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>Loading listing…</div>;
+  if (!l) return <div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>Listing not found. <Link href="/search" style={{ color: "var(--indigo)" }}>Back to search</Link></div>;
   const stats = [
     [l.beds, "Bedrooms"], [l.baths, "Bathrooms"],
     [l.sqft.toLocaleString(), "Sq ft"], [l.yearBuilt, "Year built"],
@@ -56,6 +73,9 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
 
           <h3 style={{ fontSize: 18, marginTop: 32, marginBottom: 10 }}>About this home</h3>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--muted)", margin: 0 }}>{l.description}</p>
+          <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
+            {l.mlsId && <span>MLS®: {l.mlsId} · </span>}{l.courtesy || "Courtesy of BeachesMLS"} · Listing data via BeachesMLS IDX
+          </div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

@@ -9,7 +9,7 @@ export type Listing = {
   zip: string;
   type: "Condo" | "Single Family" | "Townhouse" | "Land";
   typeKey: "condo" | "house" | "townhouse" | "land";
-  status: "For Sale";
+  status: string;            // "Active" | "Coming Soon" | "For Sale" — из Spark StandardStatus
   beds: number;
   baths: number;
   sqft: number;
@@ -20,6 +20,8 @@ export type Listing = {
   investor?: boolean;        // помечен как инвест-объект (доходный)
   estRent?: number;          // оценочная месячная аренда (для подборки инвесторов)
   senior55?: boolean;        // 55+ senior community
+  mlsId?: string;            // MLS# (ListingId из Spark)
+  courtesy?: string;         // "Courtesy of {ListOfficeName}" — атрибуция IDX
   description: string;
   photos: string[];
 };
