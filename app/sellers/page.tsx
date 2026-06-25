@@ -1,5 +1,4 @@
 "use client";
-import { AGENT } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import HomeValuation from "@/components/HomeValuation";
 import BookButton from "@/components/BookButton";
@@ -36,7 +35,6 @@ export default function Sellers() {
       </div>
 
       </div>
-      {/* /maxWidth wrapper закрыт — дальше full-width тёмная секция */}
 
       <section style={{ background: "var(--indigo)", padding: "80px 24px 88px", marginTop: 80 }}>
         <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}>

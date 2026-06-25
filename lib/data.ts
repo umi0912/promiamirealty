@@ -7,8 +7,8 @@ export type Listing = {
   city: string;
   state: string;
   zip: string;
-  type: "Condo" | "Single Family" | "Townhouse";
-  typeKey: "condo" | "house" | "townhouse";
+  type: "Condo" | "Single Family" | "Townhouse" | "Land";
+  typeKey: "condo" | "house" | "townhouse" | "land";
   status: "For Sale";
   beds: number;
   baths: number;
@@ -19,6 +19,7 @@ export type Listing = {
   featured?: boolean;
   investor?: boolean;        // помечен как инвест-объект (доходный)
   estRent?: number;          // оценочная месячная аренда (для подборки инвесторов)
+  senior55?: boolean;        // 55+ senior community
   description: string;
   photos: string[];
 };
@@ -79,6 +80,27 @@ export const LISTINGS: Listing[] = [
     lat: 25.6711, lng: -80.4123, investor: true, estRent: 3100,
     description: "Well-maintained home in a quiet neighborhood with a screened patio, updated roof, and a spacious lot.",
     photos: ["https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1400&q=80","https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=900&q=80"],
+  },
+  {
+    id: "9", price: 425000, address: "2850 NE 2nd Ave", city: "Miami", state: "FL", zip: "33137",
+    type: "Townhouse", typeKey: "townhouse", status: "For Sale", beds: 3, baths: 2, sqft: 1680, yearBuilt: 2010,
+    lat: 25.8101, lng: -80.1899,
+    description: "Modern townhouse with private entrance, updated kitchen, and two-car garage near Wynwood.",
+    photos: ["https://images.unsplash.com/photo-1580587771525-78b9dba3b814?w=1400&q=80"],
+  },
+  {
+    id: "10", price: 285000, address: "14500 SW 92nd Ave", city: "Miami", state: "FL", zip: "33186",
+    type: "Land", typeKey: "land", status: "For Sale", beds: 0, baths: 0, sqft: 8800, yearBuilt: 0,
+    lat: 25.6833, lng: -80.3333, senior55: true,
+    description: "Vacant land in 55+ gated community, perfect for custom home build.",
+    photos: ["https://images.unsplash.com/photo-1559027615-cd2628902d4a?w=1400&q=80"],
+  },
+  {
+    id: "11", price: 995000, address: "7650 SW 58th Ave", city: "Miami", state: "FL", zip: "33143",
+    type: "Single Family", typeKey: "house", status: "For Sale", beds: 4, baths: 3, sqft: 2450, yearBuilt: 2008,
+    lat: 25.7289, lng: -80.2789, senior55: true,
+    description: "Spacious home in prestigious 55+ active community with golf, tennis, and clubhouse.",
+    photos: ["https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1400&q=80"],
   },
 ];
 

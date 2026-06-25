@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
+import { LISTINGS, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import InvestmentCalculator from "@/components/InvestmentCalculator";
 import BookButton from "@/components/BookButton";
@@ -64,17 +64,17 @@ export default function Investors() {
                 <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>
                 <div style={{ background: "var(--bg)", borderRadius: 10, padding: "10px 8px", textAlign: "center", marginTop: 14 }}>
                   <div style={{ fontSize: 11, color: "var(--muted)" }}>{t("inv.estRent")}</div>
-                  <div style={{ fontSize: 16, fontWeight: 500, color: "var(--green)" }}>${l.estRent?.toLocaleString()}/mo</div>
+                  <div style={{ fontSize: 16, fontWeight: 500, color: "var(--green)" }}>${l.estRent ? l.estRent.toLocaleString() : "N/A"}/mo</div>
                 </div>
               </div>
             </Link>
           ))}
         </div>
       </section>
-      <section style={{ maxWidth: 1100, margin: "0 auto", padding: "72px 24px 0" }}>
-        <div style={{ background: "var(--surface)", borderRadius: 20, padding: "44px 32px", textAlign: "center", border: "1px solid var(--line)" }}>
-          <h2 style={{ fontSize: "clamp(24px,3.5vw,34px)", margin: "0 0 12px" }}>{t("inv.ctaTitle")}</h2>
-          <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("inv.ctaText")}</p>
+      <section style={{ background: "var(--indigo)", padding: "56px 24px 64px", marginTop: 80 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ fontSize: "clamp(24px,3.5vw,34px)", margin: "0 0 12px", color: "#fff" }}>{t("inv.ctaTitle")}</h2>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, margin: "0 0 28px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("inv.ctaText")}</p>
           <BookButton intent="invest" source="Investors page CTA" label={t("inv.ctaBtn")} />
         </div>
       </section>

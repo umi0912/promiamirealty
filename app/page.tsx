@@ -113,20 +113,27 @@ export default function Home() {
     <>
       {/* HERO */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "flex-end", overflow: "hidden" }}>
-        <video autoPlay muted loop playsInline poster="https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=2000&q=80"
+        <video autoPlay muted loop playsInline poster="/hero.png"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
           <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
         </video>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(46,26,74,.15) 40%,rgba(255,255,255,.95) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
-          <div  style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 18 }}>{t("home.eyebrow")}</div>
-          <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900 }}>{t("home.title")}</h1>
-          <p className="" style={{ fontSize: 18, color: "var(--muted)", maxWidth: 520, marginTop: 24, lineHeight: 1.7 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 14px", borderRadius: 999, background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.24)", backdropFilter: "blur(8px)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 18 }}>
+            <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "var(--amber)" }} />
+            Broker & Investor
+          </div>
+          <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 8px 36px rgba(0,0,0,0.24)" }}>{t("home.title")}</h1>
+          <p className="" style={{ fontSize: 18, color: "rgba(255,255,255,0.9)", maxWidth: 560, marginTop: 24, lineHeight: 1.7 }}>
             {t("home.subtitle")}
           </p>
           <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
-            <Link href="/search" className="btn" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("home.cta.search")}</Link>
-            <BookButton intent="buy" source="Home hero" label={t("home.cta.book")} variant="outline" style={{ background: "rgba(246,241,236,.1)", padding: "14px 28px", fontSize: 15 }} />
+            <Link href="/search" className="btn" style={{ background: "linear-gradient(135deg, #f5a623 0%, #ff7a1a 100%)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 12px 28px -12px rgba(245,166,35,0.6)" }}>{t("home.cta.search")}</Link>
+            <BookButton intent="buy" source="Home hero" label={t("home.cta.book")} variant="outline" style={{ background: "rgba(255,255,255,0.14)", color: "#fff", padding: "14px 28px", fontSize: 15, border: "1px solid rgba(255,255,255,0.28)" }} />
+          </div>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 24, padding: "12px 16px", borderRadius: 16, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)", color: "rgba(255,255,255,0.92)", fontSize: 14, fontWeight: 500 }}>
+            <span style={{ fontSize: 18 }}>🛡️</span>
+            Contract-savvy representation with investor-level market insight.
           </div>
         </div>
       </section>

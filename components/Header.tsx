@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { AGENT } from "@/lib/data";
 import { useLang, DictKey } from "@/lib/i18n";
@@ -38,9 +39,8 @@ export default function Header() {
         height: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18,
       }}>
         {/* logo */}
-        <Link href="/" style={{ textDecoration: "none", color: "#fff", flexShrink: 0 }}>
-          <span style={{ fontFamily: "Space Grotesk, sans-serif", fontSize: 21, fontWeight: 700, letterSpacing: "-0.02em" }}>PRO MIAMI</span>
-          <span style={{ fontFamily: "Manrope, sans-serif", fontSize: 10, letterSpacing: "0.3em", display: "block", color: "var(--amber)", marginTop: -3 }}>REALTY</span>
+        <Link href="/" style={{ textDecoration: "none", flexShrink: 0 }}>
+          <Image src="/logo.png" alt="PRO MIAMI REALTY" width={140} height={48} priority style={{ height: "auto" }} />
         </Link>
 
         {/* desktop nav — visible links, SERHANT-style dark pill */}

@@ -1,5 +1,4 @@
 "use client";
-import { AGENT } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
@@ -46,12 +45,15 @@ export default function Buyers() {
         <a href="/investors" style={{ color: "var(--coral)", fontSize: 14, fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}>{t("buyers.invCta")}</a>
       </div>
 
-      <div style={{ background: "var(--surface)", borderRadius: 20, padding: "40px 32px", marginTop: 48, textAlign: "center", border: "1px solid var(--line)" }}>
-        <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px" }}>{t("buyers.ctaTitle")}</h2>
-        <p style={{ color: "var(--muted)", fontSize: 16, margin: "0 0 24px" }}>{t("buyers.ctaText")}</p>
-        <BookButton intent="buy" source="Buyers page CTA" label={t("common.bookConsult")} />
       </div>
-      </div>
+
+      <section style={{ background: "var(--indigo)", padding: "56px 24px 64px", marginTop: 80 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px", color: "#fff" }}>{t("buyers.ctaTitle")}</h2>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, margin: "0 0 28px" }}>{t("buyers.ctaText")}</p>
+          <BookButton intent="buy" source="Buyers page CTA" label={t("common.bookConsult")} />
+        </div>
+      </section>
     </div>
   );
 }
