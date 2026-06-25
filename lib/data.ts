@@ -112,7 +112,7 @@ export const LISTINGS: Listing[] = [
 
 export const AGENT = {
   name: "Ays Iziken",
-  title: "Real Estate Professional",
+  title: "Real Estate Broker & Investor",
   brokerage: "PRO MIAMI REALTY",
   license: "FL #3517956",
   phone: "(305) 766-5513",
@@ -121,6 +121,10 @@ export const AGENT = {
   address: "3350 SW 148 Ave, Suite 110, Miramar, FL 33027",
   calendly: "https://calendly.com/promiamirealty-info/30min",
   google: "https://share.google/24EroHsbWthMJ7Y8l",
+  photo: "/ays.jpg",  // фото брокера — положить файл в public/ays.jpg
+  instagram: "https://www.instagram.com/ays.miami.realtor?utm_source=qr",
+  facebook: "https://www.facebook.com/share/18nMBTBwEx/?mibextid=wwXIfr",
+  whatsapp: "https://wa.me/13057665513",
 };
 
 export const fmtPrice = (n: number) => "$" + n.toLocaleString("en-US");

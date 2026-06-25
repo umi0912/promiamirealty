@@ -109,9 +109,9 @@ function Search() {
   const bathsLabel = baths ? `${baths}+ baths` : "All baths";
 
   return (
-    <div style={{ paddingTop: 72, background: "#fff", minHeight: "100vh" }}>
+    <div style={{ paddingTop: 104, background: "#fff", minHeight: "100vh" }}>
       {/* STICKY FILTER BAR */}
-      <div style={{ position: "sticky", top: 72, zIndex: 30, background: "#fff", borderBottom: "1px solid var(--line)", padding: "12px 24px" }}>
+      <div style={{ position: "sticky", top: 96, zIndex: 30, background: "#fff", borderBottom: "1px solid var(--line)", padding: "16px 24px" }}>
         <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: 1600, margin: "0 auto" }}>
           {/* search */}
           <div style={{ position: "relative", flex: "1 1 280px", maxWidth: 360 }}>
@@ -199,7 +199,7 @@ function Search() {
       <div style={{ maxWidth: 1600, margin: "0 auto", padding: "8px 24px 80px" }}>
         {view === "map" ? (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }} className="map-split">
-            <div style={{ position: "sticky", top: 150, alignSelf: "start", height: "calc(100vh - 180px)", minHeight: 480 }}>
+            <div style={{ position: "sticky", top: 180, alignSelf: "start", height: "calc(100vh - 200px)", minHeight: 480 }}>
               <MapView listings={listings} />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 }} className="map-cards">

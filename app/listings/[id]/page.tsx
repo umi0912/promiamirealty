@@ -68,7 +68,8 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40, marginTop: 28 }} className="dgrid">
+      {/* SUMMARY + AGENT CARD рядом */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40, marginTop: 28, alignItems: "start" }} className="dgrid">
         <div>
           <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
             <span style={{ background: "rgba(242,116,44,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
@@ -96,58 +97,71 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
               </div>
             ))}
           </div>
-
-          <h3 style={{ fontSize: 18, marginTop: 32, marginBottom: 10 }}>About this home</h3>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--muted)", margin: 0 }}>{l.description}</p>
-
-          {/* LOCATION */}
-          {l.lat && l.lng && (
-            <>
-              <h3 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>Location</h3>
-              <div style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>{l.address}, {l.city}, {l.state} {l.zip}</div>
-              <div style={{ height: 320 }}>
-                <MapView listings={[l]} />
-              </div>
-            </>
-          )}
-
-          {/* ADDITIONAL INFORMATION */}
-          {l.details && l.details.length > 0 && (
-            <>
-              <h3 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>Additional information</h3>
-              <div style={{ border: "1px solid var(--line)", borderRadius: 12, overflow: "hidden" }}>
-                {l.details.map((d, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", fontSize: 14, borderTop: i ? "1px solid var(--line)" : "none" }}>
-                    <span style={{ color: "var(--muted)" }}>{d.label}</span>
-                    <span style={{ color: "var(--text)", fontWeight: 500 }}>{d.value}</span>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-
-          <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
-            {l.mlsId && <span>MLS®: {l.mlsId} · </span>}{l.courtesy || "Courtesy of BeachesMLS"} · Listing data via BeachesMLS IDX
-          </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <MortgageCalculator price={l.price} listingRef={`${l.address}, ${l.city}`} taxAnnual={l.taxAnnual} hoaMonthly={l.hoaMonthly} />
-          <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", padding: 18 }}>
-            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-              <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(242,116,44,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 500 }}>AI</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 500 }}>{AGENT.name}</div>
-                <div style={{ fontSize: 12, color: "var(--muted)" }}>{AGENT.brokerage} · {AGENT.license}</div>
-              </div>
+        {/* AGENT CARD — рядом с данными */}
+        <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", padding: 20, position: "sticky", top: 100 }}>
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <AgentAvatar />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 16, fontWeight: 600 }}>{AGENT.name}</div>
+              <div style={{ fontSize: 12, color: "var(--muted)" }}>{AGENT.brokerage} · {AGENT.license}</div>
             </div>
-            <BookButton intent="buy" source="Listing page" listingRef={`${l.address}, ${l.city} · ${fmtPrice(l.price)}`} label="Book a tour" style={{ display: "block", marginTop: 16, padding: "12px", fontSize: 14, width: "100%" }} />
-            <a href={`tel:${AGENT.phoneRaw}`} style={{ display: "block", textAlign: "center", marginTop: 10, color: "var(--text)", padding: "12px", borderRadius: 999, fontSize: 14, textDecoration: "none", border: "1px solid var(--line)" }}>Call {AGENT.phone}</a>
           </div>
+          <BookButton intent="buy" source="Listing page" listingRef={`${l.address}, ${l.city} · ${fmtPrice(l.price)}`} label="Book a tour" style={{ display: "block", marginTop: 16, padding: "13px", fontSize: 15, width: "100%" }} />
+          <a href={AGENT.whatsapp} target="_blank" rel="noopener noreferrer" style={{ display: "block", textAlign: "center", marginTop: 10, color: "#fff", background: "#25D366", padding: "13px", borderRadius: 999, fontSize: 14, fontWeight: 600, textDecoration: "none" }}>WhatsApp</a>
+          <a href={`tel:${AGENT.phoneRaw}`} style={{ display: "block", textAlign: "center", marginTop: 10, color: "var(--text)", padding: "13px", borderRadius: 999, fontSize: 14, textDecoration: "none", border: "1px solid var(--line)" }}>Call {AGENT.phone}</a>
         </div>
       </div>
+
+      {/* ABOUT — на всю ширину */}
+      <h3 style={{ fontSize: 20, marginTop: 40, marginBottom: 10 }}>About this home</h3>
+      <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--muted)", margin: 0, maxWidth: 760 }}>{l.description}</p>
+
+      {/* LOCATION — на всю ширину */}
+      {l.lat && l.lng && (
+        <>
+          <h3 style={{ fontSize: 20, marginTop: 40, marginBottom: 12 }}>Location</h3>
+          <div style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>{l.address}, {l.city}, {l.state} {l.zip}</div>
+          <div style={{ height: 380 }}>
+            <MapView listings={[l]} />
+          </div>
+        </>
+      )}
+
+      {/* ADDITIONAL INFORMATION — на всю ширину, 2 колонки */}
+      {l.details && l.details.length > 0 && (
+        <>
+          <h3 style={{ fontSize: 20, marginTop: 40, marginBottom: 12 }}>Additional information</h3>
+          <div style={{ border: "1px solid var(--line)", borderRadius: 12, overflow: "hidden", display: "grid", gridTemplateColumns: "1fr 1fr" }} className="addinfo">
+            {l.details.map((d, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", fontSize: 14, borderTop: "1px solid var(--line)" }}>
+                <span style={{ color: "var(--muted)" }}>{d.label}</span>
+                <span style={{ color: "var(--text)", fontWeight: 500 }}>{d.value}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* MORTGAGE — на всю ширину снизу */}
+      <h3 style={{ fontSize: 20, marginTop: 40, marginBottom: 12 }}>Estimate your monthly payment</h3>
+      <MortgageCalculator price={l.price} listingRef={`${l.address}, ${l.city}`} taxAnnual={l.taxAnnual} hoaMonthly={l.hoaMonthly} />
+
+      <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 24, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
+        {l.mlsId && <span>MLS®: {l.mlsId} · </span>}{l.courtesy || "Courtesy of BeachesMLS"} · Listing data via BeachesMLS IDX
+      </div>
       <div style={{ height: 40 }} />
-      <style>{`@media(max-width:820px){ .dgrid{ grid-template-columns:1fr !important; } .gal{ grid-template-columns:1fr !important; height:auto !important; } }`}</style>
+      <style>{`@media(max-width:820px){ .dgrid{ grid-template-columns:1fr !important; } .gal{ grid-template-columns:1fr !important; height:auto !important; } .addinfo{ grid-template-columns:1fr !important; } }`}</style>
     </div>
   );
+}
+
+// Аватар брокера: фото /ays.jpg, fallback на инициалы если файла нет.
+function AgentAvatar() {
+  const [err, setErr] = useState(false);
+  if (err || !AGENT.photo) {
+    return <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(242,116,44,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 600, flexShrink: 0 }}>AI</div>;
+  }
+  return <img src={AGENT.photo} alt={AGENT.name} onError={() => setErr(true)} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />;
 }
