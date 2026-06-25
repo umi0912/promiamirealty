@@ -14,12 +14,20 @@ const SALE_TYPES = ["Residential", "Residential Income", "Land & Docks"];
 
 export const sparkEnabled = () => TOKEN.length > 0;
 
-// Поля, которые тянем (минимизируем payload).
+// Поля для списка (минимизируем payload).
 const SELECT = [
   "ListingId", "ListPrice", "UnparsedAddress", "City", "StateOrProvince", "PostalCode",
   "BedroomsTotal", "BathroomsTotalInteger", "LivingArea", "PropertyType", "PropertySubType",
   "StandardStatus", "YearBuilt", "Latitude", "Longitude", "PublicRemarks",
   "ListOfficeName", "SeniorCommunityYN", "CountyOrParish",
+].join(",");
+
+// Доп. поля для детальной страницы (как у SERHANT: Additional information).
+const DETAIL_SELECT = [
+  SELECT,
+  "AssociationFee", "AssociationFeeFrequency", "TaxAnnualAmount", "StoriesTotal",
+  "BathroomsFull", "BathroomsHalf", "CoolingYN", "HeatingYN", "GarageSpaces", "GarageYN",
+  "View", "SubdivisionName", "PoolPrivateYN", "ListingContractDate", "DaysOnMarket",
 ].join(",");
 
 export type SearchParams = {
@@ -95,7 +103,47 @@ type ResoRecord = {
   Latitude: number; Longitude: number; PublicRemarks: string;
   ListOfficeName: string; SeniorCommunityYN: boolean;
   Media?: { MediaURL: string; MediaCategory: string; Order: number }[];
+  // доп. поля (detail)
+  AssociationFee?: number; AssociationFeeFrequency?: string; TaxAnnualAmount?: number;
+  StoriesTotal?: number; BathroomsFull?: number; BathroomsHalf?: number;
+  CoolingYN?: boolean; HeatingYN?: boolean; GarageSpaces?: number; GarageYN?: boolean;
+  View?: string[]; SubdivisionName?: string; PoolPrivateYN?: boolean;
+  ListingContractDate?: string; DaysOnMarket?: number;
 };
+
+// AssociationFee → месячный HOA (нормализуем по частоте).
+function hoaToMonthly(fee?: number, freq?: string): number | undefined {
+  if (!fee) return undefined;
+  const f = (freq || "Monthly").toLowerCase();
+  if (f.includes("year") || f.includes("annual")) return Math.round(fee / 12);
+  if (f.includes("quarter")) return Math.round(fee / 3);
+  if (f.includes("semi")) return Math.round(fee / 6);
+  return Math.round(fee);
+}
+
+// Сборка таблицы "Additional information" из доступных полей.
+function buildDetails(r: ResoRecord): { label: string; value: string }[] {
+  const yn = (v?: boolean) => (v ? "Yes" : "No");
+  const rows: ([string, string | number | undefined])[] = [
+    ["Property type", r.PropertySubType],
+    ["Total stories", r.StoriesTotal],
+    ["Bedrooms", r.BedroomsTotal],
+    ["Full bathrooms", r.BathroomsFull],
+    ["Half bathrooms", r.BathroomsHalf],
+    ["Cooling", r.CoolingYN === undefined ? undefined : yn(r.CoolingYN)],
+    ["Heating", r.HeatingYN === undefined ? undefined : yn(r.HeatingYN)],
+    ["Garage", r.GarageYN === undefined ? undefined : yn(r.GarageYN)],
+    ["Garage spaces", r.GarageSpaces],
+    ["Pool", r.PoolPrivateYN === undefined ? undefined : yn(r.PoolPrivateYN)],
+    ["View", Array.isArray(r.View) && r.View.length ? r.View.join(", ") : undefined],
+    ["Subdivision", r.SubdivisionName],
+    ["Days on market", r.DaysOnMarket],
+    ["County", undefined], // заполняется ниже из CountyOrParish если нужно
+  ];
+  return rows
+    .filter(([, v]) => v !== undefined && v !== null && v !== "")
+    .map(([label, value]) => ({ label, value: String(value) }));
+}
 
 // Только фото из CDN sparkplatform (исключаем виртуальные туры).
 function extractPhotos(media: ResoRecord["Media"]): string[] {
@@ -109,12 +157,12 @@ function extractPhotos(media: ResoRecord["Media"]): string[] {
 // Fallback-фото, если у листинга нет медиа.
 const FALLBACK_PHOTO = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80";
 
-function mapRecord(r: ResoRecord): Listing {
+function mapRecord(r: ResoRecord, detail = false): Listing {
   const { typeKey, type } = mapType(r.PropertySubType, r.PropertyType);
   const photos = extractPhotos(r.Media);
   // адрес без города/штата в конце (UnparsedAddress часто = "318 Mansfield H, Boca Raton, FL 33434")
   const shortAddr = (r.UnparsedAddress || "").split(",")[0]?.trim() || r.UnparsedAddress || "";
-  return {
+  const base: Listing = {
     id: r.ListingId,
     mlsId: r.ListingId,
     price: r.ListPrice || 0,
@@ -135,6 +183,13 @@ function mapRecord(r: ResoRecord): Listing {
     description: r.PublicRemarks || "",
     photos: photos.length ? photos : [FALLBACK_PHOTO],
   };
+  if (detail) {
+    base.hoaMonthly = hoaToMonthly(r.AssociationFee, r.AssociationFeeFrequency);
+    base.taxAnnual = r.TaxAnnualAmount || undefined;
+    base.listedDate = r.ListingContractDate || undefined;
+    base.details = buildDetails(r);
+  }
+  return base;
 }
 
 async function sparkGet(query: string): Promise<{ value: ResoRecord[]; count?: number }> {
@@ -172,7 +227,7 @@ export async function getListings(p: SearchParams = {}): Promise<ListingsResult>
   if (p.senior55) {
     params.set("$orderby", "SeniorCommunityYN desc, ModificationTimestamp desc");
     const { value } = await sparkGet(params.toString());
-    const senior = value.map(mapRecord).filter(l => l.senior55);
+    const senior = value.map(r => mapRecord(r)).filter(l => l.senior55);
     // Ещё есть 55+ дальше, только если вся страница состояла из 55+ (перехода к не-55+ ещё не было).
     const hasMore = value.length === pageSize && senior.length === value.length;
     return { listings: senior, total: -1, page, pageSize, hasMore };
@@ -182,16 +237,16 @@ export async function getListings(p: SearchParams = {}): Promise<ListingsResult>
   params.set("$orderby", "ModificationTimestamp desc");
   const { value, count } = await sparkGet(params.toString());
   const total = count ?? value.length;
-  return { listings: value.map(mapRecord), total, page, pageSize, hasMore: page * pageSize < total };
+  return { listings: value.map(r => mapRecord(r)), total, page, pageSize, hasMore: page * pageSize < total };
 }
 
 // Один листинг по MLS ID — для detail-страницы.
 export async function getListing(id: string): Promise<Listing | null> {
   const params = new URLSearchParams();
   params.set("$filter", `ListingId eq '${esc(id)}'`);
-  params.set("$select", SELECT);
+  params.set("$select", DETAIL_SELECT);
   params.set("$expand", "Media($select=MediaURL,MediaCategory,Order)");
   params.set("$top", "1");
   const { value } = await sparkGet(params.toString());
-  return value.length ? mapRecord(value[0]) : null;
+  return value.length ? mapRecord(value[0], true) : null;
 }

@@ -6,18 +6,22 @@ export default function MortgageCalculator({
   price,
   editablePrice = false,
   listingRef,
+  taxAnnual,
+  hoaMonthly,
 }: {
   price: number;
   editablePrice?: boolean;
   listingRef?: string;
+  taxAnnual?: number;     // налог из листинга (prefill)
+  hoaMonthly?: number;    // HOA из листинга (prefill)
 }) {
   const [purchase, setPurchase] = useState(price);
   const [dp, setDp] = useState(20);
   const [rate, setRate] = useState(6.5);
   const [term, setTerm] = useState(30);
-  const [taxYr, setTaxYr] = useState(Math.round((price * 0.011) / 100) * 100); // ~1.1%/yr default
+  const [taxYr, setTaxYr] = useState(taxAnnual && taxAnnual > 0 ? Math.round(taxAnnual) : Math.round((price * 0.011) / 100) * 100); // налог листинга или ~1.1%/yr
   const [insYr, setInsYr] = useState(2400);
-  const [hoaMo, setHoaMo] = useState(0);
+  const [hoaMo, setHoaMo] = useState(hoaMonthly && hoaMonthly > 0 ? Math.round(hoaMonthly) : 0);
 
   const loan = purchase * (1 - dp / 100);
   const mr = rate / 100 / 12;

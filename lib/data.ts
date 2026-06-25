@@ -22,6 +22,10 @@ export type Listing = {
   senior55?: boolean;        // 55+ senior community
   mlsId?: string;            // MLS# (ListingId из Spark)
   courtesy?: string;         // "Courtesy of {ListOfficeName}" — атрибуция IDX
+  hoaMonthly?: number;       // HOA / association fee в месяц
+  taxAnnual?: number;        // налог на недвижимость в год
+  listedDate?: string;       // дата листинга (ListingContractDate)
+  details?: { label: string; value: string }[];  // таблица "Additional information"
   description: string;
   photos: string[];
 };
