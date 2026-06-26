@@ -19,7 +19,7 @@ export default function ContactForm() {
   const inp: React.CSSProperties = { width: "100%", background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "12px 14px", fontSize: 15, outline: "none", marginBottom: 14, boxSizing: "border-box", fontFamily: "Inter" };
   if (sent) return (
     <div style={{ background: "var(--surface)", borderRadius: 16, border: "1px solid var(--line)", padding: 40, textAlign: "center" }}>
-      <div style={{ fontSize: 20, fontFamily: "Fraunces, serif", marginBottom: 8 }}>{t("contact.sentTitle")}</div>
+      <div style={{ fontSize: 20, fontFamily: "Space Grotesk, sans-serif", marginBottom: 8 }}>{t("contact.sentTitle")}</div>
       <p style={{ color: "var(--muted)", fontSize: 15, margin: 0 }}>{t("contact.sentText")}</p>
     </div>
   );

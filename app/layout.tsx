@@ -12,6 +12,13 @@ export const metadata: Metadata = {
     title: "PRO MIAMI REALTY — Miami & Broward Real Estate",
     description: "Search live Miami listings, estimate payments, and connect with a local expert.",
     type: "website",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
 };
 

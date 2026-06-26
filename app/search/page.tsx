@@ -1,107 +1,315 @@
 "use client";
-import { useState, useMemo, useEffect, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { LISTINGS, fmtPrice, fmtPriceShort } from "@/lib/data";
+import dynamic from "next/dynamic";
+import { type Listing, fmtPrice, fmtPriceShort } from "@/lib/data";
+import { useLang } from "@/lib/i18n";
+
+// MapLibre использует window — грузим только на клиенте.
+const MapView = dynamic(() => import("@/components/MapView"), {
+  ssr: false,
+  loading: () => <div style={{ height: "100%", minHeight: 420, borderRadius: 16, background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)" }}>Loading map…</div>,
+});
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div style={{ paddingTop: 120, textAlign: "center", color: "var(--muted)" }}>Loading…</div>}>
+    <Suspense fallback={<div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>Loading…</div>}>
       <Search />
     </Suspense>
   );
 }
 
+type Status = "active" | "coming" | "all";
+type TypeKey = "all" | "condo" | "house" | "townhouse" | "land";
+
 function Search() {
+  const { t } = useLang();
   const sp = useSearchParams();
   const [q, setQ] = useState("");
-  const [type, setType] = useState("all");
+  const [type, setType] = useState<TypeKey>("all");
   const [beds, setBeds] = useState(0);
+  const [baths, setBaths] = useState(0);
+  const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(99999999);
+  const [senior55, setSenior55] = useState(false);
+  const [status, setStatus] = useState<Status>("active");
 
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [source, setSource] = useState("");
+  const [view, setView] = useState<"list" | "map">("list");
+  const [openPop, setOpenPop] = useState<string | null>(null);
+  const [saved, setSaved] = useState<Set<string>>(new Set());
+
+  // prefill из ?city=
+  useEffect(() => { const c = sp.get("city"); if (c) setQ(c); }, [sp]);
+
+  const buildQuery = useCallback((pg: number) => {
+    const p = new URLSearchParams();
+    if (q.trim()) p.set("q", q.trim());
+    if (type !== "all") p.set("type", type);
+    if (beds) p.set("beds", String(beds));
+    if (baths) p.set("baths", String(baths));
+    if (minPrice) p.set("minPrice", String(minPrice));
+    if (maxPrice < 99999999) p.set("maxPrice", String(maxPrice));
+    if (senior55) p.set("senior55", "1");
+    p.set("status", status);
+    p.set("page", String(pg));
+    return p.toString();
+  }, [q, type, beds, baths, minPrice, maxPrice, senior55, status]);
+
+  // дебаунс: при смене фильтров грузим страницу 1
+  const debounce = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => {
-    const city = sp.get("city");
-    if (city) setQ(city);
-  }, [sp]);
+    setLoading(true);
+    if (debounce.current) clearTimeout(debounce.current);
+    debounce.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/listings?${buildQuery(1)}`);
+        const data = await res.json();
+        setListings(data.listings || []);
+        setTotal(data.total ?? 0);
+        setHasMore(!!data.hasMore);
+        setPage(1);
+        setSource(data.source || "");
+      } catch { setListings([]); setTotal(0); setHasMore(false); }
+      setLoading(false);
+    }, 350);
+    return () => { if (debounce.current) clearTimeout(debounce.current); };
+  }, [buildQuery]);
 
-  const results = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    return LISTINGS.filter(l => {
-      const m = !term || l.address.toLowerCase().includes(term) || l.city.toLowerCase().includes(term) || l.zip.includes(term);
-      return m && (type === "all" || l.typeKey === type) && l.beds >= beds && l.price <= maxPrice;
-    });
-  }, [q, type, beds, maxPrice]);
+  const loadMore = async () => {
+    const next = page + 1;
+    const res = await fetch(`/api/listings?${buildQuery(next)}`);
+    const data = await res.json();
+    setListings(prev => [...prev, ...(data.listings || [])]);
+    setHasMore(!!data.hasMore);
+    setPage(next);
+  };
 
-  // нормализация координат в рамку карты (демо; реальная карта — Google/Mapbox)
-  const lats = LISTINGS.map(l => l.lat), lngs = LISTINGS.map(l => l.lng);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats), minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-  const px = (l: typeof LISTINGS[0]) => ({
-    left: `${8 + ((l.lng - minLng) / (maxLng - minLng || 1)) * 84}%`,
-    top: `${12 + ((maxLat - l.lat) / (maxLat - minLat || 1)) * 76}%`,
-  });
+  const toggleSave = (e: React.MouseEvent, id: string) => {
+    e.preventDefault(); e.stopPropagation();
+    setSaved(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  };
+  const share = (e: React.MouseEvent, l: Listing) => {
+    e.preventDefault(); e.stopPropagation();
+    const url = `${window.location.origin}/listings/${l.id}`;
+    if (navigator.share) navigator.share({ title: l.address, url }).catch(() => {});
+    else navigator.clipboard?.writeText(url);
+  };
+
+  const priceLabel = minPrice || maxPrice < 99999999
+    ? `${minPrice ? fmtPriceShort(minPrice) : "$0"}–${maxPrice < 99999999 ? fmtPriceShort(maxPrice) : "∞"}`
+    : t("search.anyPrice");
+  const typeLabel = type === "all" ? t("search.allTypes") : t(`type.${type}` as const);
+  const statusLabel = { active: t("search.forSale"), coming: t("search.comingSoon"), all: t("search.forSaleSoon") }[status];
+  const bedsLabel = beds ? `${beds}+ ${t("search.beds")}` : t("search.allBeds");
+  const bathsLabel = baths ? `${baths}+ ${t("search.baths")}` : t("search.allBaths");
 
   return (
-    <div style={{ paddingTop: 72 }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px 0" }}>
-        <h1 style={{ fontSize: "clamp(28px,4vw,42px)", margin: "0 0 4px" }}>Search listings</h1>
-        <p style={{ color: "var(--muted)", fontSize: 15, margin: "0 0 24px" }}>Live across Miami-Dade & Broward · demo data, real listings via BeachesMLS</p>
-
-        {/* FILTERS */}
-        <div style={{ background: "var(--surface)", borderRadius: 16, padding: 16, border: "1px solid var(--line)", marginBottom: 20 }}>
-          <input value={q} onChange={e => setQ(e.target.value)} placeholder="City, neighborhood, address or ZIP…" style={{ width: "100%", height: 46, background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "0 16px", fontSize: 15, marginBottom: 12, outline: "none", boxSizing: "border-box" }} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10 }}>
-            <select value={type} onChange={e => setType(e.target.value)} style={selStyle}><option value="all">Any type</option><option value="condo">Condo</option><option value="house">House</option></select>
-            <select value={beds} onChange={e => setBeds(+e.target.value)} style={selStyle}><option value={0}>Any beds</option><option value={1}>1+</option><option value={2}>2+</option><option value={3}>3+</option><option value={4}>4+</option></select>
-            <input
-              type="number"
-              value={maxPrice >= 99999999 ? "" : maxPrice}
-              onChange={e => setMaxPrice(e.target.value === "" ? 99999999 : +e.target.value)}
-              placeholder="Max price ($)"
-              style={{ ...selStyle, MozAppearance: "textfield" }}
-            />
+    <div style={{ paddingTop: 104, background: "#fff", minHeight: "100vh" }}>
+      {/* STICKY FILTER BAR */}
+      <div style={{ position: "sticky", top: 96, zIndex: 30, background: "#fff", borderBottom: "1px solid var(--line)", padding: "16px 24px" }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: 1600, margin: "0 auto" }}>
+          {/* search */}
+          <div style={{ position: "relative", flex: "1 1 280px", maxWidth: 360 }}>
+            <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }}>⌕</span>
+            <input value={q} onChange={e => setQ(e.target.value)} placeholder={t("search.placeholder")}
+              style={{ width: "100%", height: 44, paddingLeft: 38, paddingRight: 16, borderRadius: 999, border: "1px solid var(--line)", fontSize: 14, outline: "none", boxSizing: "border-box", background: "#fff" }} />
           </div>
-          <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>{results.length} objects found</div>
+
+          {/* pills */}
+          <Pill label={statusLabel} active={status !== "active"} open={openPop === "status"} onClick={() => setOpenPop(openPop === "status" ? null : "status")}>
+            {(["active", "coming", "all"] as Status[]).map(s => (
+              <PopRow key={s} selected={status === s} onClick={() => { setStatus(s); setOpenPop(null); }}>
+                {{ active: t("search.forSale"), coming: t("search.comingSoon"), all: t("search.forSaleSoon") }[s]}
+              </PopRow>
+            ))}
+          </Pill>
+
+          <Pill label={priceLabel} active={!!minPrice || maxPrice < 99999999} open={openPop === "price"} onClick={() => setOpenPop(openPop === "price" ? null : "price")} wide>
+            <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 10, minWidth: 220 }}>
+              <label style={popLabelStyle}>{t("search.minPrice")}
+                <input type="number" value={minPrice || ""} onChange={e => setMinPrice(+e.target.value || 0)} placeholder="$0" style={popInputStyle} />
+              </label>
+              <label style={popLabelStyle}>{t("search.maxPrice")}
+                <input type="number" value={maxPrice < 99999999 ? maxPrice : ""} onChange={e => setMaxPrice(e.target.value ? +e.target.value : 99999999)} placeholder="∞" style={popInputStyle} />
+              </label>
+            </div>
+          </Pill>
+
+          <Pill label={typeLabel} active={type !== "all"} open={openPop === "type"} onClick={() => setOpenPop(openPop === "type" ? null : "type")}>
+            {(["all", "condo", "house", "townhouse", "land"] as TypeKey[]).map(tk => (
+              <PopRow key={tk} selected={type === tk} onClick={() => { setType(tk); setOpenPop(null); }}>
+                {tk === "all" ? t("search.allTypes") : t(`type.${tk}` as const)}
+              </PopRow>
+            ))}
+          </Pill>
+
+          <Pill label={bedsLabel} active={!!beds} open={openPop === "beds"} onClick={() => setOpenPop(openPop === "beds" ? null : "beds")}>
+            {[0, 1, 2, 3, 4, 5].map(n => (
+              <PopRow key={n} selected={beds === n} onClick={() => { setBeds(n); setOpenPop(null); }}>{n === 0 ? t("search.allBeds") : `${n}+ ${t("search.beds")}`}</PopRow>
+            ))}
+          </Pill>
+
+          <Pill label={bathsLabel} active={!!baths} open={openPop === "baths"} onClick={() => setOpenPop(openPop === "baths" ? null : "baths")}>
+            {[0, 1, 2, 3, 4].map(n => (
+              <PopRow key={n} selected={baths === n} onClick={() => { setBaths(n); setOpenPop(null); }}>{n === 0 ? t("search.allBaths") : `${n}+ ${t("search.baths")}`}</PopRow>
+            ))}
+          </Pill>
+
+          {/* 55+ toggle */}
+          <button onClick={() => setSenior55(v => !v)} style={{
+            height: 40, padding: "0 16px", borderRadius: 999, fontSize: 14, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap",
+            border: senior55 ? "1px solid var(--indigo)" : "1px solid var(--line)",
+            background: senior55 ? "var(--indigo)" : "#fff", color: senior55 ? "#fff" : "var(--text)",
+          }}>55+ {senior55 ? "✓" : ""}</button>
+
+          <div style={{ flex: 1 }} />
+
+          {/* List / Map toggle */}
+          <div style={{ display: "inline-flex", border: "1px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
+            {(["list", "map"] as const).map(v => (
+              <button key={v} onClick={() => setView(v)} style={{
+                padding: "9px 18px", fontSize: 14, fontWeight: 600, cursor: "pointer", border: "none",
+                background: view === v ? "var(--indigo)" : "#fff", color: view === v ? "#fff" : "var(--text)",
+              }}>{v === "list" ? t("search.list") : t("search.map")}</button>
+            ))}
+          </div>
         </div>
+        {openPop && <div onClick={() => setOpenPop(null)} style={{ position: "fixed", inset: 0, zIndex: 25 }} />}
+      </div>
 
-        {/* MAP + LIST */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 80 }} className="sgrid">
-          <div style={{ position: "sticky", borderRadius: 16, overflow: "hidden", background: "#11203a", top: 90, alignSelf: "start", height: 460 }} className="smap">
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#16263f,#0e1c30)" }} />
-            <svg viewBox="0 0 400 460" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} aria-hidden>
-              <path d="M0,300 Q100,280 200,295 T400,290 L400,460 L0,460 Z" fill="#0c1830" opacity=".6" />
-              <path d="M40,60 L370,80 M30,160 L380,170 M50,260 L360,270 M40,360 L370,370" stroke="#1f3252" strokeWidth="1" />
-              <path d="M110,30 L120,440 M220,25 L230,445 M320,35 L310,440" stroke="#1f3252" strokeWidth="1" />
-            </svg>
-            {results.map(l => (
-              <Link key={l.id} href={`/listings/${l.id}`} className="mappin"
-                style={{ position: "absolute", ...px(l), transform: "translate(-50%,-100%)", textDecoration: "none", zIndex: 2 }}>
-                <span style={{ display: "inline-block", background: "rgba(22,18,28,.88)", color: "#fff", fontSize: 12, fontWeight: 500, padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap", transition: "all .2s" }}>{fmtPriceShort(l.price)}</span>
-              </Link>
-            ))}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {results.map(l => (
-              <Link key={l.id} href={`/listings/${l.id}`} className="scard"
-                style={{ display: "flex", gap: 12, background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 14, padding: 10, textDecoration: "none", transition: "all .2s" }}>
-                <div style={{ width: 110, height: 84, borderRadius: 10, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center", flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 18, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
-                  <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>
-                  <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 6 }}>{l.beds} bd · {l.baths} ba · {l.sqft.toLocaleString()} sqft</div>
-                </div>
-              </Link>
-            ))}
-            {results.length === 0 && <div style={{ textAlign: "center", padding: 60, color: "var(--muted)" }}>No listings match — adjust filters.</div>}
+      {/* HEADER ROW */}
+      <div style={{ maxWidth: 1600, margin: "0 auto", padding: "24px 24px 8px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+        <div>
+          <h1 style={{ fontSize: "clamp(22px,3vw,30px)", margin: 0 }}>{t("search.title")}</h1>
+          <div style={{ color: "var(--muted)", fontSize: 14, marginTop: 4 }}>
+            {loading ? t("search.searching") : total < 0 ? `${listings.length.toLocaleString()}+ ${t("search.results")}` : `${total.toLocaleString()} ${t("search.results")}`}
+            {source === "demo" && <span style={{ marginLeft: 8, fontSize: 12, color: "var(--amber)" }}>· demo data (set SPARK_ACCESS_TOKEN for live MLS)</span>}
+            {source === "demo-fallback" && <span style={{ marginLeft: 8, fontSize: 12, color: "var(--amber)" }}>· MLS unavailable, showing demo</span>}
           </div>
         </div>
       </div>
+
+      {/* CONTENT */}
+      <div style={{ maxWidth: 1600, margin: "0 auto", padding: "8px 24px 80px" }}>
+        {view === "map" ? (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }} className="map-split">
+            <div style={{ position: "sticky", top: 180, alignSelf: "start", height: "calc(100vh - 200px)", minHeight: 480 }}>
+              <MapView listings={listings} />
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 }} className="map-cards">
+              {listings.map(l => <Card key={l.id} l={l} saved={saved.has(l.id)} onSave={toggleSave} onShare={share} />)}
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20 }} className="grid4">
+            {listings.map(l => <Card key={l.id} l={l} saved={saved.has(l.id)} onSave={toggleSave} onShare={share} />)}
+          </div>
+        )}
+
+        {!loading && listings.length === 0 && (
+          <div style={{ textAlign: "center", padding: 80, color: "var(--muted)" }}>{t("search.noMatch")}</div>
+        )}
+
+        {/* LOAD MORE */}
+        {listings.length > 0 && hasMore && (
+          <div style={{ textAlign: "center", marginTop: 40 }}>
+            <button onClick={loadMore} style={{ padding: "13px 32px", borderRadius: 999, border: "1px solid var(--line)", background: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+              {t("search.loadMore")}{total > 0 ? ` (${listings.length.toLocaleString()} / ${total.toLocaleString()})` : ""}
+            </button>
+          </div>
+        )}
+      </div>
+
       <style>{`
-        .scard:hover{ border-color: var(--coral) !important; background: var(--surface-2) !important; }
-        .mappin:hover span{ background: var(--coral) !important; transform: scale(1.12); }
-        .mappin:hover{ z-index: 10 !important; }
-        @media(max-width:820px){ .sgrid{ grid-template-columns:1fr !important; } .smap{ position:relative !important; top:0 !important; height:300px !important; min-height:300px !important; } }
+        @media(max-width:1280px){ .grid4{ grid-template-columns:repeat(3,1fr) !important; } }
+        @media(max-width:920px){ .grid4{ grid-template-columns:repeat(2,1fr) !important; } .map-split{ grid-template-columns:1fr !important; } .map-cards{ grid-template-columns:repeat(2,1fr) !important; } }
+        @media(max-width:560px){ .grid4{ grid-template-columns:1fr !important; } .map-cards{ grid-template-columns:1fr !important; } }
       `}</style>
     </div>
   );
 }
-const selStyle: React.CSSProperties = { height: 44, background: "var(--bg)", border: "1px solid var(--line)", borderRadius: 10, color: "var(--text)", padding: "0 12px", fontSize: 14, outline: "none" };
+
+// ---------- CARD ----------
+function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSave: (e: React.MouseEvent, id: string) => void; onShare: (e: React.MouseEvent, l: Listing) => void }) {
+  const { t } = useLang();
+  const coming = l.status === "Coming Soon";
+  const pics = l.photos.slice(0, 10);
+  const [pi, setPi] = useState(0);
+  const nav = (e: React.MouseEvent, d: number) => { e.preventDefault(); e.stopPropagation(); setPi(p => (p + d + pics.length) % pics.length); };
+  return (
+    <Link href={`/listings/${l.id}`} className="scard" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+      <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", borderRadius: 12, overflow: "hidden", background: "var(--surface-2)" }}>
+        <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${pics[pi]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
+        {/* status badge */}
+        <span style={{ position: "absolute", top: 10, left: 10, background: coming ? "rgba(44,90,80,.92)" : "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8, zIndex: 2 }}>{coming ? t("search.coming") : t("search.active")}</span>
+        {/* heart + share */}
+        <div style={{ position: "absolute", top: 10, right: 10, display: "flex", gap: 8, zIndex: 2 }}>
+          <button onClick={e => onSave(e, l.id)} aria-label="Save" style={iconBtn}>{saved ? "♥" : "♡"}</button>
+          <button onClick={e => onShare(e, l)} aria-label="Share" style={iconBtn}>➤</button>
+        </div>
+        {/* slider arrows (на hover) */}
+        {pics.length > 1 && (
+          <>
+            <button className="scard-arrow scard-prev" onClick={e => nav(e, -1)} aria-label="Previous photo">‹</button>
+            <button className="scard-arrow scard-next" onClick={e => nav(e, 1)} aria-label="Next photo">›</button>
+            {/* точки */}
+            <div style={{ position: "absolute", bottom: 24, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 5, zIndex: 2 }}>
+              {pics.map((_, i) => (
+                <span key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: i === pi ? "#fff" : "rgba(255,255,255,.5)", boxShadow: "0 1px 2px rgba(0,0,0,.4)" }} />
+              ))}
+            </div>
+          </>
+        )}
+        {/* courtesy overlay */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 12px 8px", background: "linear-gradient(180deg,transparent,rgba(0,0,0,.6))", color: "rgba(255,255,255,.92)", fontSize: 11 }}>{l.courtesy || "Courtesy of BeachesMLS"}</div>
+      </div>
+      {/* info */}
+      <div style={{ padding: "10px 2px 0" }}>
+        <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "Space Grotesk, sans-serif" }}>{fmtPrice(l.price)}</div>
+        <div style={{ fontSize: 14, color: "var(--text)", marginTop: 4 }}>
+          {l.beds ? `${l.beds} bd · ` : ""}{l.baths ? `${l.baths} ba · ` : ""}{l.sqft ? `${l.sqft.toLocaleString()} sqft` : ""}
+        </div>
+        <div style={{ fontSize: 14, color: "var(--muted)", marginTop: 4 }}>{l.address}{l.city ? `, ${l.city} ${l.state} ${l.zip}` : ""}</div>
+        {l.mlsId && <div style={{ fontSize: 11, color: "rgba(0,0,0,.45)", marginTop: 6 }}>MLS®: {l.mlsId}</div>}
+      </div>
+    </Link>
+  );
+}
+
+// ---------- PILL + POPOVER ----------
+function Pill({ label, active, open, onClick, children, wide }: { label: string; active: boolean; open: boolean; onClick: () => void; children: React.ReactNode; wide?: boolean }) {
+  return (
+    <div style={{ position: "relative" }}>
+      <button onClick={onClick} style={{
+        height: 40, padding: "0 16px", borderRadius: 999, fontSize: 14, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap",
+        border: active || open ? "1px solid var(--indigo)" : "1px solid var(--line)",
+        background: active ? "var(--indigo)" : "#fff", color: active ? "#fff" : "var(--text)",
+        display: "inline-flex", alignItems: "center", gap: 6,
+      }}>{label} <span style={{ fontSize: 10, opacity: .6 }}>▾</span></button>
+      {open && (
+        <div style={{ position: "absolute", top: "calc(100% + 8px)", left: 0, zIndex: 40, background: "#fff", borderRadius: 12, border: "1px solid var(--line)", boxShadow: "0 12px 32px rgba(0,0,0,.14)", overflow: "hidden", minWidth: wide ? 220 : 180, padding: wide ? 0 : 6 }}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+function PopRow({ children, selected, onClick }: { children: React.ReactNode; selected: boolean; onClick: () => void }) {
+  return (
+    <button onClick={onClick} style={{
+      display: "block", width: "100%", textAlign: "left", padding: "10px 14px", fontSize: 14, cursor: "pointer", border: "none", borderRadius: 8,
+      background: selected ? "var(--surface)" : "transparent", color: "var(--text)", fontWeight: selected ? 700 : 500,
+    }}>{children}</button>
+  );
+}
+
+const iconBtn: React.CSSProperties = { width: 34, height: 34, borderRadius: "50%", border: "none", background: "rgba(40,40,40,.55)", color: "#fff", fontSize: 15, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" };
+const popLabelStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 6, fontSize: 12, fontWeight: 600, color: "var(--muted)" };
+const popInputStyle: React.CSSProperties = { height: 40, border: "1px solid var(--line)", borderRadius: 8, padding: "0 12px", fontSize: 14, outline: "none" };

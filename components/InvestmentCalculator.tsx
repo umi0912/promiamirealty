@@ -90,12 +90,12 @@ export default function InvestmentCalculator() {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 12, marginTop: 20 }}>
         <div style={{ background: "var(--bg)", borderRadius: 12, padding: 18, textAlign: "center" }}>
-          <div style={{ fontSize: 30, fontWeight: 500, fontFamily: "Fraunces, serif", color: "var(--amber)" }}>{capRate.toFixed(1)}%</div>
+          <div style={{ fontSize: 30, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--amber)" }}>{capRate.toFixed(1)}%</div>
           <div style={{ fontSize: 13, color: "var(--text)", marginTop: 6, fontWeight: 500 }}>{tt(L.cap)}</div>
           <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 3 }}>{tt(L.capSub)}</div>
         </div>
         <div style={{ background: "var(--bg)", borderRadius: 12, padding: 18, textAlign: "center" }}>
-          <div style={{ fontSize: 30, fontWeight: 500, fontFamily: "Fraunces, serif", color: positive ? "var(--green)" : "#E2625C" }}>${Math.round(annualCashFlow).toLocaleString("en-US")}</div>
+          <div style={{ fontSize: 30, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: positive ? "var(--green)" : "#E2625C" }}>${Math.round(annualCashFlow).toLocaleString("en-US")}</div>
           <div style={{ fontSize: 13, color: "var(--text)", marginTop: 6, fontWeight: 500 }}>{tt(L.cf)}</div>
           <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 3 }}>{tt(L.cfSub)}</div>
         </div>

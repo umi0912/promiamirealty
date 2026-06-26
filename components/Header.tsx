@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { useState } from "react";
 import { AGENT } from "@/lib/data";
 import { useLang, DictKey } from "@/lib/i18n";
 
@@ -16,58 +17,58 @@ const nav: { href: string; key: DictKey }[] = [
 
 export default function Header() {
   const { lang, setLang, t } = useLang();
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const f = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", f);
-    return () => window.removeEventListener("scroll", f);
-  }, []);
 
   const LangToggle = () => (
-    <div style={{ display: "inline-flex", border: "1px solid var(--line)", borderRadius: 999, overflow: "hidden" }}>
+    <div style={{ display: "inline-flex", border: "1px solid rgba(255,255,255,.28)", borderRadius: 999, overflow: "hidden" }}>
       {(["en", "ru"] as const).map(l => (
         <button key={l} onClick={() => setLang(l)} style={{
-          background: lang === l ? "var(--coral)" : "transparent",
-          color: lang === l ? "#fff" : "var(--muted)",
-          border: "none", padding: "6px 12px", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "Inter", textTransform: "uppercase",
+          background: lang === l ? "#fff" : "transparent",
+          color: lang === l ? "var(--indigo)" : "rgba(255,255,255,.7)",
+          border: "none", padding: "6px 13px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "Manrope, sans-serif", textTransform: "uppercase",
         }}>{l}</button>
       ))}
     </div>
   );
 
   return (
-    <header style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, transition: "all .3s",
-      background: scrolled ? "rgba(22,18,28,.92)" : "transparent",
-      backdropFilter: scrolled ? "blur(10px)" : "none",
-      borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
-    }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/" style={{ textDecoration: "none", color: "var(--text)" }}>
-          <span style={{ fontFamily: "Fraunces, serif", fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>PRO MIAMI</span>
-          <span style={{ fontFamily: "Inter", fontSize: 11, letterSpacing: "0.3em", display: "block", color: "var(--coral)", marginTop: -4 }}>REALTY</span>
+    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, padding: "18px 24px" }}>
+      <div style={{
+        maxWidth: 1340, margin: "0 auto", background: "var(--indigo)", borderRadius: 18,
+        boxShadow: "0 10px 40px rgba(44,90,80,.28)", padding: "0 14px 0 28px",
+        height: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18,
+      }}>
+        {/* logo */}
+        <Link href="/" style={{ textDecoration: "none", flexShrink: 0 }}>
+          <Image src="/logo.png" alt="PRO MIAMI REALTY" width={140} height={48} priority style={{ height: "auto" }} />
         </Link>
-        <nav className="desktop-nav" style={{ display: "flex", gap: 26, alignItems: "center" }}>
+
+        {/* desktop nav — visible links, SERHANT-style dark pill */}
+        <nav className="desktop-nav" style={{ display: "flex", gap: 24, alignItems: "center" }}>
           {nav.map(n => (
-            <Link key={n.href} href={n.href} style={{ color: "var(--text)", textDecoration: "none", fontSize: 14, opacity: 0.85 }}>{t(n.key)}</Link>
+            <Link key={n.href} href={n.href} className="navlink" style={{ color: "rgba(255,255,255,.85)", textDecoration: "none", fontSize: 14.5, fontWeight: 500 }}>{t(n.key)}</Link>
           ))}
           <LangToggle />
-          <a href={`tel:${AGENT.phoneRaw}`} className="btn" style={{ color: "#fff", background: "var(--coral)", padding: "9px 18px", borderRadius: 999, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>{AGENT.phone}</a>
+          <a href={`tel:${AGENT.phoneRaw}`} className="btn" style={{ color: "var(--indigo)", background: "#fff", padding: "10px 20px", borderRadius: 10, fontSize: 14.5, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>{AGENT.phone}</a>
         </nav>
-        <button className="mobile-toggle" aria-label="Menu" onClick={() => setOpen(!open)} style={{ display: "none", background: "none", border: "none", color: "var(--text)", fontSize: 24, cursor: "pointer" }}>{open ? "✕" : "☰"}</button>
+
+        {/* mobile toggle */}
+        <button className="mobile-toggle" aria-label="Menu" onClick={() => setOpen(!open)} style={{ display: "none", background: "none", border: "none", color: "#fff", fontSize: 24, cursor: "pointer" }}>{open ? "✕" : "☰"}</button>
       </div>
+
       {open && (
-        <div className="mobile-menu" style={{ background: "rgba(22,18,28,.98)", borderTop: "1px solid var(--line)", padding: "16px 24px" }}>
+        <div className="mobile-menu" style={{ maxWidth: 1340, margin: "10px auto 0", background: "var(--indigo)", borderRadius: 18, padding: "12px 24px 20px", boxShadow: "0 10px 40px rgba(44,90,80,.28)" }}>
           {nav.map(n => (
-            <Link key={n.href} href={n.href} onClick={() => setOpen(false)} style={{ display: "block", color: "var(--text)", textDecoration: "none", fontSize: 16, padding: "12px 0" }}>{t(n.key)}</Link>
+            <Link key={n.href} href={n.href} onClick={() => setOpen(false)} style={{ display: "block", color: "rgba(255,255,255,.9)", textDecoration: "none", fontSize: 16, padding: "12px 0" }}>{t(n.key)}</Link>
           ))}
           <div style={{ padding: "12px 0" }}><LangToggle /></div>
-          <a href={`tel:${AGENT.phoneRaw}`} style={{ display: "block", color: "var(--coral)", fontSize: 16, padding: "12px 0", textDecoration: "none" }}>{AGENT.phone}</a>
+          <a href={`tel:${AGENT.phoneRaw}`} style={{ display: "inline-block", color: "var(--indigo)", background: "#fff", fontSize: 16, fontWeight: 700, padding: "12px 22px", borderRadius: 10, textDecoration: "none", marginTop: 6 }}>{AGENT.phone}</a>
         </div>
       )}
+
       <style>{`
-        @media (max-width: 980px){ .desktop-nav{ display:none !important; } .mobile-toggle{ display:block !important; } }
+        .navlink:hover{ opacity:1; color:#fff !important; }
+        @media (max-width: 1040px){ .desktop-nav{ display:none !important; } .mobile-toggle{ display:block !important; } }
       `}</style>
     </header>
   );

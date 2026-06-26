@@ -1,0 +1,10 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="40" fill="#2E1A4A"/>
+  <rect x="90" y="90" width="1420" height="720" rx="28" fill="#F6F5F9"/>
+  <rect x="150" y="160" width="520" height="320" rx="24" fill="#E9E2F4"/>
+  <rect x="720" y="170" width="730" height="180" rx="24" fill="#FFFFFF"/>
+  <rect x="720" y="380" width="510" height="220" rx="24" fill="#F5A623"/>
+  <path d="M190 440C260 280 370 250 430 330C470 390 520 430 590 440" stroke="#2E1A4A" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="1260" cy="570" r="140" fill="#2E1A4A"/>
+  <text x="200" y="720" fill="#2E1A4A" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="80" font-weight="700">Miami Real Estate</text>
+</svg>

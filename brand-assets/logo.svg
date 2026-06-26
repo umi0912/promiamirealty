@@ -1,0 +1,9 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="400" rx="48" fill="#F6F5F9"/>
+  <circle cx="280" cy="200" r="132" fill="#2E1A4A"/>
+  <path d="M280 108C242 108 212 138 212 176C212 214 242 244 280 244C318 244 348 214 348 176C348 138 318 108 280 108Z" fill="#F5A623"/>
+  <path d="M248 248L280 168L312 248H248Z" fill="#FFFFFF"/>
+  <path d="M238 292H322" stroke="#2E1A4A" stroke-width="18" stroke-linecap="round"/>
+  <text x="420" y="190" fill="#2E1A4A" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="86" font-weight="700" letter-spacing="-2">PRO MIAMI</text>
+  <text x="420" y="252" fill="#F5A623" font-family="'Manrope', 'Arial', sans-serif" font-size="44" font-weight="700" letter-spacing="10">REALTY</text>
+</svg>

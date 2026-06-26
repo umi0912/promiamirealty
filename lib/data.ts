@@ -7,9 +7,9 @@ export type Listing = {
   city: string;
   state: string;
   zip: string;
-  type: "Condo" | "Single Family" | "Townhouse";
-  typeKey: "condo" | "house" | "townhouse";
-  status: "For Sale";
+  type: "Condo" | "Single Family" | "Townhouse" | "Land";
+  typeKey: "condo" | "house" | "townhouse" | "land";
+  status: string;            // "Active" | "Coming Soon" | "For Sale" — из Spark StandardStatus
   beds: number;
   baths: number;
   sqft: number;
@@ -19,6 +19,13 @@ export type Listing = {
   featured?: boolean;
   investor?: boolean;        // помечен как инвест-объект (доходный)
   estRent?: number;          // оценочная месячная аренда (для подборки инвесторов)
+  senior55?: boolean;        // 55+ senior community
+  mlsId?: string;            // MLS# (ListingId из Spark)
+  courtesy?: string;         // "Courtesy of {ListOfficeName}" — атрибуция IDX
+  hoaMonthly?: number;       // HOA / association fee в месяц
+  taxAnnual?: number;        // налог на недвижимость в год
+  listedDate?: string;       // дата листинга (ListingContractDate)
+  details?: { label: string; value: string }[];  // таблица "Additional information"
   description: string;
   photos: string[];
 };
@@ -80,11 +87,32 @@ export const LISTINGS: Listing[] = [
     description: "Well-maintained home in a quiet neighborhood with a screened patio, updated roof, and a spacious lot.",
     photos: ["https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1400&q=80","https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=900&q=80"],
   },
+  {
+    id: "9", price: 425000, address: "2850 NE 2nd Ave", city: "Miami", state: "FL", zip: "33137",
+    type: "Townhouse", typeKey: "townhouse", status: "For Sale", beds: 3, baths: 2, sqft: 1680, yearBuilt: 2010,
+    lat: 25.8101, lng: -80.1899,
+    description: "Modern townhouse with private entrance, updated kitchen, and two-car garage near Wynwood.",
+    photos: ["https://images.unsplash.com/photo-1580587771525-78b9dba3b814?w=1400&q=80"],
+  },
+  {
+    id: "10", price: 285000, address: "14500 SW 92nd Ave", city: "Miami", state: "FL", zip: "33186",
+    type: "Land", typeKey: "land", status: "For Sale", beds: 0, baths: 0, sqft: 8800, yearBuilt: 0,
+    lat: 25.6833, lng: -80.3333, senior55: true,
+    description: "Vacant land in 55+ gated community, perfect for custom home build.",
+    photos: ["https://images.unsplash.com/photo-1559027615-cd2628902d4a?w=1400&q=80"],
+  },
+  {
+    id: "11", price: 995000, address: "7650 SW 58th Ave", city: "Miami", state: "FL", zip: "33143",
+    type: "Single Family", typeKey: "house", status: "For Sale", beds: 4, baths: 3, sqft: 2450, yearBuilt: 2008,
+    lat: 25.7289, lng: -80.2789, senior55: true,
+    description: "Spacious home in prestigious 55+ active community with golf, tennis, and clubhouse.",
+    photos: ["https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=1400&q=80"],
+  },
 ];
 
 export const AGENT = {
   name: "Ays Iziken",
-  title: "Real Estate Professional",
+  title: "Real Estate Broker & Investor",
   brokerage: "PRO MIAMI REALTY",
   license: "FL #3517956",
   phone: "(305) 766-5513",
@@ -93,7 +121,21 @@ export const AGENT = {
   address: "3350 SW 148 Ave, Suite 110, Miramar, FL 33027",
   calendly: "https://calendly.com/promiamirealty-info/30min",
   google: "https://share.google/24EroHsbWthMJ7Y8l",
+  photo: "/ays.jpg",  // фото брокера — положить файл в public/ays.jpg
+  instagram: "https://www.instagram.com/ays.miami.realtor?utm_source=qr",
+  facebook: "https://www.facebook.com/share/18nMBTBwEx/?mibextid=wwXIfr",
+  whatsapp: "https://wa.me/13057665513",
 };
+
+// Районы для карточек на Buyers/Sellers (фото — проверенные Unsplash).
+export const NEIGHBORHOODS = [
+  { name: "Miami Beach", img: "https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=800&q=80" },
+  { name: "Coral Gables", img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80" },
+  { name: "Aventura", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" },
+  { name: "Fort Lauderdale", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" },
+  { name: "Hollywood", img: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=800&q=80" },
+  { name: "Coral Springs", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80" },
+];
 
 export const fmtPrice = (n: number) => "$" + n.toLocaleString("en-US");
 export const fmtPriceShort = (n: number) =>

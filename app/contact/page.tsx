@@ -7,7 +7,7 @@ export default function Contact() {
   const { t } = useLang();
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "120px 24px 0" }}>
-      <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>{t("contact.eyebrow")}</div>
+      <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>{t("contact.eyebrow")}</div>
       <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05 }}>{t("contact.title")}</h1>
       <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--muted)", maxWidth: 560 }}>{t("contact.sub")}</p>
 
@@ -22,7 +22,7 @@ export default function Contact() {
         </div>
         <div>
           <div style={{ fontSize: 14, color: "var(--muted)", marginBottom: 12 }}>{t("contact.pickTime")}</div>
-          <iframe src={`${AGENT.calendly}?embed_domain=promiamirealty.com&embed_type=Inline&hide_gdpr_banner=1&background_color=211b2b&text_color=f6f1ec&primary_color=f2742c`} width="100%" height="640" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
+          <iframe src={`${AGENT.calendly}?embed_domain=promiamirealty.com&embed_type=Inline&hide_gdpr_banner=1&background_color=2C5A50&text_color=F2EFE6&primary_color=7FB3A7`} width="100%" height="640" frameBorder="0" title="Book" style={{ borderRadius: 16, border: "1px solid var(--line)", display: "block" }} />
         </div>
       </div>
       <style>{`@media(max-width:820px){ .cgrid{ grid-template-columns:1fr !important; } }`}</style>

@@ -9,7 +9,7 @@ export default function Privacy() {
 
   return (
     <div style={{ maxWidth: 820, margin: "0 auto", padding: "120px 24px 100px" }}>
-      <div style={{ fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>
+      <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>
         {ru ? "Правовая информация" : "Legal"}
       </div>
       <h1 style={{ fontSize: "clamp(30px,5vw,48px)", margin: "0 0 10px", lineHeight: 1.06 }}>

@@ -1,0 +1,23 @@
+{
+  "brandName": "PRO MIAMI REALTY",
+  "tagline": "Broker & Investor",
+  "primaryColor": "#2E1A4A",
+  "accentColor": "#F5A623",
+  "backgroundColor": "#F6F5F9",
+  "fontHeading": "Space Grotesk",
+  "fontBody": "Manrope",
+  "contact": {
+    "phone": "+1 (305) 555-0148",
+    "email": "info@promiamirealty.com",
+    "location": "Miramar, FL"
+  },
+  "social": {
+    "instagram": "https://instagram.com",
+    "linkedin": "https://linkedin.com"
+  },
+  "notes": [
+    "Use the dark indigo as the primary brand color.",
+    "Use the gold accent for CTA buttons and highlights.",
+    "Keep the copy focused on investor mindset and contract protection."
+  ]
+}
