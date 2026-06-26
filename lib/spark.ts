@@ -145,11 +145,13 @@ function buildDetails(r: ResoRecord): { label: string; value: string }[] {
     .map(([label, value]) => ({ label, value: String(value) }));
 }
 
-// Только фото из CDN sparkplatform (исключаем виртуальные туры).
+// Фото листинга. MediaCategory === "Photo" исключает виртуальные туры.
+// URL могут быть на разных хостах: cdn.photos.sparkplatform.com (часть бордов)
+// или rets.sef.mlsmatrix.com (Matrix/Miami — с подписью ust= в URL). Оба валидны.
 function extractPhotos(media: ResoRecord["Media"]): string[] {
   if (!media) return [];
   return media
-    .filter(m => m.MediaCategory === "Photo" && /sparkplatform\.com/.test(m.MediaURL || ""))
+    .filter(m => m.MediaCategory === "Photo" && /^https?:\/\//.test(m.MediaURL || ""))
     .sort((a, b) => (a.Order || 0) - (b.Order || 0))
     .map(m => m.MediaURL);
 }
