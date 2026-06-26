@@ -106,7 +106,7 @@ export default function Investors() {
         <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ fontSize: "clamp(24px,3.5vw,34px)", margin: "0 0 12px", color: "#fff" }}>{t("inv.ctaTitle")}</h2>
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, margin: "0 0 28px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("inv.ctaText")}</p>
-          <BookButton intent="invest" source="Investors page CTA" label={t("inv.ctaBtn")} />
+          <BookButton intent="invest" source="Investors page CTA" label={t("inv.ctaBtn")} variant="light" />
         </div>
       </section>
     </div>

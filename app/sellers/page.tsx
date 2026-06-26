@@ -138,7 +138,7 @@ export default function Sellers() {
       <div style={{ background: "var(--indigo)", borderRadius: 20, padding: "48px 32px", marginTop: 72, textAlign: "center" }}>
         <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px", color: "#fff" }}>{t("sellers.ctaTitle")}</h2>
         <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, margin: "0 0 24px", maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>{t("sellers.ctaText")}</p>
-        <BookButton intent="sell" source="Sellers page CTA" label={t("common.bookConsult")} />
+        <BookButton intent="sell" source="Sellers page CTA" label={t("common.bookConsult")} variant="light" />
       </div>
       </div>
       <style>{`

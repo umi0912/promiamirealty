@@ -140,7 +140,7 @@ export default function Buyers() {
         <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ fontSize: "clamp(24px,3vw,32px)", margin: "0 0 12px", color: "#fff" }}>{t("buyers.ctaTitle")}</h2>
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: 16, margin: "0 0 28px" }}>{t("buyers.ctaText")}</p>
-          <BookButton intent="buy" source="Buyers page CTA" label={t("common.bookConsult")} />
+          <BookButton intent="buy" source="Buyers page CTA" label={t("common.bookConsult")} variant="light" />
         </div>
       </section>
       <style>{`
