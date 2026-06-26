@@ -133,8 +133,8 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,8,16,.35) 0%,rgba(10,8,16,.12) 35%,rgba(10,8,16,.78) 100%)" }} />
         <style>{`.hero-mobile-img{ display:none; } @media(max-width:768px){ .hero-video{ display:none !important; } .hero-mobile-img{ display:block !important; } }`}</style>
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 90px", width: "100%" }}>
-          <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,0.5)" }}>{t("home.title")}</h1>
-          <p className="" style={{ fontSize: 19, color: "#fff", maxWidth: 580, marginTop: 22, lineHeight: 1.7, textShadow: "0 2px 14px rgba(0,0,0,0.6)" }}>
+          <h1 className="" style={{ fontSize: "clamp(33px,7vw,82px)", lineHeight: 1.05, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,0.5)" }}>{t("home.title")}</h1>
+          <p className="" style={{ fontSize: 17, color: "#fff", maxWidth: 580, marginTop: 18, lineHeight: 1.65, textShadow: "0 2px 14px rgba(0,0,0,0.6)" }}>
             {t("home.subtitle")}
           </p>
           <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
@@ -149,7 +149,7 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
         <div className="statsgrid" style={{ maxWidth: 1280, margin: "0 auto", padding: "60px 24px", display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 32, alignItems: "center" }}>
           <Reveal>
             <div className="eyebrow">{t("home.stats.eyebrow")}</div>
-            <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", margin: "0 0 40px", lineHeight: 1.02 }}>{t("home.stats.title")}</h2>
+            <h2 style={{ fontSize: "clamp(26px,4.5vw,56px)", margin: "0 0 28px", lineHeight: 1.05 }}>{t("home.stats.title")}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "44px 30px", maxWidth: 460 }}>
               {[
                 { v: "120+", k: "home.stats.deals" as const },
@@ -158,7 +158,7 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
                 { v: "3", k: "home.stats.langs" as const },
               ].map((s, i) => (
                 <div key={i}>
-                  <div data-count={s.v} style={{ fontSize: "clamp(40px,5vw,64px)", fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", color: "var(--indigo)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>{s.v}</div>
+                  <div data-count={s.v} style={{ fontSize: "clamp(33px,5vw,64px)", fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", color: "var(--indigo)", lineHeight: 0.9, letterSpacing: "-0.03em" }}>{s.v}</div>
                   <div style={{ fontSize: 15, color: "var(--text)", marginTop: 10, fontWeight: 600 }}>{t(s.k)}</div>
                 </div>
               ))}
@@ -175,12 +175,12 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
       {/* AGENT VIDEO — скрыто по просьбе клиента */}
 
       {/* FEATURED — горизонтальный карусель */}
-      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px 0" }}>
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(52px,9vw,96px) 24px 0" }}>
         <Reveal>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 24 }}>
             <div>
               <div className="eyebrow">{t("home.featured.eyebrow")}</div>
-              <h2 style={{ fontSize: "clamp(28px,4vw,40px)", margin: 0 }}>{t("home.featured.title")}</h2>
+              <h2 style={{ fontSize: "clamp(23px,4vw,40px)", margin: 0 }}>{t("home.featured.title")}</h2>
             </div>
             <Link href="/search" className="viewall">{t("home.viewall")} →</Link>
           </div>
@@ -191,14 +191,14 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
       </section>
 
       {/* INVESTORS — ключевой блок */}
-      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px 0" }}>
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(52px,9vw,96px) 24px 0" }}>
         <Reveal>
         <Link href="/investors" className="invblock" style={{ display: "block", textDecoration: "none", position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 340 }}>
           <div className="invblock-img" style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center", transition: "transform .6s cubic-bezier(.2,.7,.2,1)" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(255,255,255,.94) 0%,rgba(244,241,234,.82) 38%,rgba(44,90,80,.35) 100%)" }} />
           <div style={{ position: "relative", padding: "48px 40px", maxWidth: 600 }}>
             <div className="eyebrow">{t("home.inv.eyebrow")}</div>
-            <h2 style={{ fontSize: "clamp(28px,4.5vw,46px)", margin: "0 0 16px", lineHeight: 1.06, color: "var(--text)" }}>{t("home.inv.title")}</h2>
+            <h2 style={{ fontSize: "clamp(24px,4.5vw,46px)", margin: "0 0 16px", lineHeight: 1.08, color: "var(--text)" }}>{t("home.inv.title")}</h2>
             <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 460, margin: "0 0 24px" }}>
               {t("home.inv.text")}
             </p>
@@ -209,11 +209,11 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
       </section>
 
       {/* CALC + CONSULT */}
-      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px 0" }}>
+      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(52px,9vw,96px) 24px 0" }}>
         <Reveal>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div className="eyebrow" style={{ justifyContent: "center" }}>{t("home.calc.eyebrow")}</div>
-          <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
+          <h2 style={{ fontSize: "clamp(23px,3.5vw,36px)", margin: "0 0 16px" }}>{t("home.calc.title")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 16, lineHeight: 1.7, maxWidth: 560, margin: "0 auto" }}>{t("home.calc.text")}</p>
         </div>
         <div style={{ maxWidth: 880, margin: "0 auto" }}>
@@ -222,10 +222,10 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
         </Reveal>
       </section>
 
-      <section style={{ background: "var(--indigo)", padding: "80px 24px 88px", marginTop: 96 }}>
+      <section style={{ background: "var(--indigo)", padding: "clamp(52px,9vw,80px) 24px clamp(56px,9vw,88px)", marginTop: "clamp(52px,9vw,96px)" }}>
         <Reveal>
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <h2 style={{ fontSize: "clamp(26px,3.5vw,36px)", margin: 0, color: "#fff" }}>{t("home.consult.title")}</h2>
+          <h2 style={{ fontSize: "clamp(23px,3.5vw,36px)", margin: 0, color: "#fff" }}>{t("home.consult.title")}</h2>
           <p style={{ color: "rgba(255,255,255,.72)", fontSize: 16, marginTop: 10 }}>{t("home.consult.text")}</p>
         </div>
         <div className="consult-split" style={{ maxWidth: 900, margin: "0 auto" }}>

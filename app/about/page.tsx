@@ -17,7 +17,7 @@ export default function About() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }} className="agrid">
         <div>
           <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 14 }}>{t("about.eyebrow")}</div>
-          <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 20px", lineHeight: 1.05 }}>{AGENT.name}</h1>
+          <h1 style={{ fontSize: "clamp(28px,5vw,52px)", margin: "0 0 20px", lineHeight: 1.05 }}>{AGENT.name}</h1>
           <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--muted)" }}>{t("about.p1")}</p>
           <p style={{ fontSize: 16, lineHeight: 1.8, color: "var(--muted)" }}>{t("about.p2")}</p>
           <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
