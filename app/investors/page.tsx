@@ -9,8 +9,9 @@ import BookButton from "@/components/BookButton";
 export default function Investors() {
   const { t } = useLang();
   const [deals, setDeals] = useState<Listing[]>([]);
+  const [rents, setRents] = useState<Record<string, number | null>>({});
 
-  // живые MLS-листинги в инвест-диапазоне + оценка валовой аренды
+  // живые MLS-листинги в инвест-диапазоне
   useEffect(() => {
     let cancel = false;
     (async () => {
@@ -22,6 +23,20 @@ export default function Investors() {
     })();
     return () => { cancel = true; };
   }, []);
+
+  // реальная оценка аренды по lease-компам (город + спальни)
+  useEffect(() => {
+    let cancel = false;
+    deals.forEach(async l => {
+      if (rents[l.id] !== undefined || !l.beds) return;
+      try {
+        const r = await fetch(`/api/rent-estimate?city=${encodeURIComponent(l.city)}&beds=${l.beds}`);
+        const d = await r.json();
+        if (!cancel) setRents(prev => ({ ...prev, [l.id]: d.rent }));
+      } catch { /* пропускаем */ }
+    });
+    return () => { cancel = true; };
+  }, [deals]); // eslint-disable-line react-hooks/exhaustive-deps
   const services: [string, string][] = [
     [t("inv.s1t"), t("inv.s1d")],
     [t("inv.s2t"), t("inv.s2d")],
@@ -78,8 +93,8 @@ export default function Investors() {
                 <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.beds ? `${l.beds} bd · ` : ""}{l.baths ? `${l.baths} ba · ` : ""}{l.sqft ? `${l.sqft.toLocaleString()} sqft` : ""}</div>
                 <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>
                 <div style={{ background: "var(--bg)", borderRadius: 10, padding: "10px 8px", textAlign: "center", marginTop: 14 }}>
-                  <div style={{ fontSize: 11, color: "var(--muted)" }}>{t("inv.estRent")} (est.)</div>
-                  <div style={{ fontSize: 16, fontWeight: 500, color: "var(--green)" }}>${Math.round(l.price * 0.006).toLocaleString()}/mo</div>
+                  <div style={{ fontSize: 11, color: "var(--muted)" }}>{t("inv.estRent")}{rents[l.id] != null ? ` · ${t("inv.rentComps")}` : ""}</div>
+                  <div style={{ fontSize: 16, fontWeight: 500, color: "var(--green)" }}>${(rents[l.id] != null ? rents[l.id]! : Math.round(l.price * 0.006)).toLocaleString()}/mo</div>
                 </div>
               </div>
             </Link>

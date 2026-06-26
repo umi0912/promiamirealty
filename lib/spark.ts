@@ -242,6 +242,25 @@ export async function getListings(p: SearchParams = {}): Promise<ListingsResult>
   return { listings: value.map(r => mapRecord(r)), total, page, pageSize, hasMore: page * pageSize < total };
 }
 
+// Оценка рыночной аренды по реальным lease-листингам (тот же город + спальни).
+// Берём медиану (устойчива к люкс-выбросам). null если данных мало.
+export async function getRentEstimate(city: string, beds: number): Promise<number | null> {
+  if (!city || !beds || beds < 1) return null;
+  const params = new URLSearchParams();
+  params.set("$filter", `PropertyType eq 'Residential Lease' and City eq '${esc(city)}' and BedroomsTotal eq ${beds} and StandardStatus eq 'Active'`);
+  params.set("$select", "ListPrice");
+  params.set("$top", "100");
+  const { value } = await sparkGet(params.toString());
+  const prices = value
+    .map(v => v.ListPrice)
+    .filter((p): p is number => typeof p === "number" && p > 500 && p < 60000)
+    .sort((a, b) => a - b);
+  if (prices.length < 3) return null;
+  const mid = Math.floor(prices.length / 2);
+  const median = prices.length % 2 ? prices[mid] : Math.round((prices[mid - 1] + prices[mid]) / 2);
+  return Math.round(median / 50) * 50; // округляем до $50
+}
+
 // Один листинг по MLS ID — для detail-страницы.
 export async function getListing(id: string): Promise<Listing | null> {
   const params = new URLSearchParams();

@@ -145,6 +145,7 @@ export const DICT = {
   "inv.dealsEyebrow": { en: "Income properties", ru: "Доходные объекты" },
   "inv.dealsTitle": { en: "Investment opportunities", ru: "Инвестиционные объекты" },
   "inv.estRent": { en: "Est. rent", ru: "Аренда ~" },
+  "inv.rentComps": { en: "market comps", ru: "по рынку" },
   "inv.ctaTitle": { en: "Looking for your next deal?", ru: "Ищете следующую сделку?" },
   "inv.ctaText": { en: "Tell Ays your target return and budget — get matched with properties that fit.", ru: "Назовите целевую доходность и бюджет — подберём подходящие объекты." },
   "inv.ctaBtn": { en: "Book an investor consultation", ru: "Записаться на инвест-консультацию" },
