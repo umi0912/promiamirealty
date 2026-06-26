@@ -15,10 +15,13 @@ const MIAMI: [number, number] = [-80.19, 25.77];
 
 type Props = { id: string; price: number; priceShort: string; beds: number; baths: number; sqft: number; status: string; photo: string; addr: string };
 
+// Валидные координаты Флориды (отсекаем битые 0,0 / 1,1 и прочие выбросы).
+const validGeo = (l: Listing) => l.lat > 24 && l.lat < 31 && l.lng > -88 && l.lng < -79;
+
 function toGeoJSON(listings: Listing[]) {
   return {
     type: "FeatureCollection" as const,
-    features: listings.filter(l => l.lat && l.lng).map(l => ({
+    features: listings.filter(validGeo).map(l => ({
       type: "Feature" as const,
       geometry: { type: "Point" as const, coordinates: [l.lng, l.lat] },
       properties: {
@@ -79,7 +82,7 @@ export default function MapView({ listings }: { listings: Listing[] }) {
   }, [listings]);
 
   function fitTo(map: MlMap, ls: Listing[]) {
-    const pts = ls.filter(l => l.lat && l.lng);
+    const pts = ls.filter(validGeo);
     if (pts.length === 0) return;
     if (pts.length === 1) { map.easeTo({ center: [pts[0].lng, pts[0].lat], zoom: 13 }); return; }
     const b = new maplibregl.LngLatBounds();
