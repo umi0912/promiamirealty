@@ -123,11 +123,14 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
     <>
       {/* HERO */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "flex-end", overflow: "hidden" }}>
-        <video autoPlay muted loop playsInline poster="/hero.png"
+        <video className="hero-video" autoPlay muted loop playsInline poster="/hero.png"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
           <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
         </video>
+        <img className="hero-mobile-img" src="/hero-mobile.jpg" alt=""
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,8,16,.35) 0%,rgba(10,8,16,.12) 35%,rgba(10,8,16,.78) 100%)" }} />
+        <style>{`.hero-mobile-img{ display:none; } @media(max-width:768px){ .hero-video{ display:none !important; } .hero-mobile-img{ display:block !important; } }`}</style>
         <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 90px", width: "100%" }}>
           <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,0.5)" }}>{t("home.title")}</h1>
           <p className="" style={{ fontSize: 19, color: "#fff", maxWidth: 580, marginTop: 22, lineHeight: 1.7, textShadow: "0 2px 14px rgba(0,0,0,0.6)" }}>
