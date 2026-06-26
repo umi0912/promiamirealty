@@ -17,7 +17,7 @@ export default function Home() {
     let cancel = false;
     (async () => {
       try {
-        const res = await fetch("/api/listings?status=active&minPrice=900000");
+        const res = await fetch("/api/listings?status=active&type=house&minPrice=1500000");
         const data = await res.json();
         if (!cancel && data.listings?.length) setLive(data.listings.slice(0, 7));
       } catch { /* fallback на демо */ }
