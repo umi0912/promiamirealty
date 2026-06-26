@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { type Listing, fmtPrice, fmtPriceShort } from "@/lib/data";
+import { useLang } from "@/lib/i18n";
 
 // MapLibre использует window — грузим только на клиенте.
 const MapView = dynamic(() => import("@/components/MapView"), {
@@ -23,6 +24,7 @@ type Status = "active" | "coming" | "all";
 type TypeKey = "all" | "condo" | "house" | "townhouse" | "land";
 
 function Search() {
+  const { t } = useLang();
   const sp = useSearchParams();
   const [q, setQ] = useState("");
   const [type, setType] = useState<TypeKey>("all");
@@ -102,11 +104,11 @@ function Search() {
 
   const priceLabel = minPrice || maxPrice < 99999999
     ? `${minPrice ? fmtPriceShort(minPrice) : "$0"}–${maxPrice < 99999999 ? fmtPriceShort(maxPrice) : "∞"}`
-    : "Any price";
-  const typeLabel = { all: "All property types", condo: "Condo", house: "House", townhouse: "Townhouse", land: "Land" }[type];
-  const statusLabel = { active: "For sale", coming: "Coming soon", all: "For sale + soon" }[status];
-  const bedsLabel = beds ? `${beds}+ beds` : "All beds";
-  const bathsLabel = baths ? `${baths}+ baths` : "All baths";
+    : t("search.anyPrice");
+  const typeLabel = type === "all" ? t("search.allTypes") : t(`type.${type}` as const);
+  const statusLabel = { active: t("search.forSale"), coming: t("search.comingSoon"), all: t("search.forSaleSoon") }[status];
+  const bedsLabel = beds ? `${beds}+ ${t("search.beds")}` : t("search.allBeds");
+  const bathsLabel = baths ? `${baths}+ ${t("search.baths")}` : t("search.allBaths");
 
   return (
     <div style={{ paddingTop: 104, background: "#fff", minHeight: "100vh" }}>
@@ -116,7 +118,7 @@ function Search() {
           {/* search */}
           <div style={{ position: "relative", flex: "1 1 280px", maxWidth: 360 }}>
             <span style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }}>⌕</span>
-            <input value={q} onChange={e => setQ(e.target.value)} placeholder="City, neighborhood, ZIP code…"
+            <input value={q} onChange={e => setQ(e.target.value)} placeholder={t("search.placeholder")}
               style={{ width: "100%", height: 44, paddingLeft: 38, paddingRight: 16, borderRadius: 999, border: "1px solid var(--line)", fontSize: 14, outline: "none", boxSizing: "border-box", background: "#fff" }} />
           </div>
 
@@ -124,18 +126,18 @@ function Search() {
           <Pill label={statusLabel} active={status !== "active"} open={openPop === "status"} onClick={() => setOpenPop(openPop === "status" ? null : "status")}>
             {(["active", "coming", "all"] as Status[]).map(s => (
               <PopRow key={s} selected={status === s} onClick={() => { setStatus(s); setOpenPop(null); }}>
-                {{ active: "For sale", coming: "Coming soon", all: "For sale + Coming soon" }[s]}
+                {{ active: t("search.forSale"), coming: t("search.comingSoon"), all: t("search.forSaleSoon") }[s]}
               </PopRow>
             ))}
           </Pill>
 
           <Pill label={priceLabel} active={!!minPrice || maxPrice < 99999999} open={openPop === "price"} onClick={() => setOpenPop(openPop === "price" ? null : "price")} wide>
             <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 10, minWidth: 220 }}>
-              <label style={popLabelStyle}>Min price
+              <label style={popLabelStyle}>{t("search.minPrice")}
                 <input type="number" value={minPrice || ""} onChange={e => setMinPrice(+e.target.value || 0)} placeholder="$0" style={popInputStyle} />
               </label>
-              <label style={popLabelStyle}>Max price
-                <input type="number" value={maxPrice < 99999999 ? maxPrice : ""} onChange={e => setMaxPrice(e.target.value ? +e.target.value : 99999999)} placeholder="Any" style={popInputStyle} />
+              <label style={popLabelStyle}>{t("search.maxPrice")}
+                <input type="number" value={maxPrice < 99999999 ? maxPrice : ""} onChange={e => setMaxPrice(e.target.value ? +e.target.value : 99999999)} placeholder="∞" style={popInputStyle} />
               </label>
             </div>
           </Pill>
@@ -143,20 +145,20 @@ function Search() {
           <Pill label={typeLabel} active={type !== "all"} open={openPop === "type"} onClick={() => setOpenPop(openPop === "type" ? null : "type")}>
             {(["all", "condo", "house", "townhouse", "land"] as TypeKey[]).map(tk => (
               <PopRow key={tk} selected={type === tk} onClick={() => { setType(tk); setOpenPop(null); }}>
-                {{ all: "All property types", condo: "Condo", house: "House", townhouse: "Townhouse", land: "Land" }[tk]}
+                {tk === "all" ? t("search.allTypes") : t(`type.${tk}` as const)}
               </PopRow>
             ))}
           </Pill>
 
           <Pill label={bedsLabel} active={!!beds} open={openPop === "beds"} onClick={() => setOpenPop(openPop === "beds" ? null : "beds")}>
             {[0, 1, 2, 3, 4, 5].map(n => (
-              <PopRow key={n} selected={beds === n} onClick={() => { setBeds(n); setOpenPop(null); }}>{n === 0 ? "All beds" : `${n}+ beds`}</PopRow>
+              <PopRow key={n} selected={beds === n} onClick={() => { setBeds(n); setOpenPop(null); }}>{n === 0 ? t("search.allBeds") : `${n}+ ${t("search.beds")}`}</PopRow>
             ))}
           </Pill>
 
           <Pill label={bathsLabel} active={!!baths} open={openPop === "baths"} onClick={() => setOpenPop(openPop === "baths" ? null : "baths")}>
             {[0, 1, 2, 3, 4].map(n => (
-              <PopRow key={n} selected={baths === n} onClick={() => { setBaths(n); setOpenPop(null); }}>{n === 0 ? "All baths" : `${n}+ baths`}</PopRow>
+              <PopRow key={n} selected={baths === n} onClick={() => { setBaths(n); setOpenPop(null); }}>{n === 0 ? t("search.allBaths") : `${n}+ ${t("search.baths")}`}</PopRow>
             ))}
           </Pill>
 
@@ -175,8 +177,7 @@ function Search() {
               <button key={v} onClick={() => setView(v)} style={{
                 padding: "9px 18px", fontSize: 14, fontWeight: 600, cursor: "pointer", border: "none",
                 background: view === v ? "var(--indigo)" : "#fff", color: view === v ? "#fff" : "var(--text)",
-                textTransform: "capitalize",
-              }}>{v}</button>
+              }}>{v === "list" ? t("search.list") : t("search.map")}</button>
             ))}
           </div>
         </div>
@@ -186,9 +187,9 @@ function Search() {
       {/* HEADER ROW */}
       <div style={{ maxWidth: 1600, margin: "0 auto", padding: "24px 24px 8px", display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
         <div>
-          <h1 style={{ fontSize: "clamp(22px,3vw,30px)", margin: 0 }}>Real Estate &amp; Homes for Sale</h1>
+          <h1 style={{ fontSize: "clamp(22px,3vw,30px)", margin: 0 }}>{t("search.title")}</h1>
           <div style={{ color: "var(--muted)", fontSize: 14, marginTop: 4 }}>
-            {loading ? "Searching…" : total < 0 ? `${listings.length.toLocaleString()}+ results` : `${total.toLocaleString()} results`}
+            {loading ? t("search.searching") : total < 0 ? `${listings.length.toLocaleString()}+ ${t("search.results")}` : `${total.toLocaleString()} ${t("search.results")}`}
             {source === "demo" && <span style={{ marginLeft: 8, fontSize: 12, color: "var(--amber)" }}>· demo data (set SPARK_ACCESS_TOKEN for live MLS)</span>}
             {source === "demo-fallback" && <span style={{ marginLeft: 8, fontSize: 12, color: "var(--amber)" }}>· MLS unavailable, showing demo</span>}
           </div>
@@ -213,14 +214,14 @@ function Search() {
         )}
 
         {!loading && listings.length === 0 && (
-          <div style={{ textAlign: "center", padding: 80, color: "var(--muted)" }}>No listings match — adjust filters.</div>
+          <div style={{ textAlign: "center", padding: 80, color: "var(--muted)" }}>{t("search.noMatch")}</div>
         )}
 
         {/* LOAD MORE */}
         {listings.length > 0 && hasMore && (
           <div style={{ textAlign: "center", marginTop: 40 }}>
             <button onClick={loadMore} style={{ padding: "13px 32px", borderRadius: 999, border: "1px solid var(--line)", background: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
-              Load more{total > 0 ? ` (${listings.length.toLocaleString()} of ${total.toLocaleString()})` : ""}
+              {t("search.loadMore")}{total > 0 ? ` (${listings.length.toLocaleString()} / ${total.toLocaleString()})` : ""}
             </button>
           </div>
         )}
@@ -237,13 +238,14 @@ function Search() {
 
 // ---------- CARD ----------
 function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSave: (e: React.MouseEvent, id: string) => void; onShare: (e: React.MouseEvent, l: Listing) => void }) {
+  const { t } = useLang();
   const coming = l.status === "Coming Soon";
   return (
     <Link href={`/listings/${l.id}`} className="scard" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", borderRadius: 12, overflow: "hidden", background: "var(--surface-2)" }}>
         <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
         {/* status badge */}
-        <span style={{ position: "absolute", top: 10, left: 10, background: coming ? "rgba(44,90,80,.92)" : "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8 }}>{coming ? "Coming soon" : "Active"}</span>
+        <span style={{ position: "absolute", top: 10, left: 10, background: coming ? "rgba(44,90,80,.92)" : "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8 }}>{coming ? t("search.coming") : t("search.active")}</span>
         {/* heart + share */}
         <div style={{ position: "absolute", top: 10, right: 10, display: "flex", gap: 8 }}>
           <button onClick={e => onSave(e, l.id)} aria-label="Save" style={iconBtn}>{saved ? "♥" : "♡"}</button>

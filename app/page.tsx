@@ -213,8 +213,8 @@ export default function Home() {
       {/* INVESTORS — ключевой блок */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
         <Link href="/investors"  style={{ display: "block", textDecoration: "none", position: "relative", borderRadius: 20, overflow: "hidden", minHeight: 340 }}>
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1565402170291-8491f14678db?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(255,255,255,.92) 0%,rgba(22,18,28,.7) 50%,rgba(22,18,28,.35) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=1800&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(255,255,255,.94) 0%,rgba(244,241,234,.82) 38%,rgba(44,90,80,.35) 100%)" }} />
           <div style={{ position: "relative", padding: "48px 40px", maxWidth: 600 }}>
             <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("home.inv.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(28px,4.5vw,46px)", margin: "0 0 16px", lineHeight: 1.06, color: "var(--text)" }}>{t("home.inv.title")}</h2>
