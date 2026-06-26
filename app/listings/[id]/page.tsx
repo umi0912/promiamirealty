@@ -1,6 +1,7 @@
 "use client";
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { type Listing, LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import MortgageCalculator from "@/components/MortgageCalculator";
@@ -13,6 +14,7 @@ const MapView = dynamic(() => import("@/components/MapView"), {
 
 export default function ListingDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
   const [l, setL] = useState<Listing | null>(() => LISTINGS.find(x => x.id === id) || null);
   const [loading, setLoading] = useState(!l);
   const [active, setActive] = useState(0);
@@ -48,8 +50,11 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
     ["Property type", l.type],
   ];
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "88px 24px 0" }}>
-      <Link href="/search" style={{ color: "var(--muted)", fontSize: 14, textDecoration: "none" }}>← Back to search</Link>
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "112px 24px 0" }}>
+      <button
+        onClick={() => { if (typeof window !== "undefined" && window.history.length > 1) router.back(); else router.push("/search"); }}
+        style={{ color: "var(--muted)", fontSize: 14, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "inherit" }}
+      >← Back to search</button>
 
       {/* GALLERY */}
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10, height: 380, marginTop: 16 }} className="gal">
