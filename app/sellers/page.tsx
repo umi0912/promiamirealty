@@ -94,7 +94,7 @@ export default function Sellers() {
           <h2 style={{ fontSize: "clamp(26px,3.5vw,34px)", marginBottom: 12, color: "#fff" }}>{t("sellers.valTitle")}</h2>
           <p style={{ color: "rgba(255,255,255,.72)", fontSize: 16, marginTop: 0, marginBottom: 36, maxWidth: 520, marginLeft: "auto", marginRight: "auto" }}>{t("sellers.valSub")}</p>
         </div>
-        <div style={{ maxWidth: 580, margin: "0 auto" }}>
+        <div style={{ maxWidth: 920, margin: "0 auto" }}>
           <HomeValuation />
         </div>
       </section>
