@@ -9,6 +9,7 @@ import BookButton from "@/components/BookButton";
 import AIChat from "@/components/AIChat";
 import Reveal from "@/components/Reveal";
 import ListingCarousel from "@/components/ListingCarousel";
+import FitQualifier from "@/components/FitQualifier";
 
 // featured приходит уже с сервера (live MLS или демо-fallback) — без клиентского мерцания.
 export default function HomeClient({ featured }: { featured: Listing[] }) {
@@ -131,10 +132,14 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
         <img className="hero-mobile-img" src="/hero-mobile.jpg" alt=""
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,8,16,.35) 0%,rgba(10,8,16,.12) 35%,rgba(10,8,16,.78) 100%)" }} />
-        <style>{`.hero-mobile-img{ display:none; } @media(max-width:768px){ .hero-video{ display:none !important; } .hero-mobile-img{ display:block !important; } .hero-sec{ min-height:100svh !important; align-items:center !important; } .hero-content{ padding-bottom:0 !important; padding-top:64px !important; } }`}</style>
+        <style>{`.hero-mobile-img{ display:none; } @media(max-width:768px){ .hero-video{ display:none !important; } .hero-mobile-img{ display:block !important; } .hero-sec{ min-height:100svh !important; align-items:flex-end !important; } .hero-content{ padding-bottom:13vh !important; padding-top:0 !important; } }`}</style>
         <div className="hero-content" style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 90px", width: "100%" }}>
-          <h1 className="" style={{ fontSize: "clamp(33px,7vw,82px)", lineHeight: 1.05, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,0.5)" }}>{t("home.title")}</h1>
-          <p className="" style={{ fontSize: 17, color: "#fff", maxWidth: 580, marginTop: 18, lineHeight: 1.65, textShadow: "0 2px 14px rgba(0,0,0,0.6)" }}>
+          <h1 className="" style={{ fontSize: "clamp(38px,7.4vw,86px)", lineHeight: 1.05, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,0.5)" }}>
+            {t("home.title").split("*").map((part, i) => i % 2 === 1
+              ? <span key={i} style={{ fontFamily: "'Caveat', cursive", fontWeight: 700, fontSize: "1.32em", lineHeight: 0.9, color: "#fff", padding: "0 .04em" }}>{part}</span>
+              : <span key={i}>{part}</span>)}
+          </h1>
+          <p className="" style={{ fontSize: 18, color: "#fff", maxWidth: 580, marginTop: 20, lineHeight: 1.65, textShadow: "0 2px 14px rgba(0,0,0,0.6)" }}>
             {t("home.subtitle")}
           </p>
           <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
@@ -207,6 +212,9 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
         </Link>
         </Reveal>
       </section>
+
+      {/* FIT — работайте со мной, если… */}
+      <FitQualifier />
 
       {/* CALC + CONSULT */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(52px,9vw,96px) 24px 0" }}>

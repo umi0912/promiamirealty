@@ -2,6 +2,8 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { type Listing, fmtPrice } from "@/lib/data";
+import { useLang } from "@/lib/i18n";
+import { localizeStatus } from "@/lib/listingI18n";
 
 // Горизонтальный карусель листингов с фото-слайдером на каждой карточке (как SERHANT).
 export default function ListingCarousel({ listings }: { listings: Listing[] }) {
@@ -36,6 +38,7 @@ export default function ListingCarousel({ listings }: { listings: Listing[] }) {
 }
 
 function CarouselCard({ l }: { l: Listing }) {
+  const { lang } = useLang();
   const pics = l.photos.slice(0, 10);
   const [pi, setPi] = useState(0);
   const nav = (e: React.MouseEvent, d: number) => { e.preventDefault(); e.stopPropagation(); setPi(p => (p + d + pics.length) % pics.length); };
@@ -43,7 +46,7 @@ function CarouselCard({ l }: { l: Listing }) {
     <Link href={`/listings/${l.id}`} className="lc-card scard" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", borderRadius: 14, overflow: "hidden", background: "var(--surface-2)" }}>
         <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${pics[pi]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
-        <span style={{ position: "absolute", top: 10, left: 10, background: "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8, zIndex: 2 }}>{l.status === "Coming Soon" ? "Coming soon" : "Active"}</span>
+        <span style={{ position: "absolute", top: 10, left: 10, background: "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8, zIndex: 2 }}>{localizeStatus(l.status === "Coming Soon" ? "Coming Soon" : "Active", lang)}</span>
         {pics.length > 1 && (
           <>
             <button className="scard-arrow scard-prev" onClick={e => nav(e, -1)} aria-label="Previous photo">‹</button>

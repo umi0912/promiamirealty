@@ -7,6 +7,7 @@ import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
 import FAQ from "@/components/FAQ";
 import Reveal from "@/components/Reveal";
+import PhotoSlider from "@/components/PhotoSlider";
 
 export default function Buyers() {
   const { t, lang } = useLang();
@@ -89,9 +90,7 @@ export default function Buyers() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }} className="bhomes">
             {homes.map(l => (
               <Link key={l.id} href={`/listings/${l.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                <div style={{ width: "100%", aspectRatio: "4/3", borderRadius: 12, overflow: "hidden", background: "var(--surface-2)" }}>
-                  <div style={{ width: "100%", height: "100%", backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
-                </div>
+                <PhotoSlider photos={l.photos} aspectRatio="4/3" radius={12} />
                 <div style={{ fontSize: 18, fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", marginTop: 8 }}>{fmtPrice(l.price)}</div>
                 <div style={{ fontSize: 13, color: "var(--text)", marginTop: 2 }}>{l.beds ? `${l.beds} bd · ` : ""}{l.baths ? `${l.baths} ba · ` : ""}{l.sqft ? `${l.sqft.toLocaleString()} sqft` : ""}</div>
                 <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>

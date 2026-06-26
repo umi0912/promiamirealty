@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -54,8 +54,10 @@ h1,h2,h3,h4 { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 
 .scard { transition: transform .25s ease; }
 .scard:hover { transform: translateY(-3px); }
 
-/* фото-слайдер на карточке (Search + карусель) */
+/* фото-слайдер на карточке (Search + карусель + PhotoSlider) */
 .scard:hover .scard-img { transform: scale(1.04); }
+.psbox:hover .scard-img { transform: scale(1.04); }
+.psbox:hover .scard-arrow { opacity: 1; }
 .scard-arrow { position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.92); color:#15211C; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; z-index:3; opacity:0; transition:opacity .2s; box-shadow:0 2px 8px rgba(0,0,0,.25); }
 .scard-prev { left:8px; } .scard-next { right:8px; }
 .scard:hover .scard-arrow { opacity:1; }

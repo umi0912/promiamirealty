@@ -18,7 +18,7 @@ export const DICT = {
 
   // home hero
   "home.eyebrow": { en: "Miami-Dade · Broward · South Florida", ru: "Miami-Dade · Broward · Южная Флорида" },
-  "home.title": { en: "Find your place under the Miami sun.", ru: "Найдите своё место под солнцем Майами." },
+  "home.title": { en: "Find your *place* under the Miami sun.", ru: "Найдите своё *место* под солнцем Майами." },
   "home.subtitle": { en: "Live MLS listings, sharp local insight, and a calm hand from search to closing — with Ays Iziken.", ru: "Живые объекты из MLS, знание местного рынка и спокойное сопровождение от поиска до сделки — с Ays Iziken." },
   "home.cta.search": { en: "Search listings", ru: "Смотреть объекты" },
   "home.cta.book": { en: "Book a consultation", ru: "Записаться на консультацию" },

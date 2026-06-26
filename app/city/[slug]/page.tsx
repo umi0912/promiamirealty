@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CITIES, LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import BookButton from "@/components/BookButton";
+import PhotoSlider from "@/components/PhotoSlider";
 
 export default function CityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -41,7 +42,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
             {listings.map(l => (
               <Link key={l.id} href={`/listings/${l.id}`} style={{ textDecoration: "none", background: "var(--surface)", borderRadius: 16, overflow: "hidden", border: "1px solid var(--line)", display: "block" }}>
-                <div style={{ height: 180, backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
+                <PhotoSlider photos={l.photos} height={180} radius={0} />
                 <div style={{ padding: 16 }}>
                   <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
                   <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}</div>

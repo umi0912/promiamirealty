@@ -4,8 +4,10 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { type Listing, LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
+import { localizeStatus, localizeType, localizeDetailLabel, localizeDetailValue } from "@/lib/listingI18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
+import PhotoSlider from "@/components/PhotoSlider";
 
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
@@ -14,11 +16,13 @@ const MapView = dynamic(() => import("@/components/MapView"), {
 
 export default function ListingDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [l, setL] = useState<Listing | null>(() => LISTINGS.find(x => x.id === id) || null);
   const [loading, setLoading] = useState(!l);
   const [active, setActive] = useState(0);
   const [similar, setSimilar] = useState<Listing[]>([]);
+  const [descRu, setDescRu] = useState<string | null>(null); // авто-перевод описания (ru)
+  const [descTranslated, setDescTranslated] = useState(false);
 
   // если нет в статике — тянем live из Spark
   useEffect(() => {
@@ -49,6 +53,22 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
     return () => { cancel = true; };
   }, [l?.city, l?.id]);
 
+  // авто-перевод описания на русский (через Claude); en — показываем оригинал
+  useEffect(() => {
+    setDescRu(null); setDescTranslated(false);
+    const text = l?.description;
+    if (!text || lang !== "ru") return;
+    let cancel = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/translate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text, target: "ru" }) });
+        const data = await res.json();
+        if (!cancel && data?.text) { setDescRu(data.text); setDescTranslated(!!data.translated); }
+      } catch { /* fallback к оригиналу */ }
+    })();
+    return () => { cancel = true; };
+  }, [l?.description, lang]);
+
   if (loading) return <div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>{t("listing.loading")}</div>;
   if (!l) return <div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>{t("listing.notFound")} <Link href="/search" style={{ color: "var(--indigo)" }}>{t("nav.search")}</Link></div>;
 
@@ -62,7 +82,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
     [t("listing.pricePerSqft"), pricePerSqft ? `$${pricePerSqft.toLocaleString()}` : "—"],
     [t("listing.builtIn"), l.yearBuilt ? String(l.yearBuilt) : "—"],
     [t("listing.propSize"), l.sqft ? `${l.sqft.toLocaleString()} sqft` : "—"],
-    [t("listing.propType"), l.type],
+    [t("listing.propType"), localizeType(l.type, lang)],
   ];
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "112px 24px 0" }}>
@@ -96,12 +116,12 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
       <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40, marginTop: 28, alignItems: "start" }} className="dgrid">
         <div>
           <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-            <span style={{ background: "rgba(44,90,80,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
-            <span style={{ background: "var(--surface-2)", color: "var(--muted)", fontSize: 12, padding: "4px 11px", borderRadius: 999 }}>{l.type}</span>
+            <span style={{ background: "rgba(44,90,80,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{localizeStatus(l.status, lang)}</span>
+            <span style={{ background: "var(--surface-2)", color: "var(--muted)", fontSize: 12, padding: "4px 11px", borderRadius: 999 }}>{localizeType(l.type, lang)}</span>
           </div>
           {/* beds · baths · sqft summary */}
           <div style={{ display: "flex", gap: 18, marginBottom: 14, fontSize: 15, color: "var(--text)", fontWeight: 500 }}>
-            <span>🛏 {l.beds || "Studio"} {l.beds ? t("listing.beds") : ""}</span>
+            <span>🛏 {l.beds || (lang === "ru" ? "Студия" : "Studio")} {l.beds ? t("listing.beds") : ""}</span>
             <span>🛁 {l.baths} {t("listing.baths")}</span>
             {l.sqft ? <span>📐 {l.sqft.toLocaleString()} sqft</span> : null}
           </div>
@@ -140,7 +160,10 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
 
       {/* ABOUT — на всю ширину */}
       <h3 style={{ fontSize: 20, marginTop: 40, marginBottom: 10 }}>{t("listing.about")}</h3>
-      <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--muted)", margin: 0, maxWidth: 760 }}>{l.description}</p>
+      <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--muted)", margin: 0, maxWidth: 760 }}>{lang === "ru" ? (descRu ?? l.description) : l.description}</p>
+      {lang === "ru" && descTranslated && (
+        <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 8, fontStyle: "italic", opacity: .8 }}>Переведено автоматически · оригинал на английском</div>
+      )}
 
       {/* LOCATION — на всю ширину */}
       {l.lat && l.lng && (
@@ -160,8 +183,8 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
           <div style={{ border: "1px solid var(--line)", borderRadius: 12, overflow: "hidden", display: "grid", gridTemplateColumns: "1fr 1fr" }} className="addinfo">
             {l.details.map((d, i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", fontSize: 14, borderTop: "1px solid var(--line)" }}>
-                <span style={{ color: "var(--muted)" }}>{d.label}</span>
-                <span style={{ color: "var(--text)", fontWeight: 500 }}>{d.value}</span>
+                <span style={{ color: "var(--muted)" }}>{localizeDetailLabel(d.label, lang)}</span>
+                <span style={{ color: "var(--text)", fontWeight: 500 }}>{localizeDetailValue(d.value, lang)}</span>
               </div>
             ))}
           </div>
@@ -179,9 +202,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }} className="similar">
             {similar.map(s => (
               <Link key={s.id} href={`/listings/${s.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }} className="simcard">
-                <div style={{ width: "100%", aspectRatio: "4/3", borderRadius: 10, overflow: "hidden", background: "var(--surface-2)" }}>
-                  <div className="simcard-img" style={{ width: "100%", height: "100%", backgroundImage: `url("${s.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
-                </div>
+                <PhotoSlider photos={s.photos} aspectRatio="4/3" radius={10} />
                 <div style={{ fontSize: 16, fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", marginTop: 8 }}>{fmtPrice(s.price)}</div>
                 <div style={{ fontSize: 12, color: "var(--text)", marginTop: 2 }}>{s.beds ? `${s.beds} bd · ` : ""}{s.baths ? `${s.baths} ba · ` : ""}{s.sqft ? `${s.sqft.toLocaleString()} sqft` : ""}</div>
                 <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{s.address}, {s.city}</div>
