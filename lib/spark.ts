@@ -261,6 +261,27 @@ export async function getRentEstimate(city: string, beds: number): Promise<numbe
   return Math.round(median / 50) * 50; // округляем до $50
 }
 
+// Статистика рынка (Miami-Dade + Broward, active residential) — для Sellers.
+export async function getMarketStats(): Promise<{ active: number; medianPrice: number; medianPpsf: number } | null> {
+  const base = "(CountyOrParish eq 'Miami-Dade' or CountyOrParish eq 'Broward') and StandardStatus eq 'Active' and PropertyType eq 'Residential'";
+  // count
+  const c = new URLSearchParams();
+  c.set("$filter", base); c.set("$select", "ListingId"); c.set("$top", "1"); c.set("$count", "true");
+  const cnt = await sparkGet(c.toString());
+  // sample для медианы
+  const s = new URLSearchParams();
+  s.set("$filter", base); s.set("$select", "ListPrice,LivingArea"); s.set("$top", "500"); s.set("$orderby", "ModificationTimestamp desc");
+  const { value } = await sparkGet(s.toString());
+  const med = (arr: number[]) => { const a = arr.filter(x => x > 0).sort((x, y) => x - y); return a.length ? a[Math.floor(a.length / 2)] : 0; };
+  const prices = value.map(v => v.ListPrice).filter((p): p is number => typeof p === "number" && p > 10000);
+  const ppsf = value.filter(v => v.ListPrice && v.LivingArea && v.LivingArea > 200).map(v => v.ListPrice / (v.LivingArea as number));
+  return {
+    active: cnt.count ?? 0,
+    medianPrice: Math.round(med(prices) / 1000) * 1000,
+    medianPpsf: Math.round(med(ppsf)),
+  };
+}
+
 // Один листинг по MLS ID — для detail-страницы.
 export async function getListing(id: string): Promise<Listing | null> {
   const params = new URLSearchParams();
