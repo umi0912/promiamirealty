@@ -113,7 +113,7 @@ function Search() {
   return (
     <div style={{ paddingTop: 104, background: "#fff", minHeight: "100vh" }}>
       {/* STICKY FILTER BAR */}
-      <div style={{ position: "sticky", top: 96, zIndex: 30, background: "#fff", borderBottom: "1px solid var(--line)", padding: "16px 24px" }}>
+      <div className="filterbar" style={{ position: "sticky", top: 96, zIndex: 30, background: "#fff", borderBottom: "1px solid var(--line)", padding: "16px 24px" }}>
         <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: 1600, margin: "0 auto" }}>
           {/* search */}
           <div style={{ position: "relative", flex: "1 1 280px", maxWidth: 360 }}>
@@ -200,7 +200,7 @@ function Search() {
       <div style={{ maxWidth: 1600, margin: "0 auto", padding: "8px 24px 80px" }}>
         {view === "map" ? (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }} className="map-split">
-            <div style={{ position: "sticky", top: 180, alignSelf: "start", height: "calc(100vh - 200px)", minHeight: 480 }}>
+            <div className="mapcol" style={{ position: "sticky", top: 180, alignSelf: "start", height: "calc(100vh - 200px)", minHeight: 480 }}>
               <MapView listings={listings} />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 }} className="map-cards">
@@ -229,7 +229,17 @@ function Search() {
 
       <style>{`
         @media(max-width:1280px){ .grid4{ grid-template-columns:repeat(3,1fr) !important; } }
-        @media(max-width:920px){ .grid4{ grid-template-columns:repeat(2,1fr) !important; } .map-split{ grid-template-columns:1fr !important; } .map-cards{ grid-template-columns:repeat(2,1fr) !important; } }
+        @media(max-width:920px){
+          .grid4{ grid-template-columns:repeat(2,1fr) !important; }
+          .map-split{ grid-template-columns:1fr !important; }
+          .map-cards{ grid-template-columns:repeat(2,1fr) !important; }
+          /* на телефоне карта не липнет — нормальный скролл, фикс. высота */
+          .mapcol{ position:static !important; height:60vh !important; min-height:0 !important; }
+        }
+        @media(max-width:768px){
+          /* фильтр-бар не липнет на телефоне (иначе занимает пол-экрана при скролле) */
+          .filterbar{ position:static !important; top:auto !important; }
+        }
         @media(max-width:560px){ .grid4{ grid-template-columns:1fr !important; } .map-cards{ grid-template-columns:1fr !important; } }
       `}</style>
     </div>
