@@ -1,13 +1,27 @@
 "use client";
 import Link from "next/link";
-import { LISTINGS, fmtPrice } from "@/lib/data";
+import { useState, useEffect } from "react";
+import { type Listing, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import InvestmentCalculator from "@/components/InvestmentCalculator";
 import BookButton from "@/components/BookButton";
 
 export default function Investors() {
   const { t } = useLang();
-  const deals = LISTINGS.filter(l => l.investor);
+  const [deals, setDeals] = useState<Listing[]>([]);
+
+  // живые MLS-листинги в инвест-диапазоне + оценка валовой аренды
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/listings?status=active&minPrice=300000&maxPrice=800000");
+        const data = await res.json();
+        if (!cancel) setDeals((data.listings || []).slice(0, 6));
+      } catch { /* пропускаем */ }
+    })();
+    return () => { cancel = true; };
+  }, []);
   const services: [string, string][] = [
     [t("inv.s1t"), t("inv.s1d")],
     [t("inv.s2t"), t("inv.s2d")],
@@ -61,14 +75,16 @@ export default function Investors() {
               <div style={{ height: 170, backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
               <div style={{ padding: 16 }}>
                 <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
+                <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.beds ? `${l.beds} bd · ` : ""}{l.baths ? `${l.baths} ba · ` : ""}{l.sqft ? `${l.sqft.toLocaleString()} sqft` : ""}</div>
                 <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}, {l.city}</div>
                 <div style={{ background: "var(--bg)", borderRadius: 10, padding: "10px 8px", textAlign: "center", marginTop: 14 }}>
-                  <div style={{ fontSize: 11, color: "var(--muted)" }}>{t("inv.estRent")}</div>
-                  <div style={{ fontSize: 16, fontWeight: 500, color: "var(--green)" }}>${l.estRent ? l.estRent.toLocaleString() : "N/A"}/mo</div>
+                  <div style={{ fontSize: 11, color: "var(--muted)" }}>{t("inv.estRent")} (est.)</div>
+                  <div style={{ fontSize: 16, fontWeight: 500, color: "var(--green)" }}>${Math.round(l.price * 0.006).toLocaleString()}/mo</div>
                 </div>
               </div>
             </Link>
           ))}
+          {deals.length === 0 && <div style={{ gridColumn: "1/-1", color: "var(--muted)", fontSize: 14 }}>Loading investment options…</div>}
         </div>
       </section>
       <section style={{ background: "var(--indigo)", padding: "56px 24px 64px", marginTop: 80 }}>

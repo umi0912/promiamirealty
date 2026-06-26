@@ -100,8 +100,8 @@ export const DICT = {
 
   // about
   "about.eyebrow": { en: "About", ru: "Об агенте" },
-  "about.p1": { en: "A Miami-based real estate professional with PRO MIAMI REALTY, helping buyers, sellers, and investors move with confidence across Miami-Dade and Broward.", ru: "Риелтор из Майами, компания PRO MIAMI REALTY. Помогаю покупателям, продавцам и инвесторам уверенно действовать в Miami-Dade и Broward." },
-  "about.p2": { en: "From first-time buyers to seasoned investors, the approach is the same: clear guidance, honest numbers, and steady support from first showing to closing day.", ru: "От первых покупателей до опытных инвесторов подход один: понятное сопровождение, честные цифры и поддержка от первого показа до закрытия." },
+  "about.p1": { en: "As the Broker of PRO MIAMI REALTY, Ays Iziken helps buyers, sellers, and investors navigate the South Florida real estate market with confidence. She is committed to providing clear guidance, honest advice, and a seamless experience from the first conversation to the closing table.", ru: "Как брокер PRO MIAMI REALTY, Ays Iziken помогает покупателям, продавцам и инвесторам уверенно ориентироваться на рынке недвижимости Южной Флориды. Она обеспечивает понятное сопровождение, честный совет и комфортный процесс — от первого разговора до сделки." },
+  "about.p2": { en: "Whether clients are purchasing their first home, selling a luxury property, expanding an investment portfolio, or relocating to South Florida, her goal is to make every transaction smooth, strategic, and successful.", ru: "Покупка первого дома, продажа люксового объекта, расширение инвестиционного портфеля или переезд в Южную Флориду — её цель сделать каждую сделку гладкой, стратегически выверенной и успешной." },
   "about.v1t": { en: "Local", ru: "Местный" },
   "about.v1d": { en: "Miami-Dade & Broward focus", ru: "Фокус на Miami-Dade и Broward" },
   "about.v2t": { en: "Honest", ru: "Честный" },
@@ -143,7 +143,7 @@ export const DICT = {
   "inv.calcTitle": { en: "Run any property's numbers", ru: "Посчитайте любой объект" },
   "inv.calcSub": { en: "Plug in price, rent, and expenses to see your monthly cash flow and return.", ru: "Введите цену, аренду и расходы — увидите денежный поток и доходность." },
   "inv.dealsEyebrow": { en: "Income properties", ru: "Доходные объекты" },
-  "inv.dealsTitle": { en: "Rentals worth a look", ru: "Аренда, на которую стоит взглянуть" },
+  "inv.dealsTitle": { en: "Investment opportunities", ru: "Инвестиционные объекты" },
   "inv.estRent": { en: "Est. rent", ru: "Аренда ~" },
   "inv.ctaTitle": { en: "Looking for your next deal?", ru: "Ищете следующую сделку?" },
   "inv.ctaText": { en: "Tell Ays your target return and budget — get matched with properties that fit.", ru: "Назовите целевую доходность и бюджет — подберём подходящие объекты." },

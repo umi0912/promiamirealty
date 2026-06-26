@@ -16,6 +16,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
   const [l, setL] = useState<Listing | null>(() => LISTINGS.find(x => x.id === id) || null);
   const [loading, setLoading] = useState(!l);
   const [active, setActive] = useState(0);
+  const [similar, setSimilar] = useState<Listing[]>([]);
 
   // если нет в статике — тянем live из Spark
   useEffect(() => {
@@ -31,6 +32,20 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
     })();
     return () => { cancel = true; };
   }, [id, l]);
+
+  // похожие листинги (тот же город)
+  useEffect(() => {
+    if (!l?.city) return;
+    let cancel = false;
+    (async () => {
+      try {
+        const res = await fetch(`/api/listings?q=${encodeURIComponent(l.city)}&status=active`);
+        const data = await res.json();
+        if (!cancel) setSimilar((data.listings || []).filter((x: Listing) => x.id !== l.id).slice(0, 4));
+      } catch { /* пропускаем */ }
+    })();
+    return () => { cancel = true; };
+  }, [l?.city, l?.id]);
 
   if (loading) return <div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>Loading listing…</div>;
   if (!l) return <div style={{ paddingTop: 140, textAlign: "center", color: "var(--muted)" }}>Listing not found. <Link href="/search" style={{ color: "var(--indigo)" }}>Back to search</Link></div>;
@@ -147,6 +162,26 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
       {/* MORTGAGE — на всю ширину снизу */}
       <h3 style={{ fontSize: 20, marginTop: 40, marginBottom: 12 }}>Estimate your monthly payment</h3>
       <MortgageCalculator price={l.price} listingRef={`${l.address}, ${l.city}`} taxAnnual={l.taxAnnual} hoaMonthly={l.hoaMonthly} />
+
+      {/* SIMILAR PROPERTIES — меньшие карточки */}
+      {similar.length > 0 && (
+        <>
+          <h3 style={{ fontSize: 20, marginTop: 44, marginBottom: 16 }}>Similar properties</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }} className="similar">
+            {similar.map(s => (
+              <Link key={s.id} href={`/listings/${s.id}`} style={{ textDecoration: "none", color: "inherit", display: "block" }} className="simcard">
+                <div style={{ width: "100%", aspectRatio: "4/3", borderRadius: 10, overflow: "hidden", background: "var(--surface-2)" }}>
+                  <div className="simcard-img" style={{ width: "100%", height: "100%", backgroundImage: `url("${s.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", marginTop: 8 }}>{fmtPrice(s.price)}</div>
+                <div style={{ fontSize: 12, color: "var(--text)", marginTop: 2 }}>{s.beds ? `${s.beds} bd · ` : ""}{s.baths ? `${s.baths} ba · ` : ""}{s.sqft ? `${s.sqft.toLocaleString()} sqft` : ""}</div>
+                <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{s.address}, {s.city}</div>
+              </Link>
+            ))}
+          </div>
+          <style>{`.simcard:hover .simcard-img{ transform: scale(1.06); } @media(max-width:720px){ .similar{ grid-template-columns:repeat(2,1fr) !important; } }`}</style>
+        </>
+      )}
 
       <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 24, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
         {l.mlsId && <span>MLS®: {l.mlsId} · </span>}{l.courtesy || "Courtesy of BeachesMLS"} · Listing data via BeachesMLS IDX

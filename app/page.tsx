@@ -117,23 +117,15 @@ export default function Home() {
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}>
           <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-miami-beach-4818/1080p.mp4" type="video/mp4" />
         </video>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(46,26,74,.15) 40%,rgba(255,255,255,.95) 100%)" }} />
-        <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 80px", width: "100%" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 14px", borderRadius: 999, background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.24)", backdropFilter: "blur(8px)", color: "#fff", fontSize: 13, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 18 }}>
-            <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "var(--amber)" }} />
-            Broker & Investor
-          </div>
-          <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 8px 36px rgba(0,0,0,0.24)" }}>{t("home.title")}</h1>
-          <p className="" style={{ fontSize: 18, color: "rgba(255,255,255,0.9)", maxWidth: 560, marginTop: 24, lineHeight: 1.7 }}>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,8,16,.35) 0%,rgba(10,8,16,.12) 35%,rgba(10,8,16,.78) 100%)" }} />
+        <div style={{ position: "relative", maxWidth: 1280, margin: "0 auto", padding: "0 24px 90px", width: "100%" }}>
+          <h1 className="" style={{ fontSize: "clamp(40px,7vw,82px)", lineHeight: 1.02, margin: 0, maxWidth: 900, color: "#fff", textShadow: "0 6px 30px rgba(0,0,0,0.5)" }}>{t("home.title")}</h1>
+          <p className="" style={{ fontSize: 19, color: "#fff", maxWidth: 580, marginTop: 22, lineHeight: 1.7, textShadow: "0 2px 14px rgba(0,0,0,0.6)" }}>
             {t("home.subtitle")}
           </p>
           <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
             <Link href="/search" className="btn" style={{ background: "linear-gradient(135deg, #f5a623 0%, #ff7a1a 100%)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 12px 28px -12px rgba(245,166,35,0.6)" }}>{t("home.cta.search")}</Link>
-            <BookButton intent="buy" source="Home hero" label={t("home.cta.book")} variant="outline" style={{ background: "rgba(255,255,255,0.14)", color: "#fff", padding: "14px 28px", fontSize: 15, border: "1px solid rgba(255,255,255,0.28)" }} />
-          </div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 24, padding: "12px 16px", borderRadius: 16, background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)", color: "rgba(255,255,255,0.92)", fontSize: 14, fontWeight: 500 }}>
-            <span style={{ fontSize: 18 }}>🛡️</span>
-            Contract-savvy representation with investor-level market insight.
+            <BookButton intent="buy" source="Home hero" label={t("home.cta.book")} variant="outline" style={{ background: "rgba(255,255,255,0.16)", color: "#fff", padding: "14px 28px", fontSize: 15, border: "1px solid rgba(255,255,255,0.45)" }} />
           </div>
         </div>
       </section>
@@ -159,28 +151,14 @@ export default function Home() {
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", overflow: "visible" }}>
-            <canvas id="globe" width="680" height="680" style={{ width: "128%", maxWidth: "none", height: "auto", marginRight: "-28%" }} />
+            <canvas id="globe" width="680" height="680" style={{ width: "162%", maxWidth: "none", height: "auto", marginRight: "-46%" }} />
           </div>
         </div>
         <style>{`.statsgrid{ overflow:hidden; }`}</style>
         <style>{`@media(max-width:880px){ .statsgrid{ grid-template-columns:1fr !important; gap:50px !important; } .statsgrid > div:last-child{ order:-1; } }`}</style>
       </section>
 
-      {/* AGENT VIDEO */}
-      <section style={{ maxWidth: 1280, margin: "0 auto", padding: "72px 24px 0" }}>
-        <div className="agentvid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
-          <div>
-            <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--coral)", marginBottom: 12 }}>{t("home.agent.eyebrow")}</div>
-            <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)", margin: "0 0 16px", lineHeight: 1.1 }}>{t("home.agent.title")}</h2>
-            <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.7, maxWidth: 440 }}>{t("home.agent.text")}</p>
-          </div>
-          <div style={{ position: "relative", borderRadius: 18, overflow: "hidden", aspectRatio: "16/10", background: "var(--surface-2)" }}>
-            <video controls poster="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1000&q=80" style={{ width: "100%", height: "100%", objectFit: "cover" }}>
-              <source src="https://cdn.coverr.co/videos/coverr-a-woman-in-a-business-meeting-5244/1080p.mp4" type="video/mp4" />
-            </video>
-          </div>
-        </div>
-      </section>
+      {/* AGENT VIDEO — скрыто по просьбе клиента */}
 
       {/* FEATURED — журнальная мозаика */}
       <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 24px 0" }}>
