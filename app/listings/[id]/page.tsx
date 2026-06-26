@@ -163,5 +163,5 @@ function AgentAvatar() {
   if (err || !AGENT.photo) {
     return <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(242,116,44,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 600, flexShrink: 0 }}>AI</div>;
   }
-  return <img src={AGENT.photo} alt={AGENT.name} onError={() => setErr(true)} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} />;
+  return <img src={AGENT.photo} alt={AGENT.name} onError={() => setErr(true)} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", objectPosition: "top", flexShrink: 0 }} />;
 }
