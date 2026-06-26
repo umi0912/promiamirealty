@@ -53,7 +53,7 @@ export default function Investors() {
           <p style={{ fontSize: 18, color: "rgba(255,255,255,.9)", maxWidth: 540, marginTop: 20, lineHeight: 1.7 }}>{t("inv.sub")}</p>
           <div style={{ display: "flex", gap: 14, marginTop: 28, flexWrap: "wrap" }}>
             <a href="#calculator" style={{ background: "var(--coral)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none" }}>{t("inv.analyze")}</a>
-            <a href="#deals" style={{ background: "rgba(246,241,236,.1)", color: "var(--text)", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("inv.seeProps")}</a>
+            <a href="#deals" style={{ background: "rgba(255,255,255,0.16)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 600, textDecoration: "none", border: "1px solid rgba(255,255,255,0.5)" }}>{t("inv.seeProps")}</a>
           </div>
         </div>
       </section>
