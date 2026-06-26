@@ -8,10 +8,6 @@ import { LeadProvider } from "@/components/LeadModal";
 export const metadata: Metadata = {
   title: "PRO MIAMI REALTY — Miami & Broward Real Estate",
   description: "Buy, sell, and invest in Miami-Dade and Broward real estate with Ays Iziken, PRO MIAMI REALTY. Search live listings, estimate payments, and book a consultation.",
-  icons: {
-    icon: "/favicon-32.png",
-    apple: "/apple-icon.png",
-  },
   openGraph: {
     title: "PRO MIAMI REALTY — Miami & Broward Real Estate",
     description: "Search live Miami listings, estimate payments, and connect with a local expert.",

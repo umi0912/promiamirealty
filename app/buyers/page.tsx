@@ -2,12 +2,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useLang } from "@/lib/i18n";
-import { type Listing, fmtPrice } from "@/lib/data";
+import { type Listing, fmtPrice, NEIGHBORHOODS } from "@/lib/data";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
 import FAQ from "@/components/FAQ";
-
-const NEIGHBORHOODS = ["Miami Beach", "Coral Gables", "Aventura", "Fort Lauderdale", "Hollywood", "Coral Springs"];
 
 export default function Buyers() {
   const { t, lang } = useLang();
@@ -106,9 +104,11 @@ export default function Buyers() {
       <div style={{ marginTop: 72 }}>
         <h2 style={{ fontSize: "clamp(24px,3.5vw,32px)", margin: "0 0 20px" }}>{tt("Explore by neighborhood", "Районы")}</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }} className="bhoods">
-          {NEIGHBORHOODS.map(city => (
-            <Link key={city} href={`/search?city=${encodeURIComponent(city)}`} style={{ textDecoration: "none", position: "relative", borderRadius: 14, overflow: "hidden", minHeight: 130, display: "flex", alignItems: "flex-end", padding: 18, background: "linear-gradient(135deg, var(--indigo), var(--violet))" }}>
-              <span style={{ color: "#fff", fontSize: 19, fontWeight: 600, fontFamily: "Space Grotesk, sans-serif" }}>{city} <span style={{ opacity: .7 }}>→</span></span>
+          {NEIGHBORHOODS.map(n => (
+            <Link key={n.name} href={`/search?city=${encodeURIComponent(n.name)}`} className="hoodcard" style={{ textDecoration: "none", position: "relative", borderRadius: 14, overflow: "hidden", minHeight: 150, display: "flex", alignItems: "flex-end", padding: 18 }}>
+              <div className="hoodcard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${n.img}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(44,90,80,.88) 100%)" }} />
+              <span style={{ position: "relative", color: "#fff", fontSize: 20, fontWeight: 600, fontFamily: "Space Grotesk, sans-serif" }}>{n.name} <span style={{ opacity: .8 }}>→</span></span>
             </Link>
           ))}
         </div>
@@ -144,6 +144,7 @@ export default function Buyers() {
         </div>
       </section>
       <style>{`
+        .hoodcard:hover .hoodcard-img{ transform: scale(1.07); }
         @media(max-width:900px){ .bhomes{ grid-template-columns:repeat(2,1fr) !important; } .bhoods,.breviews{ grid-template-columns:repeat(2,1fr) !important; } }
         @media(max-width:560px){ .bhomes,.bhoods,.breviews{ grid-template-columns:1fr !important; } }
       `}</style>

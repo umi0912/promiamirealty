@@ -1,6 +1,8 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useLang } from "@/lib/i18n";
+import { NEIGHBORHOODS } from "@/lib/data";
 import HomeValuation from "@/components/HomeValuation";
 import BookButton from "@/components/BookButton";
 import FAQ from "@/components/FAQ";
@@ -28,6 +30,12 @@ export default function Sellers() {
     { q: tt("When is the best time to sell?", "Когда лучше продавать?"), a: tt("South Florida sells year-round, with strong demand in winter/spring from relocating and international buyers. We'll time it to your goals.", "Южная Флорида продаётся круглый год, пик спроса зимой/весной от переезжающих и иностранных покупателей. Подберём момент под ваши цели.") },
     { q: tt("How do you price my home?", "Как вы определяете цену?"), a: tt("With real comparable sales and current demand — not guesswork — so it's priced to attract offers without leaving money on the table.", "По реальным сделкам-аналогам и текущему спросу — не на глаз — чтобы цена привлекала офферы и не теряла вашу выгоду.") },
     { q: tt("Where will my listing be seen?", "Где увидят мой листинг?"), a: tt("On the MLS and syndicated to Zillow, Realtor.com, Redfin and more — plus targeted reach to the right buyers.", "В MLS и на Zillow, Realtor.com, Redfin и др. — плюс таргетинг на нужных покупателей.") },
+  ];
+
+  const reviews = [
+    { text: tt("Ays priced our home right and we had multiple offers in the first week — sold above asking.", "Ays выставила правильную цену, и в первую неделю было несколько офферов — продали выше запрашиваемой."), who: tt("Seller · Pinecrest", "Продавец · Pinecrest") },
+    { text: tt("Professional photos and staging advice made a real difference. Smooth from listing to closing.", "Профессиональные фото и советы по стейджингу реально помогли. Гладко от листинга до сделки."), who: tt("Seller · Aventura", "Продавец · Aventura") },
+    { text: tt("She handled everything and kept us informed. Honest, sharp, and easy to work with.", "Она всё взяла на себя и держала в курсе. Честная, профессиональная, с ней легко."), who: tt("Seller · Fort Lauderdale", "Продавец · Fort Lauderdale") },
   ];
 
   const steps: [string, string][] = [
@@ -92,10 +100,39 @@ export default function Sellers() {
       </section>
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+      {/* NEIGHBORHOODS */}
+      <div style={{ marginTop: 72 }}>
+        <h2 style={{ fontSize: "clamp(24px,3.5vw,32px)", margin: "0 0 4px" }}>{tt("Selling in your area?", "Продаёте в этих районах?")}</h2>
+        <p style={{ color: "var(--muted)", fontSize: 15, margin: "0 0 22px" }}>{tt("See what's active near you to gauge demand and pricing.", "Посмотрите активные объекты рядом — оцените спрос и цены.")}</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }} className="shoods">
+          {NEIGHBORHOODS.map(n => (
+            <Link key={n.name} href={`/search?city=${encodeURIComponent(n.name)}`} className="hoodcard" style={{ textDecoration: "none", position: "relative", borderRadius: 14, overflow: "hidden", minHeight: 150, display: "flex", alignItems: "flex-end", padding: 18 }}>
+              <div className="hoodcard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${n.img}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(44,90,80,.88) 100%)" }} />
+              <span style={{ position: "relative", color: "#fff", fontSize: 20, fontWeight: 600, fontFamily: "Space Grotesk, sans-serif" }}>{n.name} <span style={{ opacity: .8 }}>→</span></span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {/* FAQ */}
       <div style={{ marginTop: 72 }}>
         <h2 style={{ fontSize: "clamp(24px,3.5vw,32px)", margin: "0 0 20px" }}>{tt("Seller FAQ", "Частые вопросы продавцов")}</h2>
         <FAQ items={faqs} />
+      </div>
+
+      {/* TESTIMONIALS */}
+      <div style={{ marginTop: 72 }}>
+        <h2 style={{ fontSize: "clamp(24px,3.5vw,32px)", margin: "0 0 20px" }}>{tt("What sellers say", "Отзывы продавцов")}</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }} className="sreviews">
+          {reviews.map((r, i) => (
+            <div key={i} style={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 16, padding: 24 }}>
+              <div style={{ color: "var(--amber)", fontSize: 18, marginBottom: 10 }}>★★★★★</div>
+              <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--text)", margin: "0 0 14px" }}>&ldquo;{r.text}&rdquo;</p>
+              <div style={{ fontSize: 13, color: "var(--muted)", fontWeight: 600 }}>{r.who}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div style={{ background: "var(--indigo)", borderRadius: 20, padding: "48px 32px", marginTop: 72, textAlign: "center" }}>
@@ -104,7 +141,12 @@ export default function Sellers() {
         <BookButton intent="sell" source="Sellers page CTA" label={t("common.bookConsult")} />
       </div>
       </div>
-      <style>{`@media(max-width:760px){ .mstats{ grid-template-columns:1fr !important; } }`}</style>
+      <style>{`
+        .hoodcard:hover .hoodcard-img{ transform: scale(1.07); }
+        @media(max-width:900px){ .shoods,.sreviews{ grid-template-columns:repeat(2,1fr) !important; } }
+        @media(max-width:760px){ .mstats{ grid-template-columns:1fr !important; } }
+        @media(max-width:560px){ .shoods,.sreviews{ grid-template-columns:1fr !important; } }
+      `}</style>
     </div>
   );
 }

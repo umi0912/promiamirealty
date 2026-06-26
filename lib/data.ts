@@ -127,6 +127,16 @@ export const AGENT = {
   whatsapp: "https://wa.me/13057665513",
 };
 
+// Районы для карточек на Buyers/Sellers (фото — проверенные Unsplash).
+export const NEIGHBORHOODS = [
+  { name: "Miami Beach", img: "https://images.unsplash.com/photo-1535498730771-e735b998cd64?w=800&q=80" },
+  { name: "Coral Gables", img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80" },
+  { name: "Aventura", img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" },
+  { name: "Fort Lauderdale", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" },
+  { name: "Hollywood", img: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=800&q=80" },
+  { name: "Coral Springs", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80" },
+];
+
 export const fmtPrice = (n: number) => "$" + n.toLocaleString("en-US");
 export const fmtPriceShort = (n: number) =>
   n >= 1000000 ? "$" + (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + "M" : "$" + Math.round(n / 1000) + "k";
