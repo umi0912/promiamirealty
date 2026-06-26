@@ -35,7 +35,7 @@ export default function Header() {
     <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, padding: "18px 24px" }}>
       <div style={{
         maxWidth: 1340, margin: "0 auto", background: "var(--indigo)", borderRadius: 18,
-        boxShadow: "0 10px 40px rgba(46,26,74,.28)", padding: "0 14px 0 28px",
+        boxShadow: "0 10px 40px rgba(44,90,80,.28)", padding: "0 14px 0 28px",
         height: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18,
       }}>
         {/* logo */}
@@ -57,7 +57,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="mobile-menu" style={{ maxWidth: 1340, margin: "10px auto 0", background: "var(--indigo)", borderRadius: 18, padding: "12px 24px 20px", boxShadow: "0 10px 40px rgba(46,26,74,.28)" }}>
+        <div className="mobile-menu" style={{ maxWidth: 1340, margin: "10px auto 0", background: "var(--indigo)", borderRadius: 18, padding: "12px 24px 20px", boxShadow: "0 10px 40px rgba(44,90,80,.28)" }}>
           {nav.map(n => (
             <Link key={n.href} href={n.href} onClick={() => setOpen(false)} style={{ display: "block", color: "rgba(255,255,255,.9)", textDecoration: "none", fontSize: 16, padding: "12px 0" }}>{t(n.key)}</Link>
           ))}

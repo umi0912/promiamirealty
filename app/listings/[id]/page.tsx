@@ -87,7 +87,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
       <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40, marginTop: 28, alignItems: "start" }} className="dgrid">
         <div>
           <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-            <span style={{ background: "rgba(242,116,44,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
+            <span style={{ background: "rgba(44,90,80,.18)", color: "var(--coral)", fontSize: 12, fontWeight: 500, padding: "4px 11px", borderRadius: 999 }}>{l.status}</span>
             <span style={{ background: "var(--surface-2)", color: "var(--muted)", fontSize: 12, padding: "4px 11px", borderRadius: 999 }}>{l.type}</span>
           </div>
           {/* beds · baths · sqft summary */}
@@ -196,7 +196,7 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
 function AgentAvatar() {
   const [err, setErr] = useState(false);
   if (err || !AGENT.photo) {
-    return <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(242,116,44,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 600, flexShrink: 0 }}>AI</div>;
+    return <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(44,90,80,.18)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--coral)", fontWeight: 600, flexShrink: 0 }}>AI</div>;
   }
   return <img src={AGENT.photo} alt={AGENT.name} onError={() => setErr(true)} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", objectPosition: "top", flexShrink: 0 }} />;
 }

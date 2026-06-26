@@ -15,7 +15,7 @@ export default function Sellers() {
     <div>
       <section style={{ position: "relative", minHeight: "62vh", display: "flex", alignItems: "flex-end" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "url(https://images.unsplash.com/photo-1728324580682-d7e19f767f14?w=2000&q=80)", backgroundSize: "cover", backgroundPosition: "center" }} />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(46,26,74,.45) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(44,90,80,.45) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 56px", width: "100%" }}>
           <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--amber)", marginBottom: 14 }}>{t("sellers.eyebrow")}</div>
           <h1 style={{ fontSize: "clamp(32px,5vw,52px)", margin: "0 0 16px", lineHeight: 1.05, maxWidth: 720, color: "#fff" }}>{t("sellers.title")}</h1>

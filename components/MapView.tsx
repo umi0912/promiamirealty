@@ -143,20 +143,20 @@ export default function MapView({ listings }: { listings: Listing[] }) {
 function cardRow(p: Props, onClick: () => void): HTMLElement {
   const row = document.createElement("div");
   row.style.cssText = "display:flex;gap:10px;padding:8px;border-radius:10px;cursor:pointer;align-items:center;";
-  row.addEventListener("mouseenter", () => (row.style.background = "#f3f0f7"));
+  row.addEventListener("mouseenter", () => (row.style.background = "#F2EFE6"));
   row.addEventListener("mouseleave", () => (row.style.background = "transparent"));
   row.addEventListener("click", onClick);
 
   const img = document.createElement("div");
-  img.style.cssText = `width:74px;height:56px;border-radius:8px;flex-shrink:0;background:#ece9f3 center/cover no-repeat;${p.photo ? `background-image:url("${p.photo}");` : ""}`;
+  img.style.cssText = `width:74px;height:56px;border-radius:8px;flex-shrink:0;background:#E7E2D4 center/cover no-repeat;${p.photo ? `background-image:url("${p.photo}");` : ""}`;
 
   const info = document.createElement("div");
   info.style.cssText = "min-width:0;flex:1;";
   const specs = [p.beds ? `${p.beds} bd` : "", p.baths ? `${p.baths} ba` : "", p.sqft ? `${Number(p.sqft).toLocaleString()} sqft` : ""].filter(Boolean).join(" · ");
   info.innerHTML =
-    `<div style="font-size:15px;font-weight:700;color:#160d24;font-family:'Space Grotesk',sans-serif;">${fmtPrice(p.price)}</div>` +
-    `<div style="font-size:12px;color:#6f6580;margin-top:2px;">${specs}</div>` +
-    `<div style="font-size:11px;font-weight:700;letter-spacing:.04em;color:#2e1a4a;margin-top:3px;text-transform:uppercase;">${p.status || "Active"}</div>`;
+    `<div style="font-size:15px;font-weight:700;color:#15211C;font-family:'Space Grotesk',sans-serif;">${fmtPrice(p.price)}</div>` +
+    `<div style="font-size:12px;color:#5A6B65;margin-top:2px;">${specs}</div>` +
+    `<div style="font-size:11px;font-weight:700;letter-spacing:.04em;color:#2C5A50;margin-top:3px;text-transform:uppercase;">${p.status || "Active"}</div>`;
 
   row.appendChild(img); row.appendChild(info);
   return row;
@@ -166,16 +166,16 @@ function cardRow(p: Props, onClick: () => void): HTMLElement {
 function priceEl(label: string, onClick: () => void): HTMLElement {
   const el = document.createElement("button");
   el.textContent = label;
-  el.style.cssText = "cursor:pointer;background:#fff;color:#2e1a4a;font-weight:700;font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(46,26,74,.25);box-shadow:0 2px 8px rgba(0,0,0,.18);white-space:nowrap;font-family:Manrope,sans-serif;";
+  el.style.cssText = "cursor:pointer;background:#fff;color:#2C5A50;font-weight:700;font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(44,90,80,.25);box-shadow:0 2px 8px rgba(0,0,0,.18);white-space:nowrap;font-family:Manrope,sans-serif;";
   el.addEventListener("click", e => { e.stopPropagation(); onClick(); });
-  el.addEventListener("mouseenter", () => { el.style.background = "#2e1a4a"; el.style.color = "#fff"; el.style.zIndex = "10"; });
-  el.addEventListener("mouseleave", () => { el.style.background = "#fff"; el.style.color = "#2e1a4a"; });
+  el.addEventListener("mouseenter", () => { el.style.background = "#2C5A50"; el.style.color = "#fff"; el.style.zIndex = "10"; });
+  el.addEventListener("mouseleave", () => { el.style.background = "#fff"; el.style.color = "#2C5A50"; });
   return el;
 }
 function clusterEl(count: string | number, onClick: () => void): HTMLElement {
   const el = document.createElement("button");
   el.textContent = `${count} units`;
-  el.style.cssText = "cursor:pointer;background:#2e1a4a;color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.28);white-space:nowrap;font-family:Manrope,sans-serif;";
+  el.style.cssText = "cursor:pointer;background:#2C5A50;color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.28);white-space:nowrap;font-family:Manrope,sans-serif;";
   el.addEventListener("click", e => { e.stopPropagation(); onClick(); });
   return el;
 }

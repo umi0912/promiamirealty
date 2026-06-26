@@ -4,21 +4,21 @@
 @tailwind utilities;
 
 :root {
-  /* light indigo-plum design system (v3) */
+  /* PRO MIAMI REALTY brand palette (Logobook): Deep Teal + Warm Ivory + Muted Aqua */
   --bg: #ffffff;
-  --bg2: #f6f5f9;
-  --surface: #f6f5f9;
-  --surface-2: #ece9f3;
-  --indigo: #2e1a4a;
-  --indigo-d: #1e1133;
-  --violet: #4b2e7a;
-  /* keep legacy var names mapped so existing components recolor automatically */
-  --coral: #2e1a4a;       /* primary actions now indigo */
-  --amber: #f5a623;       /* secondary accent: orange-yellow */
-  --green: #3FB984;
-  --text: #160d24;
-  --muted: #6f6580;
-  --line: rgba(22,13,36,0.10);
+  --bg2: #F2EFE6;          /* Warm Ivory — тёплые светлые секции */
+  --surface: #F4F1EA;      /* light ivory */
+  --surface-2: #E7E2D4;    /* darker ivory */
+  --indigo: #2C5A50;       /* Deep Teal — основной бренд-цвет (имя legacy) */
+  --indigo-d: #234A42;     /* darker teal */
+  --violet: #3A6F63;       /* mid teal */
+  /* legacy var names mapped to brand so existing components recolor automatically */
+  --coral: #2C5A50;        /* primary actions = Deep Teal */
+  --amber: #7FB3A7;        /* accent = Muted Aqua */
+  --green: #3FB984;        /* positive financials (cash flow / est rent) */
+  --text: #15211C;         /* near Smoky Black, тёплый тёмный */
+  --muted: #5A6B65;        /* muted teal-gray */
+  --line: rgba(44,90,80,0.14);
 }
 
 * { box-sizing: border-box; }
@@ -37,7 +37,7 @@ h1,h2,h3,h4 { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 
 
 /* единственная анимация — кнопки при наведении */
 .btn { transition: transform .2s ease, box-shadow .25s ease, opacity .2s ease, background .25s ease; }
-.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(46,26,74,.55); }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px -10px rgba(44,90,80,.55); }
 .btn:active { transform: translateY(0); }
 
 .fade-up, .fade-up.in { opacity: 1; transform: none; }

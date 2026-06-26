@@ -47,7 +47,7 @@ export default function Home() {
         const depth = (z + 1) / 2;
         ctx.beginPath();
         ctx.arc(px, py, 0.8 + depth * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(46,26,74,${0.12 + depth * 0.62})`;
+        ctx.fillStyle = `rgba(44,90,80,${0.12 + depth * 0.62})`;
         ctx.fill();
       }
       // palm emoji marker on Miami — on a glossy white disc (crisp, no transparency)
@@ -58,11 +58,11 @@ export default function Home() {
         // glossy white disc backing
         ctx.beginPath(); ctx.arc(mx, my, 19, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "rgba(255,138,61,.75)"; ctx.shadowBlur = 16;
+        ctx.shadowColor = "rgba(44,90,80,.75)"; ctx.shadowBlur = 16;
         ctx.fill();
         // thin amber ring
         ctx.beginPath(); ctx.arc(mx, my, 19, 0, Math.PI * 2);
-        ctx.lineWidth = 2; ctx.strokeStyle = "#ff8a3d"; ctx.shadowBlur = 0; ctx.stroke();
+        ctx.lineWidth = 2; ctx.strokeStyle = "#2C5A50"; ctx.shadowBlur = 0; ctx.stroke();
         // palm emoji, full opacity, centered
         ctx.globalAlpha = 1;
         ctx.font = "26px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',serif";
@@ -124,7 +124,7 @@ export default function Home() {
             {t("home.subtitle")}
           </p>
           <div className="" style={{ display: "flex", gap: 14, marginTop: 32, flexWrap: "wrap" }}>
-            <Link href="/search" className="btn" style={{ background: "linear-gradient(135deg, #f5a623 0%, #ff7a1a 100%)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 12px 28px -12px rgba(245,166,35,0.6)" }}>{t("home.cta.search")}</Link>
+            <Link href="/search" className="btn" style={{ background: "linear-gradient(135deg, #2C5A50 0%, #234A42 100%)", color: "#fff", padding: "14px 28px", borderRadius: 999, fontSize: 15, fontWeight: 700, textDecoration: "none", boxShadow: "0 12px 28px -12px rgba(44,90,80,0.7)" }}>{t("home.cta.search")}</Link>
             <BookButton intent="buy" source="Home hero" label={t("home.cta.book")} variant="outline" style={{ background: "rgba(255,255,255,0.16)", color: "#fff", padding: "14px 28px", fontSize: 15, border: "1px solid rgba(255,255,255,0.45)" }} />
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function Home() {
         <div className="consult-split" style={{ maxWidth: 900, margin: "0 auto" }}>
           {/* запись через Calendly — на индиго-фоне, без рамки */}
           <div style={{ height: 700, borderRadius: 16, overflow: "hidden" }}>
-            <iframe src={`${AGENT.calendly}?embed_domain=promiamirealty.com&embed_type=Inline&hide_gdpr_banner=1&background_color=2e1a4a&text_color=f6f1ec&primary_color=f5a623`} width="100%" height="100%" frameBorder="0" title="Book" style={{ display: "block", border: "none" }} />
+            <iframe src={`${AGENT.calendly}?embed_domain=promiamirealty.com&embed_type=Inline&hide_gdpr_banner=1&background_color=2C5A50&text_color=F2EFE6&primary_color=7FB3A7`} width="100%" height="100%" frameBorder="0" title="Book" style={{ display: "block", border: "none" }} />
           </div>
         </div>
       </section>
@@ -243,7 +243,7 @@ export default function Home() {
         .tile-img{ position:absolute; inset:0; background-size:cover; background-position:center; transition:transform .5s cubic-bezier(.2,.7,.2,1); }
         .tile:hover .tile-img{ transform:scale(1.06); }
         .tile-ov{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(22,18,28,0) 45%,rgba(22,18,28,.9) 100%); }
-        .tile-badge{ position:absolute; top:12px; left:12px; background:rgba(242,116,44,.92); color:#fff; font-size:11px; font-weight:500; padding:4px 10px; border-radius:999px; }
+        .tile-badge{ position:absolute; top:12px; left:12px; background:rgba(44,90,80,.92); color:#fff; font-size:11px; font-weight:500; padding:4px 10px; border-radius:999px; }
         .tile-info{ position:absolute; bottom:0; left:0; right:0; padding:14px; }
         .tile-price{ color:#fff; font-size:17px; font-weight:500; font-family:'Space Grotesk',serif; }
         .tile-addr{ color:rgba(255,255,255,.82); font-size:12px; margin-top:2px; }

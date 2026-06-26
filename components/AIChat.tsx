@@ -11,7 +11,7 @@ export default function AIChat() {
           <ChatPanel height="min(480px, calc(100vh - 140px))" />
         </div>
       )}
-      <button onClick={() => setOpen(!open)} aria-label="Chat" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--coral)", border: "none", color: "#fff", fontSize: 24, cursor: "pointer", boxShadow: "0 6px 20px rgba(242,116,44,.4)" }}>{open ? "✕" : "✦"}</button>
+      <button onClick={() => setOpen(!open)} aria-label="Chat" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--coral)", border: "none", color: "#fff", fontSize: 24, cursor: "pointer", boxShadow: "0 6px 20px rgba(44,90,80,.4)" }}>{open ? "✕" : "✦"}</button>
     </div>
   );
 }
