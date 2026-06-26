@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { WORLD_LAND } from "@/lib/worldmap";
-import { LISTINGS, AGENT, fmtPrice } from "@/lib/data";
+import { type Listing, LISTINGS, AGENT, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import MortgageCalculator from "@/components/MortgageCalculator";
 import BookButton from "@/components/BookButton";
@@ -10,8 +10,24 @@ import AIChat from "@/components/AIChat";
 
 export default function Home() {
   const { t } = useLang();
-  const featured = LISTINGS.filter(l => l.featured);
-  const rest = LISTINGS.filter(l => !l.featured).slice(0, 4);
+  const [live, setLive] = useState<Listing[]>([]);
+
+  // живые премиум-листинги для «Signature residences» (fallback на демо)
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/listings?status=active&minPrice=900000");
+        const data = await res.json();
+        if (!cancel && data.listings?.length) setLive(data.listings.slice(0, 7));
+      } catch { /* fallback на демо */ }
+    })();
+    return () => { cancel = true; };
+  }, []);
+
+  const items = (live.length ? live : [...LISTINGS.filter(l => l.featured), ...LISTINGS.filter(l => !l.featured)]).slice(0, 7);
+  const featured = items;
+  const rest: Listing[] = [];
 
   useEffect(() => {
     const c = document.getElementById("globe") as HTMLCanvasElement | null;
