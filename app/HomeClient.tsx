@@ -41,13 +41,18 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
     const draw = () => {
       ctx.clearRect(0, 0, size, size);
       rot += 0.0017;
-      for (const p of land) {
-        const { px, py, z } = project(p.lat, p.lon, rot);
-        if (z < -0.02) continue;
-        const depth = (z + 1) / 2;
+      // рисуем все точки сферы; сортируем по z (дальние — первыми), чтобы
+      // задняя сторона бледно просвечивала «под» передней при вращении.
+      const pts = land.map(p => project(p.lat, p.lon, rot)).sort((a, b) => a.z - b.z);
+      for (const { px, py, z } of pts) {
+        const depth = (z + 1) / 2;          // 0 = задняя сторона, 1 = передняя
+        const front = z >= -0.02;
         ctx.beginPath();
-        ctx.arc(px, py, 0.8 + depth * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(44,90,80,${0.12 + depth * 0.62})`;
+        ctx.arc(px, py, (front ? 0.8 : 0.5) + depth * 1.5, 0, Math.PI * 2);
+        // передние — насыщенные; задние — бледные (эффект 3D-просвета)
+        ctx.fillStyle = front
+          ? `rgba(44,90,80,${0.14 + depth * 0.6})`
+          : `rgba(44,90,80,${0.05 + depth * 0.06})`;
         ctx.fill();
       }
       // palm emoji marker on Miami — on a glossy white disc (crisp, no transparency)
@@ -151,11 +156,11 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", overflow: "visible" }}>
-            <canvas id="globe" width="680" height="680" style={{ width: "118%", maxWidth: "none", height: "auto", marginRight: "-14%" }} />
+            <canvas id="globe" width="680" height="680" style={{ width: "138%", maxWidth: "none", height: "auto", marginRight: "-22%" }} />
           </div>
         </div>
         <style>{`.statsgrid{ overflow:hidden; }`}</style>
-        <style>{`@media(max-width:880px){ .statsgrid{ grid-template-columns:1fr !important; gap:24px !important; padding:44px 24px !important; } .statsgrid > div:last-child{ order:-1; } #globe{ width:90% !important; max-width:420px !important; margin:0 auto !important; } }`}</style>
+        <style>{`@media(max-width:880px){ .statsgrid{ grid-template-columns:1fr !important; gap:24px !important; padding:44px 24px !important; } .statsgrid > div:last-child{ order:-1; } #globe{ width:88% !important; max-width:460px !important; margin:0 auto !important; margin-right:auto !important; } }`}</style>
       </section>
 
       {/* AGENT VIDEO — скрыто по просьбе клиента */}
