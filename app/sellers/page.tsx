@@ -72,15 +72,15 @@ export default function Sellers() {
         <div style={{ marginTop: 64 }}>
           <h2 style={{ fontSize: "clamp(24px,3.5vw,32px)", margin: "0 0 4px" }}>{tt("Recent market activity", "Активность рынка")}</h2>
           <p style={{ color: "var(--muted)", fontSize: 15, margin: "0 0 22px" }}>{tt("Live data across Miami-Dade & Broward — so you price with the market, not against it.", "Живые данные по Miami-Dade и Broward — чтобы цена соответствовала рынку.")}</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16 }} className="mstats">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 18, overflow: "hidden" }} className="mstats">
             {[
               [stats.active.toLocaleString(), tt("Active homes for sale", "Активных объектов в продаже")],
               ["$" + stats.medianPrice.toLocaleString(), tt("Median list price", "Медианная цена листинга")],
-              ["$" + stats.medianPpsf.toLocaleString(), tt("Median price / sqft", "Медиана за sqft")],
+              ["$" + stats.medianPpsf.toLocaleString() + "/sqft", tt("Median price per sqft", "Медиана за sqft")],
             ].map(([v, lab], i) => (
-              <div key={i} style={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 16, padding: "26px 24px" }}>
-                <div style={{ fontSize: "clamp(28px,4vw,40px)", fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", color: "var(--indigo)", lineHeight: 1 }}>{v}</div>
-                <div style={{ fontSize: 14, color: "var(--text)", marginTop: 8, fontWeight: 600 }}>{lab}</div>
+              <div key={i} style={{ padding: "32px 20px", textAlign: "center", borderLeft: i ? "1px solid var(--line)" : "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }} className="mstat-cell">
+                <div style={{ fontSize: "clamp(26px,3.4vw,38px)", fontWeight: 700, fontFamily: "Space Grotesk, sans-serif", color: "var(--indigo)", lineHeight: 1, letterSpacing: "-0.02em" }}>{v}</div>
+                <div style={{ fontSize: 13.5, color: "var(--muted)", marginTop: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>{lab}</div>
               </div>
             ))}
           </div>
@@ -144,7 +144,7 @@ export default function Sellers() {
       <style>{`
         .hoodcard:hover .hoodcard-img{ transform: scale(1.07); }
         @media(max-width:900px){ .shoods,.sreviews{ grid-template-columns:repeat(2,1fr) !important; } }
-        @media(max-width:760px){ .mstats{ grid-template-columns:1fr !important; } }
+        @media(max-width:760px){ .mstats{ grid-template-columns:1fr !important; } .mstat-cell{ border-left:none !important; } .mstat-cell:not(:first-child){ border-top:1px solid var(--line); } }
         @media(max-width:560px){ .shoods,.sreviews{ grid-template-columns:1fr !important; } }
       `}</style>
     </div>
