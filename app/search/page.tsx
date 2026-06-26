@@ -279,13 +279,6 @@ function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSav
         <div style={{ fontSize: 14, color: "var(--muted)", marginTop: 4 }}>{l.address}{l.city ? `, ${l.city} ${l.state} ${l.zip}` : ""}</div>
         {l.mlsId && <div style={{ fontSize: 11, color: "rgba(0,0,0,.45)", marginTop: 6 }}>MLS®: {l.mlsId}</div>}
       </div>
-      <style>{`
-        .scard:hover .scard-img{ transform: scale(1.04); }
-        .scard-arrow{ position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.92); color:#15211C; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; z-index:3; opacity:0; transition:opacity .2s; box-shadow:0 2px 8px rgba(0,0,0,.25); }
-        .scard-prev{ left:8px; } .scard-next{ right:8px; }
-        .scard:hover .scard-arrow{ opacity:1; }
-        @media(hover:none){ .scard-arrow{ opacity:1; background:rgba(255,255,255,.85); } }
-      `}</style>
     </Link>
   );
 }

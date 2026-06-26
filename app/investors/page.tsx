@@ -5,6 +5,7 @@ import { type Listing, fmtPrice } from "@/lib/data";
 import { useLang } from "@/lib/i18n";
 import InvestmentCalculator from "@/components/InvestmentCalculator";
 import BookButton from "@/components/BookButton";
+import Reveal from "@/components/Reveal";
 
 export default function Investors() {
   const { t } = useLang();
@@ -62,11 +63,11 @@ export default function Investors() {
         <p style={{ color: "var(--muted)", fontSize: 16, maxWidth: 560, marginTop: 0 }}>{t("inv.svcSub")}</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16, marginTop: 32 }}>
           {services.map(([title, d], i) => (
-            <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: 26, border: "1px solid var(--line)" }}>
+            <Reveal key={i} delay={i * 70} style={{ background: "var(--surface)", borderRadius: 16, padding: 26, border: "1px solid var(--line)" }}>
               <div style={{ fontSize: 13, color: "var(--coral)", fontWeight: 500, marginBottom: 12 }}>0{i + 1}</div>
               <div style={{ fontSize: 19, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 10 }}>{title}</div>
               <div style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{d}</div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

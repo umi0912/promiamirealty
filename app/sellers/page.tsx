@@ -6,6 +6,7 @@ import { NEIGHBORHOODS } from "@/lib/data";
 import HomeValuation from "@/components/HomeValuation";
 import BookButton from "@/components/BookButton";
 import FAQ from "@/components/FAQ";
+import Reveal from "@/components/Reveal";
 
 export default function Sellers() {
   const { t, lang } = useLang();
@@ -59,11 +60,11 @@ export default function Sellers() {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 16, marginTop: 48 }}>
         {steps.map(([title, d], i) => (
-          <div key={i} style={{ background: "var(--surface)", borderRadius: 16, padding: 24, border: "1px solid var(--line)" }}>
+          <Reveal key={i} delay={i * 70} style={{ background: "var(--surface)", borderRadius: 16, padding: 24, border: "1px solid var(--line)" }}>
             <div style={{ fontSize: 13, color: "var(--coral)", fontWeight: 500, marginBottom: 10 }}>{t("step")} {i + 1}</div>
             <div style={{ fontSize: 17, fontFamily: "Space Grotesk, sans-serif", fontWeight: 500, marginBottom: 8 }}>{title}</div>
             <div style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6 }}>{d}</div>
-          </div>
+          </Reveal>
         ))}
       </div>
 
