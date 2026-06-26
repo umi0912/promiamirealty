@@ -240,17 +240,33 @@ function Search() {
 function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSave: (e: React.MouseEvent, id: string) => void; onShare: (e: React.MouseEvent, l: Listing) => void }) {
   const { t } = useLang();
   const coming = l.status === "Coming Soon";
+  const pics = l.photos.slice(0, 10);
+  const [pi, setPi] = useState(0);
+  const nav = (e: React.MouseEvent, d: number) => { e.preventDefault(); e.stopPropagation(); setPi(p => (p + d + pics.length) % pics.length); };
   return (
     <Link href={`/listings/${l.id}`} className="scard" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", borderRadius: 12, overflow: "hidden", background: "var(--surface-2)" }}>
-        <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
+        <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${pics[pi]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
         {/* status badge */}
-        <span style={{ position: "absolute", top: 10, left: 10, background: coming ? "rgba(44,90,80,.92)" : "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8 }}>{coming ? t("search.coming") : t("search.active")}</span>
+        <span style={{ position: "absolute", top: 10, left: 10, background: coming ? "rgba(44,90,80,.92)" : "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8, zIndex: 2 }}>{coming ? t("search.coming") : t("search.active")}</span>
         {/* heart + share */}
-        <div style={{ position: "absolute", top: 10, right: 10, display: "flex", gap: 8 }}>
+        <div style={{ position: "absolute", top: 10, right: 10, display: "flex", gap: 8, zIndex: 2 }}>
           <button onClick={e => onSave(e, l.id)} aria-label="Save" style={iconBtn}>{saved ? "♥" : "♡"}</button>
           <button onClick={e => onShare(e, l)} aria-label="Share" style={iconBtn}>➤</button>
         </div>
+        {/* slider arrows (на hover) */}
+        {pics.length > 1 && (
+          <>
+            <button className="scard-arrow scard-prev" onClick={e => nav(e, -1)} aria-label="Previous photo">‹</button>
+            <button className="scard-arrow scard-next" onClick={e => nav(e, 1)} aria-label="Next photo">›</button>
+            {/* точки */}
+            <div style={{ position: "absolute", bottom: 24, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 5, zIndex: 2 }}>
+              {pics.map((_, i) => (
+                <span key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: i === pi ? "#fff" : "rgba(255,255,255,.5)", boxShadow: "0 1px 2px rgba(0,0,0,.4)" }} />
+              ))}
+            </div>
+          </>
+        )}
         {/* courtesy overlay */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 12px 8px", background: "linear-gradient(180deg,transparent,rgba(0,0,0,.6))", color: "rgba(255,255,255,.92)", fontSize: 11 }}>{l.courtesy || "Courtesy of BeachesMLS"}</div>
       </div>
@@ -263,7 +279,13 @@ function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSav
         <div style={{ fontSize: 14, color: "var(--muted)", marginTop: 4 }}>{l.address}{l.city ? `, ${l.city} ${l.state} ${l.zip}` : ""}</div>
         {l.mlsId && <div style={{ fontSize: 11, color: "rgba(0,0,0,.45)", marginTop: 6 }}>MLS®: {l.mlsId}</div>}
       </div>
-      <style>{`.scard:hover .scard-img{ transform: scale(1.06); }`}</style>
+      <style>{`
+        .scard:hover .scard-img{ transform: scale(1.04); }
+        .scard-arrow{ position:absolute; top:50%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; border:none; cursor:pointer; background:rgba(255,255,255,.92); color:#15211C; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; z-index:3; opacity:0; transition:opacity .2s; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+        .scard-prev{ left:8px; } .scard-next{ right:8px; }
+        .scard:hover .scard-arrow{ opacity:1; }
+        @media(hover:none){ .scard-arrow{ opacity:1; background:rgba(255,255,255,.85); } }
+      `}</style>
     </Link>
   );
 }
