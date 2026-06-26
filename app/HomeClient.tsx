@@ -132,7 +132,7 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
 
       {/* STATS — о компании (SERHANT-style: цифры слева + globe справа) */}
       <section style={{ background: "var(--bg2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
-        <div className="statsgrid" style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 24px", display: "grid", gridTemplateColumns: "1.05fr .95fr", gap: 50, alignItems: "center" }}>
+        <div className="statsgrid" style={{ maxWidth: 1280, margin: "0 auto", padding: "60px 24px", display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 32, alignItems: "center" }}>
           <div>
             <div style={{ display: "none", fontSize: 13, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 18, fontFamily: "Space Grotesk, sans-serif", fontWeight: 600 }}>{t("home.stats.eyebrow")}</div>
             <h2 style={{ fontSize: "clamp(32px,4.5vw,56px)", margin: "0 0 40px", lineHeight: 1.02 }}>{t("home.stats.title")}</h2>
@@ -151,11 +151,11 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", overflow: "visible" }}>
-            <canvas id="globe" width="680" height="680" style={{ width: "162%", maxWidth: "none", height: "auto", marginRight: "-46%" }} />
+            <canvas id="globe" width="680" height="680" style={{ width: "118%", maxWidth: "none", height: "auto", marginRight: "-14%" }} />
           </div>
         </div>
         <style>{`.statsgrid{ overflow:hidden; }`}</style>
-        <style>{`@media(max-width:880px){ .statsgrid{ grid-template-columns:1fr !important; gap:50px !important; } .statsgrid > div:last-child{ order:-1; } }`}</style>
+        <style>{`@media(max-width:880px){ .statsgrid{ grid-template-columns:1fr !important; gap:24px !important; padding:44px 24px !important; } .statsgrid > div:last-child{ order:-1; } #globe{ width:90% !important; max-width:420px !important; margin:0 auto !important; } }`}</style>
       </section>
 
       {/* AGENT VIDEO — скрыто по просьбе клиента */}
