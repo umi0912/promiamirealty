@@ -68,22 +68,29 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "112px 24px 0" }}>
       <Link href="/search" style={{ color: "var(--muted)", fontSize: 14, textDecoration: "none" }}>{t("listing.back")}</Link>
 
-      {/* GALLERY */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10, height: 380, marginTop: 16 }} className="gal">
-        <div style={{ backgroundImage: `url("${l.photos[active]}")`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 12 }} />
-        <div style={{ display: "grid", gridTemplateRows: "1fr 1fr", gap: 10 }}>
-          {l.photos.slice(1, 3).map((p, i) => (
-            <div key={i} onClick={() => setActive(i + 1)} style={{ backgroundImage: `url("${p}")`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 12, cursor: "pointer" }} />
-          ))}
+      {/* GALLERY — слайдер */}
+      <div style={{ marginTop: 16 }}>
+        <div style={{ position: "relative", width: "100%", height: 480, borderRadius: 14, overflow: "hidden", background: "var(--surface-2)" }} className="slider-main">
+          <div style={{ position: "absolute", inset: 0, backgroundImage: `url("${l.photos[active]}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
+          {l.photos.length > 1 && (
+            <>
+              <button onClick={() => setActive(a => (a - 1 + l.photos.length) % l.photos.length)} aria-label="Previous" style={navBtn("left")}>‹</button>
+              <button onClick={() => setActive(a => (a + 1) % l.photos.length)} aria-label="Next" style={navBtn("right")}>›</button>
+              <div style={{ position: "absolute", bottom: 14, right: 14, background: "rgba(0,0,0,.6)", color: "#fff", fontSize: 13, fontWeight: 600, padding: "5px 12px", borderRadius: 999 }}>{active + 1} / {l.photos.length}</div>
+            </>
+          )}
         </div>
+        {l.photos.length > 1 && (
+          <div style={{ display: "flex", gap: 8, marginTop: 10, overflowX: "auto", paddingBottom: 4 }} className="thumbs">
+            {l.photos.map((p, i) => (
+              <button key={i} onClick={() => setActive(i)} style={{
+                flexShrink: 0, width: 96, height: 68, borderRadius: 10, backgroundImage: `url("${p}")`, backgroundSize: "cover", backgroundPosition: "center",
+                cursor: "pointer", border: active === i ? "3px solid var(--coral)" : "3px solid transparent", padding: 0, opacity: active === i ? 1 : 0.7, transition: "opacity .2s",
+              }} aria-label={`Photo ${i + 1}`} />
+            ))}
+          </div>
+        )}
       </div>
-      {l.photos.length > 1 && (
-        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-          {l.photos.map((p, i) => (
-            <div key={i} onClick={() => setActive(i)} style={{ width: 64, height: 48, borderRadius: 8, backgroundImage: `url("${p}")`, backgroundSize: "cover", backgroundPosition: "center", cursor: "pointer", border: active === i ? "2px solid var(--coral)" : "2px solid transparent" }} />
-          ))}
-        </div>
-      )}
 
       {/* SUMMARY + AGENT CARD рядом */}
       <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 40, marginTop: 28, alignItems: "start" }} className="dgrid">
@@ -189,9 +196,22 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
         {l.mlsId && <span>MLS®: {l.mlsId} · </span>}{l.courtesy || "Courtesy of BeachesMLS"} · Listing data via BeachesMLS IDX
       </div>
       <div style={{ height: 40 }} />
-      <style>{`@media(max-width:820px){ .dgrid{ grid-template-columns:1fr !important; } .gal{ grid-template-columns:1fr !important; height:auto !important; } .addinfo{ grid-template-columns:1fr !important; } }`}</style>
+      <style>{`
+        @media(max-width:820px){ .dgrid{ grid-template-columns:1fr !important; } .addinfo{ grid-template-columns:1fr !important; } .slider-main{ height:300px !important; } }
+        .thumbs::-webkit-scrollbar{ height:6px; } .thumbs::-webkit-scrollbar-thumb{ background:var(--surface-2); border-radius:3px; }
+      `}</style>
     </div>
   );
+}
+
+// стрелка слайдера
+function navBtn(side: "left" | "right"): React.CSSProperties {
+  return {
+    position: "absolute", top: "50%", [side]: 14, transform: "translateY(-50%)",
+    width: 44, height: 44, borderRadius: "50%", border: "none", cursor: "pointer",
+    background: "rgba(255,255,255,.9)", color: "var(--indigo)", fontSize: 26, lineHeight: 1,
+    display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 14px rgba(0,0,0,.2)",
+  } as React.CSSProperties;
 }
 
 // Аватар брокера: фото /ays.jpg, fallback на инициалы если файла нет.
