@@ -17,7 +17,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
     <div>
       {/* HERO */}
       <section style={{ position: "relative", minHeight: "56vh", display: "flex", alignItems: "flex-end" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${city.photo})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: `url("${city.photo}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(22,18,28,.5) 0%,rgba(22,18,28,.4) 40%,rgba(22,18,28,.96) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto", padding: "0 24px 48px", width: "100%" }}>
           <Link href="/city" style={{ color: "var(--muted)", fontSize: 14, textDecoration: "none" }}>← {lang === "ru" ? "Все города" : "All cities"}</Link>
@@ -41,7 +41,7 @@ export default function CityPage({ params }: { params: Promise<{ slug: string }>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
             {listings.map(l => (
               <Link key={l.id} href={`/listings/${l.id}`} style={{ textDecoration: "none", background: "var(--surface)", borderRadius: 16, overflow: "hidden", border: "1px solid var(--line)", display: "block" }}>
-                <div style={{ height: 180, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+                <div style={{ height: 180, backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center" }} />
                 <div style={{ padding: 16 }}>
                   <div style={{ fontSize: 20, fontWeight: 500, fontFamily: "Space Grotesk, sans-serif", color: "var(--text)" }}>{fmtPrice(l.price)}</div>
                   <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 2 }}>{l.address}</div>

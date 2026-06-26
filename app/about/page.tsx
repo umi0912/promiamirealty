@@ -25,7 +25,7 @@ export default function About() {
             <Link href="/contact" style={{ background: "rgba(246,241,236,.08)", color: "var(--text)", padding: "13px 26px", borderRadius: 999, fontSize: 15, fontWeight: 500, textDecoration: "none", border: "1px solid var(--line)" }}>{t("common.getInTouch")}</Link>
           </div>
         </div>
-        <div style={{ aspectRatio: "4/5", borderRadius: 20, background: "var(--surface-2)", backgroundImage: `url(${AGENT.photo}), url(https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80)`, backgroundSize: "cover", backgroundPosition: "center top" }} />
+        <div style={{ aspectRatio: "4/5", borderRadius: 20, background: "var(--surface-2)", backgroundImage: `url("${AGENT.photo}"), url(https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80)`, backgroundSize: "cover", backgroundPosition: "center top" }} />
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16, marginTop: 72 }}>

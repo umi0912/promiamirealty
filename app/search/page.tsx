@@ -241,7 +241,7 @@ function Card({ l, saved, onSave, onShare }: { l: Listing; saved: boolean; onSav
   return (
     <Link href={`/listings/${l.id}`} className="scard" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", borderRadius: 12, overflow: "hidden", background: "var(--surface-2)" }}>
-        <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url(${l.photos[0]})`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
+        <div className="scard-img" style={{ position: "absolute", inset: 0, backgroundImage: `url("${l.photos[0]}")`, backgroundSize: "cover", backgroundPosition: "center", transition: "transform .5s cubic-bezier(.2,.7,.2,1)" }} />
         {/* status badge */}
         <span style={{ position: "absolute", top: 10, left: 10, background: coming ? "rgba(46,26,74,.92)" : "rgba(28,28,28,.82)", color: "#fff", fontSize: 12, fontWeight: 600, padding: "5px 11px", borderRadius: 8 }}>{coming ? "Coming soon" : "Active"}</span>
         {/* heart + share */}

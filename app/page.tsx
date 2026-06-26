@@ -194,21 +194,21 @@ export default function Home() {
         <div className="mosaic">
           {featured[0] && (
             <Link href={`/listings/${featured[0].id}`} className="m-big tile">
-              <div className="tile-img" style={{ backgroundImage: `url(${featured[0].photos[0]})` }} />
+              <div className="tile-img" style={{ backgroundImage: `url("${featured[0].photos[0]}")` }} />
               <div className="tile-ov" /><span className="tile-badge">Featured</span>
               <div className="tile-info"><div className="tile-price" style={{ fontSize: 24 }}>{fmtPrice(featured[0].price)}</div><div className="tile-addr">{featured[0].address}</div><div className="tile-specs">{featured[0].beds} bd · {featured[0].baths} ba · {featured[0].sqft.toLocaleString()} sqft</div></div>
             </Link>
           )}
           {featured.slice(1).map(l => (
             <Link key={l.id} href={`/listings/${l.id}`} className="tile">
-              <div className="tile-img" style={{ backgroundImage: `url(${l.photos[0]})` }} />
+              <div className="tile-img" style={{ backgroundImage: `url("${l.photos[0]}")` }} />
               <div className="tile-ov" />
               <div className="tile-info"><div className="tile-price">{fmtPrice(l.price)}</div><div className="tile-addr">{l.address}</div></div>
             </Link>
           ))}
           {rest.map(l => (
             <Link key={l.id} href={`/listings/${l.id}`} className="tile">
-              <div className="tile-img" style={{ backgroundImage: `url(${l.photos[0]})` }} />
+              <div className="tile-img" style={{ backgroundImage: `url("${l.photos[0]}")` }} />
               <div className="tile-ov" />
               <div className="tile-info"><div className="tile-price">{fmtPrice(l.price)}</div><div className="tile-addr">{l.address}</div></div>
             </Link>

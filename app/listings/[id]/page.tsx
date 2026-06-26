@@ -58,17 +58,17 @@ export default function ListingDetail({ params }: { params: Promise<{ id: string
 
       {/* GALLERY */}
       <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10, height: 380, marginTop: 16 }} className="gal">
-        <div style={{ backgroundImage: `url(${l.photos[active]})`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 12 }} />
+        <div style={{ backgroundImage: `url("${l.photos[active]}")`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 12 }} />
         <div style={{ display: "grid", gridTemplateRows: "1fr 1fr", gap: 10 }}>
           {l.photos.slice(1, 3).map((p, i) => (
-            <div key={i} onClick={() => setActive(i + 1)} style={{ backgroundImage: `url(${p})`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 12, cursor: "pointer" }} />
+            <div key={i} onClick={() => setActive(i + 1)} style={{ backgroundImage: `url("${p}")`, backgroundSize: "cover", backgroundPosition: "center", borderRadius: 12, cursor: "pointer" }} />
           ))}
         </div>
       </div>
       {l.photos.length > 1 && (
         <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
           {l.photos.map((p, i) => (
-            <div key={i} onClick={() => setActive(i)} style={{ width: 64, height: 48, borderRadius: 8, backgroundImage: `url(${p})`, backgroundSize: "cover", backgroundPosition: "center", cursor: "pointer", border: active === i ? "2px solid var(--coral)" : "2px solid transparent" }} />
+            <div key={i} onClick={() => setActive(i)} style={{ width: 64, height: 48, borderRadius: 8, backgroundImage: `url("${p}")`, backgroundSize: "cover", backgroundPosition: "center", cursor: "pointer", border: active === i ? "2px solid var(--coral)" : "2px solid transparent" }} />
           ))}
         </div>
       )}

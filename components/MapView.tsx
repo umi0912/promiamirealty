@@ -148,7 +148,7 @@ function cardRow(p: Props, onClick: () => void): HTMLElement {
   row.addEventListener("click", onClick);
 
   const img = document.createElement("div");
-  img.style.cssText = `width:74px;height:56px;border-radius:8px;flex-shrink:0;background:#ece9f3 center/cover no-repeat;${p.photo ? `background-image:url(${p.photo});` : ""}`;
+  img.style.cssText = `width:74px;height:56px;border-radius:8px;flex-shrink:0;background:#ece9f3 center/cover no-repeat;${p.photo ? `background-image:url("${p.photo}");` : ""}`;
 
   const info = document.createElement("div");
   info.style.cssText = "min-width:0;flex:1;";
