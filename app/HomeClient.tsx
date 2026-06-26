@@ -32,28 +32,33 @@ export default function HomeClient({ featured }: { featured: Listing[] }) {
       const xs = Math.cos(lat) * Math.sin(lon + rotation);
       const ys = Math.sin(lat);
       const zs = Math.cos(lat) * Math.cos(lon + rotation);
-      return { px: cx + xs * R, py: cy - ys * R, z: zs };
+      return { px: cx + xs * R, py: cy - ys * R, z: zs, xs, ys };
     };
 
+    // направление света (верх-лево-перёд) — для затенения как у освещённого шара
+    const LX = -0.40, LY = 0.52, LZ = 0.76;
+
     // start rotated so the Americas (Miami) face viewer
-    // start so Miami (palm) sits on the LEFT side of the visible sphere, near the text
     let rot = (80.19 - 45) * Math.PI / 180, raf = 0;
     const draw = () => {
       ctx.clearRect(0, 0, size, size);
-      rot += 0.0017;
-      // рисуем все точки сферы; сортируем по z (дальние — первыми), чтобы
-      // задняя сторона бледно просвечивала «под» передней при вращении.
+      rot += 0.0016;
+      // все точки сферы; сортируем по z (дальние первыми) — задняя сторона
+      // бледно просвечивает «под» передней при вращении (3D-эффект).
       const pts = land.map(p => project(p.lat, p.lon, rot)).sort((a, b) => a.z - b.z);
-      for (const { px, py, z } of pts) {
-        const depth = (z + 1) / 2;          // 0 = задняя сторона, 1 = передняя
-        const front = z >= -0.02;
-        ctx.beginPath();
-        ctx.arc(px, py, (front ? 0.8 : 0.5) + depth * 1.5, 0, Math.PI * 2);
-        // передние — насыщенные; задние — бледные (эффект 3D-просвета)
-        ctx.fillStyle = front
-          ? `rgba(44,90,80,${0.14 + depth * 0.6})`
-          : `rgba(44,90,80,${0.05 + depth * 0.06})`;
-        ctx.fill();
+      for (const { px, py, z, xs, ys } of pts) {
+        const front = z >= -0.04;
+        // яркость по освещению: насколько точка повёрнута к свету
+        const lit = Math.max(0, xs * LX + ys * LY + z * LZ);
+        if (front) {
+          ctx.fillStyle = `rgba(44,90,80,${0.16 + lit * 0.62})`;
+          const r = 0.7 + lit * 0.9;
+          ctx.fillRect(px - r, py - r, r * 2, r * 2);
+        } else {
+          // задняя сторона — еле заметная
+          ctx.fillStyle = `rgba(44,90,80,${0.045 + (z + 1) * 0.03})`;
+          ctx.fillRect(px - 0.5, py - 0.5, 1, 1);
+        }
       }
       // palm emoji marker on Miami — on a glossy white disc (crisp, no transparency)
       const m = project(miami.lat, miami.lon, rot);
